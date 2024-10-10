@@ -4,15 +4,14 @@
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
   <title>P2_Follow_Line</title>
 
-  
-  
+
   <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
             background-image: url('images.png'); /* Asegúrate de que la ruta sea correcta */
             background-size: cover; /* Asegura que la imagen cubra todo el fondo */
-           /* background-repeat: no-repeat;*/ /* No repetir la imagen */
+           background-repeat: no-repeat; /* No repetir la imagen */
             background-attachment: fixed; /* Mantiene la imagen fija */
             background-position: center; /* Centra la imagen */
             color: white; /* Cambia el color del texto si es necesario */
