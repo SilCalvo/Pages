@@ -20,8 +20,9 @@
         }
         .sidebar {
             width: 150px; /* Ancho del índice */
-            position: static; /* Fijo al desplazarse */
-            top: 5; /* Se mantiene en la parte superior */
+            position: fixed; /* Fijo al desplazarse */
+            top: 10px; /* Distancia desde la parte superior */
+            left: 10px;
             padding: 20px;
             background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
             border-radius: 8px; /* Bordes redondeados */
@@ -33,6 +34,7 @@
             background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para mejorar la legibilidad */
             max-width: 800px; /* Limita el ancho del contenido */
             margin: auto; /* Centra el contenido */
+            margin-left: 170px;
             border-radius: 8px; /* Bordes redondeados */
             flex: 1; /* Permite que el contenido ocupe el espacio restante */
         }
