@@ -9,33 +9,32 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-image: url('images.png'); /* Asegúrate de que la ruta sea correcta */
-            background-size: cover; /* Asegura que la imagen cubra todo el fondo */
-            background-repeat: no-repeat; /* No repetir la imagen */
-            background-attachment: fixed; /* Mantiene la imagen fija */
-            background-position: center; /* Centra la imagen */
-            color: white; /* Cambia el color del texto si es necesario */
-            height: 100vh; /* Asegura que el body tenga altura completa */
-            display: flex; /* Usamos flexbox para alinear el contenido */
+            background-image: url('images.png'); 
+            background-size: cover; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed;
+            background-position: center;
+            color: white; 
+            height: 100vh; 
+            display: flex; 
         }
         .sidebar {
-            width: 150px; /* Ancho del índice */
+            width: 150px;
             position: fixed; /* Fijo al desplazarse */
-            top: 10px; /* Distancia desde la parte superior */
+            top: 10px; 
             left: 10px;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
-            border-radius: 8px; /* Bordes redondeados */
-            margin-right: 5px; /* Espaciado a la derecha */
+            background-color: rgba(0, 0, 0, 0.7); 
+            border-radius: 8px; 
+            margin-right: 5px;
     
         }
         .content {
-            padding: 20px; /* Espaciado alrededor del contenido */
-            background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente para mejorar la legibilidad */
-            max-width: 800px; /* Limita el ancho del contenido */
-            margin: auto; /* Centra el contenido */
-           /* margin-left: 170px;*/
-            border-radius: 8px; /* Bordes redondeados */
+            padding: 20px; 
+            background-color: rgba(0, 0, 0, 0.5); 
+            max-width: 1000px; 
+            margin: auto; 
+            border-radius: 8px;
             flex: 1; /* Permite que el contenido ocupe el espacio restante */
         }
     </style>
@@ -114,7 +113,8 @@ El coche de Fórmula 1 consta de una cámara de visión en la parte
 frontal, para manejar dicha información necesitaremos las librerías de
 OpenCV (cv2) y Numpy. <br>
 Como la imagen recibida está a color y la línea a seguir es
-distinguible, trabajaremos la imagen aplicando un filtro de color para quedarnos solo con la línea roja (hay que tener en cuenta que hay
+distinguible, trabajaremos la imagen aplicando un filtro de color para 
+quedarnos solo con la línea roja (hay que tener en cuenta que hay
 colores como el blanco que también tienen componente roja por lo que
 hay que filtrar por ellos también). A continuación, para distinguir
 hacia donde va la línea sacaremos de la una franja destacada (desde los
