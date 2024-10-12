@@ -1,69 +1,66 @@
+<html>
+<head>
+<meta content="text/html; charset=ISO-8859-1"
+http-equiv="content-type">
+<title>P2_Follow_Line</title>
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background-image: url('images.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: center;
+color: white;
+height: 100vh;
+display: flex;
+}
+.sidebar {
+width: 150px;
+position: fixed; /* Fijo al desplazarse */
+top: 10px;
+left: 10px;
+padding: 20px;
+background-color: rgba(0, 0, 0, 0.7);
+border-radius: 8px;
+margin-right: 5px;
 
-<html><head>
-  
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-  <title>P2_Follow_Line</title>
-
-
-  <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('images.png'); 
-            background-size: cover; 
-            background-repeat: no-repeat; 
-            background-attachment: fixed;
-            background-position: center;
-            color: white; 
-            height: 100vh; 
-            display: flex; 
-        }
-        .sidebar {
-            width: 150px;
-            position: fixed; /* Fijo al desplazarse */
-            top: 10px; 
-            left: 10px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7); 
-            border-radius: 8px; 
-            margin-right: 5px;
-    
-        }
-        .content {
-            padding: 20px; 
-            background-color: rgba(0, 0, 0, 0.5); 
-            max-width: 800px; 
-            margin: auto; 
-            border-radius: 8px;
-            flex: 1; /* Permite que el contenido ocupe el espacio restante */
-        }
-    </style>
-</head><body>
+}
+.content {
+padding: 20px;
+background-color: rgba(0, 0, 0, 0.5);
+max-width: 800px;
+margin: auto;
+border-radius: 8px;
+flex: 1; /* Permite que el contenido ocupe el espacio restante */
+}
+</style>
+</head>
+<body>
 <div class="sidebar">
 <h3>Índice</h3>
 <ul>
-  <li><a href="#INTRODUCCION">Introducción</a></li>
-  <li><a href="#PID">PID</a></li>
-  <li><a href="#MODELOS_SIMPLE_VS_ACKERMAN">Modelo Simple vs Ackerman</a></li>
-  <li><a href="#PROCESAMIENTO_DE_IMAGEN">Procesamiento de Imagen</a></li>
-  <li><a href="#CASOS_CONTROLADOS">Casos Controlados</a></li>
-  <li><a href="#PRUEBAS">Pruebas</a></li>
-  <li>Resultado Final</li>
+<li><a href="#INTRODUCCION">Introducción</a></li>
+<li><a href="#PID">PID</a></li>
+<li><a href="#MODELOS_SIMPLE_VS_ACKERMAN">Modelo Simple vs Ackerman</a></li>
+<li><a href="#PROCESAMIENTO_DE_IMAGEN">Procesamiento de Imagen</a></li>
+<li><a href="#CASOS_CONTROLADOS">Casos Controlados</a></li>
+<li><a href="#PRUEBAS">Pruebas</a></li>
+<li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
 </ul>
 </div>
-
 <div class="content">
-<div style="text-align: center;"><big><big><span style="font-weight: bold;"> PRACTICA 2 FOLLOW LINE </span><br style="font-weight: bold;">
+<div style="text-align: center;"><big><big><span
+style="font-weight: bold;"> PRACTICA 2 FOLLOW LINE </span><br
+style="font-weight: bold;">
 <span style="font-weight: bold;">
 Silvia Calvo Cabello</span></big></big><br>
 </div>
-
 <br>
 <ul>
-  <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">
-INTRODUCCIÓN</span></li>
+<li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
 </ul>
-
 Mediante Unibotics (página para la simulación de distintos proyectos)
 realizar un programa para un coche de Fórmula 1 autónomo. Para ello
 consta de una cámara frontal para reconocer la línea del circuito a
@@ -71,30 +68,31 @@ seguir. Este debe ser lo más rápido y estable posible, realizando este
 control mediante un PID.<br>
 <br>
 <ul>
-  <li><span style="font-weight: bold;"><a name="PID"></a>
-PID</span></li>
+<li><span style="font-weight: bold;"><a name="PID"></a>PID</span></li>
 </ul>
-
 Es un controlador de lazo cerrado el cual intenta minimizar el error y
 hacer el sistema lo más rápido posible. Existen varios tipos de estos
-controladores (P, PD, PI, PID) <br><span style="font-weight: bold;">
-P - Proporcional - </span>Es inversamente proporcional al error, cuanto mayor
-sea su valor, más rápidamente reaccionará al error instantáneo.<br><span style="font-weight: bold;">
-I - Integral </span>- Calcula la integral del error para minimizar el offset
-(el error estable), cuanto mayor sea su valor ...<br><span style="font-weight: bold;">
-D - Derivativo -</span> Calcula la derivada del error para suavizar o exagerar
+controladores (P, PD, PI, PID) <br>
+<span style="font-weight: bold;">P - Proporcional - </span>Es
+inversamente proporcional al error, cuanto mayor
+sea su valor, más rápidamente reaccionará al error instantáneo.<br>
+<span style="font-weight: bold;">I - Integral </span>- Calcula la
+integral del error para minimizar el offset
+(el error estable), cuanto mayor sea su valor ...<br>
+<span style="font-weight: bold;">D - Derivativo -</span> Calcula la
+derivada del error para suavizar o exagerar
 los cambios del error, cuanto mayor sea su valor ...<br>
 <br>
-Para esta práctica se ha seleccionado un controlador <span style="font-weight: bold;">PD (kp*error +
+Para esta práctica se ha seleccionado un controlador <span
+style="font-weight: bold;">PD (kp*error +
 kd*de/dt)</span>.
 Como las muestras del sistema son discretas, para el derivativo se
 calculará con la resta de tiempo entre muestras.<br>
 <br>
 <ul>
-  <li><span style="font-weight: bold;"><a name="MODELOS_SIMPLE_VS_ACKERMAN"></a>
-MODELOS SIMPLE VS ACKERMAN</span></li>
+<li><span style="font-weight: bold;"><a
+name="MODELOS_SIMPLE_VS_ACKERMAN"></a>MODELOS SIMPLE VS ACKERMAN</span></li>
 </ul>
-
 Como ya he mencionado antes, para esta práctica se está usando
 Unibotics para la simulación de los proyectos, y esta da dos opciones a
 la hora de controlar el coche de Fórmula 1. Primero mediante el giro
@@ -105,61 +103,68 @@ secundarias no se mueven. Para esta práctica primero se realizará con
 el modelo simple y después el Ackerman<br>
 <br>
 <ul>
-  <li><span style="font-weight: bold;"><a name="PROCESAMIENTO_DE_IMAGEN"></a>
-PROCESAMIENTO DE IMAGEN</span> </li>
+<li><span style="font-weight: bold;"><a name="PROCESAMIENTO_DE_IMAGEN"></a>PROCESAMIENTO
+DE IMAGEN</span> </li>
 </ul>
-
 El coche de Fórmula 1 consta de una cámara de visión en la parte
 frontal, para manejar dicha información necesitaremos las librerías de
 OpenCV (cv2) y Numpy. <br>
+<br>
 Como la imagen recibida está a color y la línea a seguir es
-distinguible, trabajaremos la imagen aplicando un filtro de color para 
-quedarnos solo con la línea roja (hay que tener en cuenta que hay
-colores como el blanco que también tienen componente roja por lo que
-hay que filtrar por ellos también). A continuación, para distinguir
+distinguible, trabajaremos la imagen aplicando un filtro de color para
+quedarnos solo con la línea roja (HSV). A continuación, para distinguir
 hacia donde va la línea sacaremos de la una franja destacada (desde los
-240 píxeles a los 280 píxeles en la componente y) sacaremos los índices
+240 píxeles a los 260 píxeles en la componente y) sacaremos los índices
 de todos estos píxeles que han pasado el filtrado y haremos una media,
 de esta manera podremos comprobar hacia dónde va la línea comparándola
 con el centro de la imagen. <br>
 <br>
 <ul>
-  <li><span style="font-weight: bold;"><a name="CASOS_CONTROLADOS"></a>
-CASOS CONTROLADOS</span></li>
+<li><span style="font-weight: bold;"><a name="CASOS_CONTROLADOS"></a>CASOS
+CONTROLADOS</span></li>
 </ul>
 <ol>
-  <li><span style="text-decoration: underline;">
-No ver la línea al empezar el circuito:</span> Si al empezar el programa el
-coche no ve la línea roja que debe seguir, girará hasta encontrarla.</li>
-  <li><span style="text-decoration: underline;">
-Calibración al inicio: </span>La cámara frontal no está situada en el centro
+<li><span style="text-decoration: underline;">Calibración al inicio: </span>La
+cámara frontal no está situada en el centro
 del coche, por lo que hay que calibrarla poniendo el coche en el centro
 de la línea.</li>
-  <li style="text-decoration: underline;">
-Perder la línea en mitad del circuito:</li>
+<li><span style="text-decoration: underline;">Perder la línea en
+mitad del circuito: </span>
+El programa va guardando hacia donde tiene que girar para
+volver a encontrar la linea, asi cuando la pierda solo gira hasta
+volver a encontrarla </li>
 </ol>
-
 <br>
 <ul>
-  <li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS</span></li>
+<li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS</span></li>
 </ul>
 <span style="text-decoration: underline;">Primer internto: </span>Circuito:
 Simple&nbsp; Conduccion: Simple Vision:RGB Controlador: PD(0.005 0.015)
 Velocidad: 4 tiempo: 280 s Problemas: Va muy lento<br>
 <br>
 <span style="text-decoration: underline;">Segundo intento:</span>
-Circuito: Simple&nbsp; Conduccion: Simple Vision:RGB Controlador:
-PD(0.01 0.3) Velocidad: 10 tiempo: 110S s Problemas: Para el modelo 
-condución simple es el mejor, no genera oscilaciones innecesarias. 
-No hay problemas.<br>
-<br>
-<span style="text-decoration: underline;">Tercer intento:</span>
 Circuito: Simple&nbsp; Conduccion: Simple Vision:HSV Controlador:
 PD(0.0 0.02) Velocidad: 8 tiempo: 130 s Problemas: Oscila bastante en
 las curvas.<br>
 <br>
-  
+<span style="text-decoration: underline;">Tercer intento:</span>
+Circuito: Simple&nbsp; Conduccion: Simple Vision:RGB Controlador:
+PD(0.01 0.3) Velocidad: 10 tiempo: 110S s Problemas: Para el modelo
+condución simple es el mejor, no genera oscilaciones innecesarias. No
+hay problemas.<br>
+<br>
+<ul>
+<li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO
+FINAL</span></li>
+</ul>
+<span style="text-decoration: underline;">simple</span><br>
+Se ha dado prioridad a la estabilidad ante la rapidez, por ello el
+sistema tarda 110 s pero tiene unas oscilaciones mínimas a lo largo de
+todo el recorrido como se puede comprobar en el siguinete video.<br>
+<br>
+<br>
 <br>
 </div>
+</body>
+</html>
 
-</body></html>
