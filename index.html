@@ -17,7 +17,7 @@ height: 100vh;
 display: flex;
 }
 .sidebar {
-width: 125px;
+width: 150px;
 position: fixed; /* Fijo al desplazarse */
 top: 10px;
 left: 10px;
@@ -28,12 +28,14 @@ margin-right: 5px;
 
 }
 .content {
-padding: 20px;
-background-color: rgba(0, 0, 0, 0.5);
-max-width: 800px;
-margin: auto;
-border-radius: 8px;
-flex: 1; /* Permite que el contenido ocupe el espacio restante */
+ padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    max-width: calc(100% - 170px); /* 150px del sidebar + 20px de margen */
+    margin: auto;
+    border-radius: 8px;
+    flex: 1; /* Permite que el contenido ocupe el espacio restante */
+    position: relative;
+    left: 150px; /* Desplazar el contenido hacia la derecha */
 }
 </style>
 </head>
