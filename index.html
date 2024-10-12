@@ -17,7 +17,7 @@ height: 100vh;
 display: flex;
 }
 .sidebar {
-width: 150px;
+width: 125px;
 position: fixed; /* Fijo al desplazarse */
 top: 10px;
 left: 10px;
@@ -30,12 +30,12 @@ margin-right: 5px;
 .content {
  padding: 20px;
     background-color: rgba(0, 0, 0, 0.5);
-    max-width: calc(80%)
+    max-width: calc(80% - 20px)
     margin: auto;
     border-radius: 8px;
     flex: 1; /* Permite que el contenido ocupe el espacio restante */
     position: relative;
-    left: 170px; /* Desplazar el contenido hacia la derecha */
+    left: calc(50% - 50% + 75px);
 }
 </style>
 </head>
