@@ -109,7 +109,7 @@ roomba, indicando que la velocidad angular que recibe el modelo es la
 que gira, está el modelo Ackerman, este funciona de manera que la
 velocidad angular gira las ruedas principales del coche y las
 secundarias no se mueven. Para esta práctica primero se realizará con
-el modelo simple y después el Ackerman<br>
+el modelo simple.<br>
 <br>
 <ul>
 <li><span style="font-weight: bold;"><a name="PROCESAMIENTO_DE_IMAGEN"></a>PROCESAMIENTO
@@ -156,16 +156,20 @@ Simple&nbsp; Conduccion: Simple Vision:RGB Controlador: PD(0.005 0.015)
 Velocidad: 4 tiempo: 280 s Problemas: Va muy lento<br>
 <br>
 <span style="text-decoration: underline;">Segundo intento:</span>
-Circuito: Simple&nbsp; Conduccion: Simple Vision:HSV Controlador:
-PD(0.0 0.02) Velocidad: 8 tiempo: 130 s Problemas: Oscila bastante en
+Circuito: Simple&nbsp; Conduccion: Simple Vision:RGB Controlador:
+PD(0.009 0.02) Velocidad: 8 tiempo: 130 s Problemas: Oscila bastante en
 las curvas.<br>
 <br>
 <span style="text-decoration: underline;">Tercer intento:</span>
-Circuito: Simple&nbsp; Conduccion: Simple Vision:RGB Controlador:
+Circuito: Simple&nbsp; Conduccion: Simple Vision:HSV Controlador:
 PD(0.01 0.3) Velocidad: 10 tiempo: 110S s Problemas: Para el modelo
 condución simple es el mejor, no genera oscilaciones innecesarias. No
 hay problemas.<br>
 <br>
+  <span style="text-decoration: underline;"> Prueba ackerman:</span>
+Circuito: Simple&nbsp; Probé el modo ackerman, pero iba muy descontrolado, 
+intenté hacer pruebas de que simplemente fuese recto, y no podia, siempre 
+giraba hacia un lado.<br>
 <ul>
 <li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO
 FINAL</span></li>
