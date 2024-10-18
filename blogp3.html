@@ -16,6 +16,7 @@
             color: white;
             height: 100vh;
             display: flex;
+            flex-direction: column;
         }
         .sidebar {
             width: 125px;
@@ -33,8 +34,27 @@
             max-width: calc(60% - 50px);
             margin: auto;
             border-radius: 8px;
-            flex: 1; /* Permite que el contenido ocupe el espacio restante */
+            flex: 1; 
             color: white;
+        }
+        .fixed-box {
+            width: 100px;
+            height: 100px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
         }
         a {
             color: white;
@@ -123,5 +143,9 @@
             <p>Se realizaron pruebas en otros circuitos, como el de Montmelo. Aunque el tiempo final fue elevado, el vehículo mostró un comportamiento muy estable, manteniéndose prácticamente sobre la línea de seguimiento.</p>
         </div>
     </div>
+
+    
+    <a href="index.html" class="fixed-box left-box">Página 1</a>
+    <a href="blogp2.html" class="fixed-box right-box">Página 2</a>
 </body>
 </html>
