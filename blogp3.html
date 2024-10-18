@@ -1,169 +1,127 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P3_Obstacle_avoidance</title>
-<style>
-body {
-margin: 0;
-font-family: Arial, sans-serif;
-background-image: url('imagesP3.png');
-background-size: cover;
-background-repeat: no-repeat;
-background-attachment: fixed;
-background-position: center;
-color: white;
-height: 100vh;
-display: flex;
-}
-.sidebar {
-width: 125px;
-position: fixed; /* Fijo al desplazarse */
-top: 10px;
-left: 10px;
-padding: 20px;
-background-color: rgba(0, 0, 0, 0.7);
-border-radius: 8px;
-margin-right: 5px;
-}
-.content {
-padding: 20px;
-background-color: rgba(0, 0, 0, 0.5);
-max-width: calc(60% - 50px);
-margin: auto;
-border-radius: 8px;
-flex: 1; /* Permite que el contenido ocupe el espacio restante */
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P3_Obstacle_avoidance</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('imagesP3.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed; /* Fijo al desplazarse */
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1; /* Permite que el contenido ocupe el espacio restante */
+            color: white;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body style="color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee"
-vlink="#551a8b">
-<div class="sidebar">
-<h3>Índice</h3>
-<ul>
-<li><a href="#INTRODUCCION" title="Introducción">Introducción</a></li>
-<li><a href="#VFF" title="VFF">VFF</a></li>
-<li><a href="#CALCULO_DE_FUERZA" title="Calculo de fuerzas">Calculo
-de fuerzas<br>
-</a></li>
-<li><a href="#CASOS_CONTROLADOS" title="Casos Controlados">Casos
-Controlados</a></li>
-<li><a href="#PRUEBAS" title="Pruebas">Pruebas</a></li>
-<li><a href="#RESULTADO_FINAL" title="Resultado Final">Resultado Final</a></li>
-</ul>
-<div style="text-align: center; margin-top: 20px;"> <a
-href="index.html"
-style="color: white; text-decoration: none; font-weight: bold;">
-Volver a la página principal </a> </div>
-</div>
-<div style="background-color: white; color: white;" class="content">
-<div style="text-align: center; background-color: white;"> <big><big><span
-style="font-weight: bold;"> PRACTICA 2 FOLLOW LINE </span><br>
-<span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
-</div>
-<br>
-<ul style="background-color: white;">
-<li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
-</ul>
-Mediante Unibotics (página para la simulación de distintos proyectos)
-realizar un programa para un coche de Fórmula 1 autónomo usando
-navegación local. El programa consta de puntos a alcalzar (waypoints)
-en término de coordenadas globales, para evitar choque se debe usar la
-técnica de VFF. .<br>
-<br>
-<ul style="background-color: white;">
-<li><span style="font-weight: bold;"><a name="VFF"></a>VFF</span></li>
-</ul>
-VFF es una técnica de navegación lacal que consta de fuerzas virtuales.
-Fuerzas atractivas hacia los objectivos y fuerzas repulsivas creadas
-por obstaculos, estas con en direccion opuesta a este. Una vez obtenido
-la Fuerza atractiva total y la repulsiva, se calcula la fuerza total de
-la siguiente manera : &nbsp; &nbsp; <span style="font-weight: bold;">Fuerza
-resultante = </span><b
-style="font-weight: 500; font-family: &quot;Google Sans&quot;,Arial,sans-serif; font-size: 20px; font-style: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal;">α
-* </b><span style="font-weight: bold;">Fuerza atractiva + </span><span
-style="font-family: &quot;Google Sans&quot;,Arial,sans-serif; font-size: 20px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">β*</span><span
-style="font-weight: bold;">Fuerza repulsiva</span> <br>
-<br>
-<ul style="background-color: white;">
-<li><span style="font-weight: bold;"><a name="CALCULO_DE_FUERZAS"></a>CÁLCULO
-DE FUERZAS<br>
-</span></li>
-</ul>
-<span style="font-weight: bold;"> Fuerza atractiva:&nbsp; </span>Obteniendo
-las coordenadas globales y calculando su posición relativa al robot.
-Pero esto da un vector con modulo descontrolado, para ello se
-controlará dando un máximo y un minimo.<br>
-<br>
-<span style="font-weight: bold;">Fuerza repulsiva:</span> Calculada
-através de los datos recibidos por el laser de 180º. Se utiliza el
-siguiente método<br>
-<ul style="background-color: white;">
-</ul>
-<br>
-<ul style="background-color: white;">
-<li><span style="font-weight: bold;"><a name="CASOS_CONTROLADOS"></a>CASOS
-CONTROLADOS</span></li>
-</ul>
-<ol style="background-color: white;">
-<li><span style="text-decoration: underline;">Calibración al inicio: </span>La
-cámara frontal no está situada en el centro del coche, por lo que hay
-que calibrarla poniendo el coche en el centro de la línea.</li>
-<li><span style="text-decoration: underline;">Perder la línea en
-mitad del circuito: </span>El programa va guardando hacia donde tiene
-que girar para volver a encontrar la línea, así cuando la pierda solo
-gira en esa dirección.</li>
-<li><span style="text-decoration: underline;">Margen del PD: </span>
-Para evitar oscilaciones muy pequeñas, se ha generado un margen como el
-comentado en clase para el robot sigue personas, el cual selecciona la
-velocidad angular a 0.</li>
-</ol>
-<br>
-<ul style="background-color: white;">
-<li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS</span></li>
-</ul>
-<span style="text-decoration: underline;">Primer intento:</span>
-Calcular el vector repulsivo usando un solo punto del laser, el más
-próximo al coche. Funciona pero es muy frágil e inestable. &nbsp;&nbsp;
-<br>
-<br>
-<span style="text-decoration: underline;">Segundo intento:</span>
-Calcular el vector repulsivo dando pesos a las distancias más proximas
-al frente del coche. La primera prueba no funcionó <br>
-<br>
-<span style="text-decoration: underline;">Tercer intento:</span>
-.<br>
-<br>
-
-<div
-style="text-align: center; margin-top: 20px; background-color: white;">
-<a
-href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ef6M6llBN0JKmc53fgmzw6cBwLofVwNbKe7FxkZQ8RS9Wg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=heHl73"
-target="_blank" style="text-decoration: none;"> Ver el video <br>
-</a> </div>
-<ul style="background-color: white;">
-<li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO
-FINAL</span></li>
-</ul>
-<span style="text-decoration: underline;">Simple</span><br>
-Se ha dado prioridad a la estabilidad ante la rapidez, por ello el
-sistema tarda 110 s, pero tiene unas oscilaciones mínimas a lo largo de
-todo el recorrido como se puede comprobar en el siguiente video.<br>
-<div
-style="text-align: center; margin-top: 20px; background-color: white;">
-<a
-href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYIP2pwS5qlOkky4mui3dWMBNP_ZVmhA8WxAIgtmTaEJ1g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=jUAYJf"
-target="_blank" style="text-decoration: none;"> Ver el video <br>
-</a> </div>
-<br>
-<br>
-<br>
-<div style="background-color: white;"> <br>
-<div style="background-color: white;">Se hicieron pruebas en otros
-circuitos como el Montmelo, el cual el tiempo final era algo elevado,
-ero seguía siendo muy estable, apenas saliéndose de la línea a seguir. </div>
-</div>
-</div>
+<body>
+    <div class="sidebar">
+        <h3>Índice</h3>
+        <ul>
+            <li><a href="#INTRODUCCION">Introducción</a></li>
+            <li><a href="#VFF">VFF</a></li>
+            <li><a href="#CALCULO_DE_FUERZA">Cálculo de Fuerzas</a></li>
+            <li><a href="#CASOS_CONTROLADOS">Casos Controlados</a></li>
+            <li><a href="#PRUEBAS">Pruebas</a></li>
+            <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
+        </ul>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+        </div>
+    </div>
+    <div class="content">
+        <div style="text-align: center;">
+            <h1>PRACTICA 2 FOLLOW LINE</h1>
+            <h2>Silvia Calvo Cabello</h2>
+        </div>
+        <br>
+        <ul>
+            <li><a name="INTRODUCCION"></a><strong>INTRODUCCIÓN</strong></li>
+        </ul>
+        <p>
+            Se desarrolló un programa en Unibotics para un vehículo de Fórmula 1 autónomo, utilizando navegación local. Este programa tiene como objetivo alcanzar puntos específicos (waypoints) definidos en coordenadas globales, y para evitar colisiones se aplica la técnica de Virtual Force Field (VFF).
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="VFF"></a>VFF</strong></li>
+        </ul>
+        <p>
+            La técnica VFF consiste en un enfoque de navegación local que utiliza fuerzas virtuales. Estas fuerzas incluyen componentes atractivos hacia los objetivos y componentes repulsivos generados por obstáculos, orientados en dirección opuesta. La fuerza total se calcula de la siguiente manera:
+        </p>
+        <p>
+            <strong>Fuerza resultante = α * Fuerza atractiva + β * Fuerza repulsiva</strong>
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="CALCULO_DE_FUERZAS"></a>CÁLCULO DE FUERZAS</strong></li>
+        </ul>
+        <p>
+            <strong>Fuerza atractiva:</strong> Esta se determina calculando la posición relativa del robot con respecto a las coordenadas globales. Para controlar el módulo de esta fuerza, se establecen límites máximos y mínimos.
+        </p>
+        <p>
+            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, utilizando el método correspondiente.
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="CASOS_CONTROLADOS"></a>CASOS CONTROLADOS</strong></li>
+        </ul>
+        <ol>
+            <li><span style="text-decoration: underline;">Calibración inicial:</span> Dado que la cámara frontal no está centrada en el vehículo, es necesario calibrarla posicionando el coche en el centro de la línea.</li>
+            <li><span style="text-decoration: underline;">Pérdida de la línea en el circuito:</span> El programa registra la dirección hacia la que debe girar para recuperar la línea, permitiendo que el coche gire en esa dirección al perderla.</li>
+            <li><span style="text-decoration: underline;">Margen del PD:</span> Para evitar oscilaciones menores, se ha implementado un margen similar al discutido en clase, que ajusta la velocidad angular a 0.</li>
+        </ol>
+        <br>
+        <ul>
+            <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
+        </ul>
+        <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
+        <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa.</p>
+        <p><strong>Tercer intento:</strong> Se realizó una prueba en un circuito simple con las siguientes configuraciones: Conducción simple, Visión HSV, Controlador PD (0.01, 0.3), Velocidad: 10, Tiempo: 110 s. Este modelo demostró ser el más estable, evitando oscilaciones innecesarias.</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ef6M6llBN0JKmc53fgmzw6cBwLofVwNbKe7FxkZQ8RS9Wg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=heHl73" target="_blank">Ver el video</a>
+        </div>
+        <ul>
+            <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
+        </ul>
+        <p><strong>Configuración Simple:</strong> Se priorizó la estabilidad sobre la rapidez. El sistema tardó 110 s, pero mantuvo oscilaciones mínimas a lo largo del recorrido, como se puede observar en el siguiente video.</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYIP2pwS5qlOkky4mui3dWMBNP_ZVmhA8WxAIgtmTaEJ1g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=jUAYJf" target="_blank">Ver el video</a>
+        </div>
+        <br>
+        <div>
+            <p>Se realizaron pruebas en otros circuitos, como el de Montmelo. Aunque el tiempo final fue elevado, el vehículo mostró un comportamiento muy estable, manteniéndose prácticamente sobre la línea de seguimiento.</p>
+        </div>
+    </div>
 </body>
 </html>
-
