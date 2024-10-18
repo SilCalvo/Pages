@@ -1,140 +1,169 @@
-<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P3_Obstacle_avoidance</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-image: url('imagesP3.png');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-position: center;
-            color: white;
-            height: 100vh;
-            display: flex;
-        }
-        .sidebar {
-            width: 125px;
-            position: fixed; /* Fijo al desplazarse */
-            top: 10px;
-            left: 10px;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
-            margin-right: 5px;
-        }
-        .content {
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            max-width: calc(60% - 50px);
-            margin: auto;
-            border-radius: 8px;
-            flex: 1; /* Permite que el contenido ocupe el espacio restante */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P3_Obstacle_avoidance</title>
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background-image: url('imagesP3.png');
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+background-position: center;
+color: white;
+height: 100vh;
+display: flex;
+}
+.sidebar {
+width: 125px;
+position: fixed; /* Fijo al desplazarse */
+top: 10px;
+left: 10px;
+padding: 20px;
+background-color: rgba(0, 0, 0, 0.7);
+border-radius: 8px;
+margin-right: 5px;
+}
+.content {
+padding: 20px;
+background-color: rgba(0, 0, 0, 0.5);
+max-width: calc(60% - 50px);
+margin: auto;
+border-radius: 8px;
+flex: 1; /* Permite que el contenido ocupe el espacio restante */
+}
+</style>
 </head>
-<body>
-
+<body style="color: rgb(0, 0, 0);" alink="#ee0000" link="#0000ee"
+vlink="#551a8b">
 <div class="sidebar">
-    <h3>Índice</h3>
-    <ul>
-        <li><a href="#INTRODUCCION" title="Introducción">Introducción</a></li>
-        <li><a href="#PID" title="PID">PID</a></li>
-        <li><a href="#MODELOS_SIMPLE_VS_ACKERMAN" title="Modelo Simple vs Ackerman">Modelo Simple vs Ackerman</a></li>
-        <li><a href="#PROCESAMIENTO_DE_IMAGEN" title="Procesamiento de Imagen">Procesamiento de Imagen</a></li>
-        <li><a href="#CASOS_CONTROLADOS" title="Casos Controlados">Casos Controlados</a></li>
-        <li><a href="#PRUEBAS" title="Pruebas">Pruebas</a></li>
-        <li><a href="#RESULTADO_FINAL" title="Resultado Final">Resultado Final</a></li>
-    </ul>
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">
-            Volver a la página principal
-        </a>
-    </div>
+<h3>Índice</h3>
+<ul>
+<li><a href="#INTRODUCCION" title="Introducción">Introducción</a></li>
+<li><a href="#VFF" title="VFF">VFF</a></li>
+<li><a href="#CALCULO_DE_FUERZA" title="Calculo de fuerzas">Calculo
+de fuerzas<br>
+</a></li>
+<li><a href="#CASOS_CONTROLADOS" title="Casos Controlados">Casos
+Controlados</a></li>
+<li><a href="#PRUEBAS" title="Pruebas">Pruebas</a></li>
+<li><a href="#RESULTADO_FINAL" title="Resultado Final">Resultado Final</a></li>
+</ul>
+<div style="text-align: center; margin-top: 20px;"> <a
+href="index.html"
+style="color: white; text-decoration: none; font-weight: bold;">
+Volver a la página principal </a> </div>
 </div>
-
-<div class="content">
-    <div style="text-align: center;">
-        <big><big><span style="font-weight: bold;"> PRACTICA 2 FOLLOW LINE </span><br>
-        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
-    </div>
-    <br>
-    <ul>
-        <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
-    </ul>
-    Mediante Unibotics (página para la simulación de distintos proyectos) realizar un programa para un coche de Fórmula 1 autónomo usando navegación local. 
-    El programa consta de puntos a alcalzar (waypoints) en término de coordenadas globales, para evitar choque se debe usar la técnica de VFF.
-    .<br>
-    <br>
-    <ul>
-        <li><span style="font-weight: bold;"><a name="PID"></a>PID</span></li>
-    </ul>
-    Es un controlador de lazo cerrado el cual intenta minimizar el error y hacer el sistema lo más rápido posible. Existen varios tipos de estos controladores (P, PD, PI, PID).<br>
-    <span style="font-weight: bold;">P - Proporcional - </span>Es inversamente proporcional al error, cuanto mayor sea su valor, más rápidamente reaccionará al error instantáneo.<br>
-    <span style="font-weight: bold;">I - Integral </span>- Calcula la integral del error para minimizar el offset (el error estable), cuanto mayor sea su valor ...<br>
-    <span style="font-weight: bold;">D - Derivativo -</span> Calcula la derivada del error para suavizar o exagerar los cambios del error, cuanto mayor sea su valor ...<br>
-    <br>
-    Para esta práctica se ha seleccionado un controlador <span style="font-weight: bold;">PD (kp*error + kd*de/dt)</span>. Como las muestras del sistema son discretas, para el derivativo se calculará con la resta de tiempo entre muestras.<br>
-    <br>
-    <ul>
-        <li><span style="font-weight: bold;"><a name="MODELOS_SIMPLE_VS_ACKERMAN"></a>MODELOS SIMPLE VS ACKERMAN</span></li>
-    </ul>
-    Como ya he mencionado antes, para esta práctica se está usando Unibotics para la simulación de los proyectos, y esta da dos opciones a la hora de controlar el coche de Fórmula 1. Primero mediante el giro roomba, indicando que la velocidad angular que recibe el modelo es la que gira, y está el modelo Ackerman, que funciona de manera que la velocidad angular gira las ruedas principales del coche y las secundarias no se mueven. Para esta práctica primero se realizará con el modelo simple.<br>
-    <br>
-    <ul>
-        <li><span style="font-weight: bold;"><a name="PROCESAMIENTO_DE_IMAGEN"></a>PROCESAMIENTO DE IMAGEN</span></li>
-    </ul>
-    El coche de Fórmula 1 consta de una cámara de visión en la parte frontal, para manejar dicha información necesitaremos las librerías de OpenCV (cv2) y Numpy.<br>
-    Como la imagen recibida está a color y la línea a seguir es distinguible, trabajaremos la imagen aplicando un filtro de color para quedarnos solo con la línea roja (HSV). A continuación, para distinguir hacia dónde va la línea, sacaremos de una franja destacada (desde los 240 píxeles a los 260 píxeles en la componente y) los índices de todos estos píxeles que han pasado el filtrado y haremos una media, de esta manera podremos comprobar hacia dónde va la línea comparándola con el centro de la imagen.<br>
-    <br>
-    <ul>
-        <li><span style="font-weight: bold;"><a name="CASOS_CONTROLADOS"></a>CASOS CONTROLADOS</span></li>
-    </ul>
-    <ol>
-        <li><span style="text-decoration: underline;">Calibración al inicio: </span>La cámara frontal no está situada en el centro del coche, por lo que hay que calibrarla poniendo el coche en el centro de la línea.</li>
-        <li><span style="text-decoration: underline;">Perder la línea en mitad del circuito: </span>El programa va guardando hacia donde tiene que girar para volver a encontrar la línea, así cuando la pierda solo gira en esa dirección.</li>
-        <li><span style="text-decoration: underline;">Margen del PD: </span> Para evitar oscilaciones muy pequeñas, se ha generado un margen como el comentado en clase para el robot sigue personas, el cual selecciona la velocidad angular a 0.</li>
-    </ol>
-    <br>
-    <ul>
-        <li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS</span></li>
-    </ul>
-    <span style="text-decoration: underline;">Primer intento: </span>Circuito: Simple&nbsp; Conducción: Simple Vision: RGB Controlador: PD(0.005 0.015) Velocidad: 4 tiempo: 280 s Problemas: Va muy lento<br>
-    <br>
-    <span style="text-decoration: underline;">Segundo intento:</span> Circuito: Simple&nbsp; Conducción: Simple Vision: RGB Controlador: PD(0.009 0.02) Velocidad: 8 tiempo: 130 s Problemas: Oscila bastante en las curvas.<br>
-    <br>
-    <span style="text-decoration: underline;">Tercer intento:</span> Circuito: Simple&nbsp; Conducción: Simple Vision: HSV Controlador: PD(0.01 0.3) Velocidad: 10 tiempo: 110 s Problemas: Para el modelo conducción simple es el mejor, no genera oscilaciones innecesarias. No hay problemas.<br>
-    <br>
-    <span style="text-decoration: underline;">Prueba Ackerman:</span> Circuito: Simple&nbsp; Probé el modo Ackerman, pero iba muy descontrolado. Intenté hacer pruebas de que simplemente fuese recto, y no podía, siempre giraba hacia un lado como se puede comprobar en el siguiente video. La única manera que conseguí que no girase era poniéndolo a velocidad 2, por lo que tardaba 180 segundos solo en hacer la primera curva.<br>
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ef6M6llBN0JKmc53fgmzw6cBwLofVwNbKe7FxkZQ8RS9Wg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=heHl73" target="_blank" style="color: white; text-decoration: none;">
-            Ver el video
-            <br>
-        </a>
-    </div>
-    <ul>
-        <li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO FINAL</span></li>
-    </ul>
-    <span style="text-decoration: underline;">Simple</span><br>
-    Se ha dado prioridad a la estabilidad ante la rapidez, por ello el sistema tarda 110 s, pero tiene unas oscilaciones mínimas a lo largo de todo el recorrido como se puede comprobar en el siguiente video.<br>
-    <div style="text-align: center; margin-top: 20px;">
-        <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYIP2pwS5qlOkky4mui3dWMBNP_ZVmhA8WxAIgtmTaEJ1g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=jUAYJf" target="_blank" style="color: white; text-decoration: none;">
-            Ver el video
-            <br>
-        </a>
-    </div>
-    <br><br><br>
-    <div style="display: flex; align-items: center;">
-        <img style="width: 419px; height: 281px; margin-right: 20px;" alt="Prueba en circuito" src="foto.PNG">
-        <div>
-            Se hicieron pruebas en otros circuitos como el Montmelo, el cual el tiempo final era algo elevado, pero seguía siendo muy estable, apenas saliéndose de la línea a seguir.
-        </div>
-    </div>
+<div style="background-color: white; color: white;" class="content">
+<div style="text-align: center; background-color: white;"> <big><big><span
+style="font-weight: bold;"> PRACTICA 2 FOLLOW LINE </span><br>
+<span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
 </div>
+<br>
+<ul style="background-color: white;">
+<li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+</ul>
+Mediante Unibotics (página para la simulación de distintos proyectos)
+realizar un programa para un coche de Fórmula 1 autónomo usando
+navegación local. El programa consta de puntos a alcalzar (waypoints)
+en término de coordenadas globales, para evitar choque se debe usar la
+técnica de VFF. .<br>
+<br>
+<ul style="background-color: white;">
+<li><span style="font-weight: bold;"><a name="VFF"></a>VFF</span></li>
+</ul>
+VFF es una técnica de navegación lacal que consta de fuerzas virtuales.
+Fuerzas atractivas hacia los objectivos y fuerzas repulsivas creadas
+por obstaculos, estas con en direccion opuesta a este. Una vez obtenido
+la Fuerza atractiva total y la repulsiva, se calcula la fuerza total de
+la siguiente manera : &nbsp; &nbsp; <span style="font-weight: bold;">Fuerza
+resultante = </span><b
+style="font-weight: 500; font-family: &quot;Google Sans&quot;,Arial,sans-serif; font-size: 20px; font-style: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal;">α
+* </b><span style="font-weight: bold;">Fuerza atractiva + </span><span
+style="font-family: &quot;Google Sans&quot;,Arial,sans-serif; font-size: 20px; font-style: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; white-space: normal; background-color: rgb(255, 255, 255); display: inline ! important; float: none;">β*</span><span
+style="font-weight: bold;">Fuerza repulsiva</span> <br>
+<br>
+<ul style="background-color: white;">
+<li><span style="font-weight: bold;"><a name="CALCULO_DE_FUERZAS"></a>CÁLCULO
+DE FUERZAS<br>
+</span></li>
+</ul>
+<span style="font-weight: bold;"> Fuerza atractiva:&nbsp; </span>Obteniendo
+las coordenadas globales y calculando su posición relativa al robot.
+Pero esto da un vector con modulo descontrolado, para ello se
+controlará dando un máximo y un minimo.<br>
+<br>
+<span style="font-weight: bold;">Fuerza repulsiva:</span> Calculada
+através de los datos recibidos por el laser de 180º. Se utiliza el
+siguiente método<br>
+<ul style="background-color: white;">
+</ul>
+<br>
+<ul style="background-color: white;">
+<li><span style="font-weight: bold;"><a name="CASOS_CONTROLADOS"></a>CASOS
+CONTROLADOS</span></li>
+</ul>
+<ol style="background-color: white;">
+<li><span style="text-decoration: underline;">Calibración al inicio: </span>La
+cámara frontal no está situada en el centro del coche, por lo que hay
+que calibrarla poniendo el coche en el centro de la línea.</li>
+<li><span style="text-decoration: underline;">Perder la línea en
+mitad del circuito: </span>El programa va guardando hacia donde tiene
+que girar para volver a encontrar la línea, así cuando la pierda solo
+gira en esa dirección.</li>
+<li><span style="text-decoration: underline;">Margen del PD: </span>
+Para evitar oscilaciones muy pequeñas, se ha generado un margen como el
+comentado en clase para el robot sigue personas, el cual selecciona la
+velocidad angular a 0.</li>
+</ol>
+<br>
+<ul style="background-color: white;">
+<li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS</span></li>
+</ul>
+<span style="text-decoration: underline;">Primer intento:</span>
+Calcular el vector repulsivo usando un solo punto del laser, el más
+próximo al coche. Funciona pero es muy frágil e inestable. &nbsp;&nbsp;
+<br>
+<br>
+<span style="text-decoration: underline;">Segundo intento:</span>
+Calcular el vector repulsivo dando pesos a las distancias más proximas
+al frente del coche. La primera prueba no funcionó <br>
+<br>
+<span style="text-decoration: underline;">Tercer intento:</span>
+.<br>
+<br>
 
+<div
+style="text-align: center; margin-top: 20px; background-color: white;">
+<a
+href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ef6M6llBN0JKmc53fgmzw6cBwLofVwNbKe7FxkZQ8RS9Wg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=heHl73"
+target="_blank" style="text-decoration: none;"> Ver el video <br>
+</a> </div>
+<ul style="background-color: white;">
+<li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO
+FINAL</span></li>
+</ul>
+<span style="text-decoration: underline;">Simple</span><br>
+Se ha dado prioridad a la estabilidad ante la rapidez, por ello el
+sistema tarda 110 s, pero tiene unas oscilaciones mínimas a lo largo de
+todo el recorrido como se puede comprobar en el siguiente video.<br>
+<div
+style="text-align: center; margin-top: 20px; background-color: white;">
+<a
+href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYIP2pwS5qlOkky4mui3dWMBNP_ZVmhA8WxAIgtmTaEJ1g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=jUAYJf"
+target="_blank" style="text-decoration: none;"> Ver el video <br>
+</a> </div>
+<br>
+<br>
+<br>
+<div style="background-color: white;"> <br>
+<div style="background-color: white;">Se hicieron pruebas en otros
+circuitos como el Montmelo, el cual el tiempo final era algo elevado,
+ero seguía siendo muy estable, apenas saliéndose de la línea a seguir. </div>
+</div>
+</div>
 </body>
 </html>
+
