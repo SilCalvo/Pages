@@ -33,9 +33,11 @@
         a {
             color: white;
             text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
+            display: flex; /* Hacer que el enlace sea un contenedor flex */
+            align-items: center; /* Centrado vertical */
+            justify-content: center; /* Centrado horizontal */
+            width: 100%; /* Ocupa todo el ancho del cuadrado */
+            height: 100%; /* Ocupa todo el alto del cuadrado */
         }
         .square-container {
             display: flex;
@@ -44,16 +46,15 @@
             margin-top: 20px; /* Espacio adicional */
         }
         .square {
-            width: 125px; 
+            width: 100px; 
             height: 50px; 
             background-color: rgba(255, 255, 255, 0.3); 
             border: 2px solid white; 
             border-radius: 5px; 
-            display: flex;
-            align-items: center; /* Centrado vertical */
-            justify-content: center; /* Centrado horizontal */
             color: black; /* Color del texto dentro del cuadrado */
             text-align: center; /* Asegura que el texto esté centrado */
+            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+            position: relative; /* Permite que el enlace se posicione adecuadamente */
         }
     </style>
 </head>
@@ -66,7 +67,9 @@
 
 <div class="square-container">
     <div class="square">P1 Vacum Cleaner</div>
-    <a href="blogp2.html" class="square">P2 Follow Line</a>
+    <a href="blogp2.html" class="square">
+        P2 Follow Line
+    </a>
     <div class="square">P3 Obstacle avoidance</div>
 </div>
     
