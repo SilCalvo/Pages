@@ -108,10 +108,10 @@
             <li><strong><a name="CALCULO_DE_FUERZAS"></a>CÁLCULO DE FUERZAS</strong></li>
         </ul>
         <p>
-            <strong>Fuerza atractiva:</strong> Esta se determina calculando la posición relativa del robot con respecto a las coordenadas globales. Para controlar el módulo de esta fuerza, se establecen límites máximos y mínimos.
+            <strong>Fuerza atractiva:</strong> Esta se determina calculando la posición relativa del robot con respecto a las coordenadas globales. Para controlar el módulo de esta fuerza, se establecen límites máximos a los que puede llegar.
         </p>
         <p>
-            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, utilizando el método correspondiente.
+            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, el método usado ha variado durante todo el proceso de programación (los cuales se explican en el campo de pruebas) pero el resultante consiste en: 
         </p>
         <br>
         <ul>
@@ -127,8 +127,8 @@
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
         <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
-        <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa.</p>
-        <p><strong>Tercer intento:</strong> Se realizó una prueba en un circuito simple con las siguientes configuraciones: Conducción simple, Visión HSV, Controlador PD (0.01, 0.3), Velocidad: 10, Tiempo: 110 s. Este modelo demostró ser el más estable, evitando oscilaciones innecesarias.</p>
+        <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa debida a un mal cálculo de los pesos ya que se calculaban a la inversa, al corregir ese error, la prueba funcionaba correctamente menos en un caso en concreto que habia un coche y se chocaba con él</p>
+        <p><strong>Tercer intento:</strong> Hacer que solo tuviese en cuenta las distancias dentro de un cuadrado al rededor del coche para intentar solucionar el error anterior del coche.</p>
         <div style="text-align: center; margin-top: 20px;">
             <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ef6M6llBN0JKmc53fgmzw6cBwLofVwNbKe7FxkZQ8RS9Wg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=heHl73" target="_blank">Ver el video</a>
         </div>
