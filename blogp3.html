@@ -118,9 +118,7 @@
             <li><strong><a name="CASOS_CONTROLADOS"></a>CASOS CONTROLADOS</strong></li>
         </ul>
         <ol>
-            <li><span style="text-decoration: underline;">Calibración inicial:</span> Dado que la cámara frontal no está centrada en el vehículo, es necesario calibrarla posicionando el coche en el centro de la línea.</li>
-            <li><span style="text-decoration: underline;">Pérdida de la línea en el circuito:</span> El programa registra la dirección hacia la que debe girar para recuperar la línea, permitiendo que el coche gire en esa dirección al perderla.</li>
-            <li><span style="text-decoration: underline;">Margen del PD:</span> Para evitar oscilaciones menores, se ha implementado un margen similar al discutido en clase, que ajusta la velocidad angular a 0.</li>
+           <li><span style="text-decoration: underline;">Equilibrio de fuerzas:</span> Por la manera de calcular las fuerza resultante es posible que esta sea nula. Esto se debe a que la fuerza atractivo y repulsivo son iguales y opuestos (multiplicados por su alpha correspondiente). Por ello En mi codigo si eso llega a pasar se hace que la fuerza restante total sea más osado, dando mas fuerza al atrayente </li>
         </ol>
         <br>
         <ul>
@@ -129,9 +127,7 @@
         <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
         <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa debida a un mal cálculo de los pesos ya que se calculaban a la inversa, al corregir ese error, la prueba funcionaba correctamente menos en un caso en concreto que habia un coche y se chocaba con él</p>
         <p><strong>Tercer intento:</strong> Hacer que solo tuviese en cuenta las distancias dentro de un cuadrado al rededor del coche para intentar solucionar el error anterior del coche.</p>
-        <div style="text-align: center; margin-top: 20px;">
-            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ef6M6llBN0JKmc53fgmzw6cBwLofVwNbKe7FxkZQ8RS9Wg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=heHl73" target="_blank">Ver el video</a>
-        </div>
+        
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
         </ul>
