@@ -111,7 +111,7 @@
             <strong>Fuerza atractiva:</strong> Esta se determina calculando la posición relativa del robot con respecto a las coordenadas globales. Para controlar el módulo de esta fuerza, se establecen límites máximos a los que puede llegar.
         </p>
         <p>
-            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, el método usado ha variado durante todo el proceso de programación (los cuales se explican en el campo de pruebas) pero el resultante consiste en: 
+            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, el método usado ha variado durante todo el proceso de programación (los cuales se explican en el campo de pruebas) pero el resultante consiste en: Filtrar todas las medidas por debajo de una distancia (5 m ) y de cada uno de los puntos restantes calcular sus respectivas fuerzas, y por último, para hayar la final, hacer la media de esas fuerzas dando más valor a las que se encuentran delante del coche.
         </p>
         <br>
         <ul>
@@ -133,14 +133,12 @@
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
         </ul>
-        <p><strong>Configuración Simple:</strong> Se priorizó la estabilidad sobre la rapidez. El sistema tardó 110 s, pero mantuvo oscilaciones mínimas a lo largo del recorrido, como se puede observar en el siguiente video.</p>
+        <p>En el siguiente video se puede observar el fucionamiento del coche, aunque en este no se vea el caso singular de la anulacion de fuerzas a veces se daba. Un inconveniene es que gira muy bruscamene para evitar a los coches</p>
         <div style="text-align: center; margin-top: 20px;">
-            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYIP2pwS5qlOkky4mui3dWMBNP_ZVmhA8WxAIgtmTaEJ1g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=jUAYJf" target="_blank">Ver el video</a>
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ERdaPF6J_EJJn2RCvck190wBRpmuiwg_alSuQGkwbhNQcw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=4kfSNt" target="_blank">Ver el video</a>
         </div>
         <br>
-        <div>
-            <p>Se realizaron pruebas en otros circuitos, como el de Montmelo. Aunque el tiempo final fue elevado, el vehículo mostró un comportamiento muy estable, manteniéndose prácticamente sobre la línea de seguimiento.</p>
-        </div>
+       
     </div>
 
     
