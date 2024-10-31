@@ -1,1 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P3_Obstacle_avoidance</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('imagesP3_.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed; /* Fijo al desplazarse */
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1; 
+            color: white;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Índice</h3>
+        <ul>
+            <li><a href="#INTRODUCCION">Introducción</a></li>
+            <li><a href="#VFF">VFF</a></li>
+            <li><a href="#CALCULO_DE_FUERZA">Cálculo de Fuerzas</a></li>
+            <li><a href="#CASOS_CONTROLADOS">Casos Controlados</a></li>
+            <li><a href="#PRUEBAS">Pruebas</a></li>
+            <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
+        </ul>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+        </div>
+    </div>
+    <div class="content">
+        <div style="text-align: center;">
+            <h1>PRACTICA 3 OBSTACLE AVOIDANCE</h1>
+            <h2>Silvia Calvo Cabello</h2>
+        </div>
+        <br>
+        <ul>
+            <li><a name="INTRODUCCION"></a><strong>INTRODUCCIÓN</strong></li>
+        </ul>
+        <p>
+            Se desarrolló un programa en Unibotics para un vehículo de Fórmula 1 autónomo, utilizando navegación local. Este programa tiene como objetivo alcanzar puntos específicos (waypoints) definidos en coordenadas globales, y para evitar colisiones se aplica la técnica de Virtual Force Field (VFF).
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="VFF"></a>VFF</strong></li>
+        </ul>
+        <p>
+            La técnica VFF consiste en un enfoque de navegación local que utiliza fuerzas virtuales. Estas fuerzas incluyen componentes atractivos hacia los objetivos y componentes repulsivos generados por obstáculos, orientados en dirección opuesta. La fuerza total se calcula de la siguiente manera:
+        </p>
+        <p>
+            <strong>Fuerza resultante = α * Fuerza atractiva + β * Fuerza repulsiva</strong>
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="CALCULO_DE_FUERZAS"></a>CÁLCULO DE FUERZAS</strong></li>
+        </ul>
+        <p>
+            <strong>Fuerza atractiva:</strong> Esta se determina calculando la posición relativa del robot con respecto a las coordenadas globales. Para controlar el módulo de esta fuerza, se establecen límites máximos a los que puede llegar.
+        </p>
+        <p>
+            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, el método usado ha variado durante todo el proceso de programación (los cuales se explican en el campo de pruebas) pero el resultante consiste en: Filtrar todas las medidas por debajo de una distancia (5 m ) y de cada uno de los puntos restantes calcular sus respectivas fuerzas, y por último, para hayar la final, hacer la media de esas fuerzas dando más valor a las que se encuentran delante del coche.
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="CASOS_CONTROLADOS"></a>CASOS CONTROLADOS</strong></li>
+        </ul>
+        <ol>
+           <li><span style="text-decoration: underline;">Equilibrio de fuerzas:</span> Por la manera de calcular las fuerza resultante es posible que esta sea nula. Esto se debe a que la fuerza atractivo y repulsivo son iguales y opuestos (multiplicados por su alpha correspondiente). Por ello En mi codigo si eso llega a pasar se hace que la fuerza restante total sea más osado, dando mas fuerza al atrayente </li>
+        </ol>
+        <br>
+        <ul>
+            <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
+        </ul>
+        <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
+        <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa debida a un mal cálculo de los pesos ya que se calculaban a la inversa, al corregir ese error, la prueba funcionaba correctamente menos en un caso en concreto que habia un coche y se chocaba con él</p>
+        <p><strong>Tercer intento:</strong> Hacer que solo tuviese en cuenta las distancias dentro de un cuadrado al rededor del coche para intentar solucionar el error anterior del coche. Pero se acercaba mucho a las paredes asique volvi al anterior.</p>
+        <br>
+        Tener el cuenta que estos son intentos de algoritmos para calcular la fuerza repulsiva total, pero n cada uno de estos intentos se hicieron pruebas con distintos alphas y betas, y distancias maximas, asi como la veloidad del coche. 
+        <br>
+        <ul>
+            <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
+        </ul>
+        <p>En el siguiente video se puede observar el fucionamiento del coche, aunque en este no se vea el caso singular de la anulacion de fuerzas a veces se daba, sobretdo cuando al resetear la pagina, no se reseteaban los objetivos por lo que en vez de ir a por el primero, iba al segundo, yendo al lado de la pared hasta anularse las fuerzas. 
+            <br><br> Un inconveniene es que gira muy bruscamene para evitar a los coches</p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ERdaPF6J_EJJn2RCvck190wBRpmuiwg_alSuQGkwbhNQcw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=4kfSNt" target="_blank">Ver el video</a>
+        </div>
+        <br>
+       
+    </div>
 
+    
+    <a href="blogp2.html" class="fixed-box left-box">←</a>
+    <a href="index.html" class="fixed-box right-box">→</a>
+</body>
+</html>
