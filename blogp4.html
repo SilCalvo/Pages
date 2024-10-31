@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>P3_Obstacle_avoidance</title>
+    <title>P4_Global_navigation</title>
     <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-image: url('imagesP3_.png');
+            background-image: url('imagesP4.png');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -71,8 +71,8 @@
         <h3>Índice</h3>
         <ul>
             <li><a href="#INTRODUCCION">Introducción</a></li>
-            <li><a href="#VFF">VFF</a></li>
-            <li><a href="#CALCULO_DE_FUERZA">Cálculo de Fuerzas</a></li>
+            <li><a href="#BFS">BFS</a></li>
+            <li><a href="#COSTE POR GRADIENTE">Coste por gradiente</a></li>
             <li><a href="#CASOS_CONTROLADOS">Casos Controlados</a></li>
             <li><a href="#PRUEBAS">Pruebas</a></li>
             <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
@@ -83,7 +83,7 @@
     </div>
     <div class="content">
         <div style="text-align: center;">
-            <h1>PRACTICA 3 OBSTACLE AVOIDANCE</h1>
+            <h1>PRACTICA 4 GLOBAL NAVIGATION</h1>
             <h2>Silvia Calvo Cabello</h2>
         </div>
         <br>
@@ -91,27 +91,26 @@
             <li><a name="INTRODUCCION"></a><strong>INTRODUCCIÓN</strong></li>
         </ul>
         <p>
-            Se desarrolló un programa en Unibotics para un vehículo de Fórmula 1 autónomo, utilizando navegación local. Este programa tiene como objetivo alcanzar puntos específicos (waypoints) definidos en coordenadas globales, y para evitar colisiones se aplica la técnica de Virtual Force Field (VFF).
+            Se desarrolló un programa en Unibotics para un taxi autonomo en una ciudad dado su mapa. En esta practica solo se usará navegación global. 
+            <br> El objetivo consiste en dar targets al coche y que este mediante un algoritmo de búsqueda (BFS) debe encontrar el camino de menor coste hasta llegar a dicho target. 
         </p>
         <br>
         <ul>
-            <li><strong><a name="VFF"></a>VFF</strong></li>
+            <li><strong><a name="BFS"></a>BFS</strong></li>
         </ul>
         <p>
-            La técnica VFF consiste en un enfoque de navegación local que utiliza fuerzas virtuales. Estas fuerzas incluyen componentes atractivos hacia los objetivos y componentes repulsivos generados por obstáculos, orientados en dirección opuesta. La fuerza total se calcula de la siguiente manera:
+            El algoritmo de búsqueda por superficie (BFS) consiste en 
         </p>
-        <p>
-            <strong>Fuerza resultante = α * Fuerza atractiva + β * Fuerza repulsiva</strong>
-        </p>
+       
         <br>
         <ul>
-            <li><strong><a name="CALCULO_DE_FUERZAS"></a>CÁLCULO DE FUERZAS</strong></li>
+            <li><strong><a name="COSTE POR GRADIENTE"></a>COSTE POR GRADIENTE</strong></li>
         </ul>
         <p>
-            <strong>Fuerza atractiva:</strong> Esta se determina calculando la posición relativa del robot con respecto a las coordenadas globales. Para controlar el módulo de esta fuerza, se establecen límites máximos a los que puede llegar.
+            <strong>Mapa de costes:</strong> ttr
         </p>
         <p>
-            <strong>Fuerza repulsiva:</strong> Se calcula a partir de los datos obtenidos mediante un láser de 180 grados, el método usado ha variado durante todo el proceso de programación (los cuales se explican en el campo de pruebas) pero el resultante consiste en: Filtrar todas las medidas por debajo de una distancia (5 m ) y de cada uno de los puntos restantes calcular sus respectivas fuerzas, y por último, para hayar la final, hacer la media de esas fuerzas dando más valor a las que se encuentran delante del coche.
+            <strong>Mapa de obstáculos:</strong> rtrt
         </p>
         <br>
         <ul>
@@ -143,7 +142,7 @@
     </div>
 
     
-    <a href="blogp2.html" class="fixed-box left-box">←</a>
+    <a href="blogp3.html" class="fixed-box left-box">←</a>
     <a href="index.html" class="fixed-box right-box">→</a>
 </body>
 </html>
