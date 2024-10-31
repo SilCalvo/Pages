@@ -14,13 +14,13 @@
             background-attachment: fixed;
             background-position: center;
             color: white;
-            height: 100vh;
             display: flex;
             flex-direction: column;
+            min-height: 100vh; /* Cambiado a min-height */
         }
         .sidebar {
             width: 125px;
-            position: fixed; /* Fijo al desplazarse */
+            position: fixed;
             top: 10px;
             left: 10px;
             padding: 20px;
@@ -64,6 +64,14 @@
         a:hover {
             text-decoration: underline;
         }
+        .footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative; 
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -82,16 +90,16 @@
         </div>
     </div>
     <div class="content">
-         <div style="text-align: center;">
-        <big><big><span style="font-weight: bold;"> PRACTICA 4 GLOBAL NAVIGATION </span><br>
-        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+        <div style="text-align: center;">
+            <big><big><span style="font-weight: bold;"> PRACTICA 4 GLOBAL NAVIGATION </span><br>
+            <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
         </div>
         <br>
         <ul>
             <li><a name="INTRODUCCION"></a><strong>INTRODUCCIÓN</strong></li>
         </ul>
         <p>
-            Se desarrolló un programa en Unibotics para un taxi autonomo en una ciudad dado su mapa. En esta practica solo se usará navegación global. 
+            Se desarrolló un programa en Unibotics para un taxi autónomo en una ciudad dado su mapa. En esta práctica solo se usará navegación global. 
             <br> El objetivo consiste en dar targets al coche y que este mediante un algoritmo de búsqueda (BFS) debe encontrar el camino de menor coste hasta llegar a dicho target. 
         </p>
         <br>
@@ -117,32 +125,38 @@
             <li><strong><a name="CASOS_CONTROLADOS"></a>CASOS CONTROLADOS</strong></li>
         </ul>
         <ol>
-           <li><span style="text-decoration: underline;">Equilibrio de fuerzas:</span> Por la manera de calcular las fuerza resultante es posible que esta sea nula. Esto se debe a que la fuerza atractivo y repulsivo son iguales y opuestos (multiplicados por su alpha correspondiente). Por ello En mi codigo si eso llega a pasar se hace que la fuerza restante total sea más osado, dando mas fuerza al atrayente </li>
+           <li><span style="text-decoration: underline;">Equilibrio de fuerzas:</span> Por la manera de calcular la fuerza resultante es posible que esta sea nula. Esto se debe a que la fuerza atractiva y repulsiva son iguales y opuestos (multiplicados por su alpha correspondiente). Por ello, en mi código si eso llega a pasar se hace que la fuerza restante total sea más osada, dando más fuerza al atrayente.</li>
         </ol>
         <br>
         <ul>
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
         <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
-        <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa debida a un mal cálculo de los pesos ya que se calculaban a la inversa, al corregir ese error, la prueba funcionaba correctamente menos en un caso en concreto que habia un coche y se chocaba con él</p>
-        <p><strong>Tercer intento:</strong> Hacer que solo tuviese en cuenta las distancias dentro de un cuadrado al rededor del coche para intentar solucionar el error anterior del coche. Pero se acercaba mucho a las paredes asique volvi al anterior.</p>
+        <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa debida a un mal cálculo de los pesos, ya que se calculaban a la inversa. Al corregir ese error, la prueba funcionaba correctamente menos en un caso en concreto que había un coche y se chocaba con él.</p>
+        <p><strong>Tercer intento:</strong> Hacer que solo tuviese en cuenta las distancias dentro de un cuadrado alrededor del coche para intentar solucionar el error anterior del coche. Pero se acercaba mucho a las paredes así que volví al anterior.</p>
         <br>
-        Tener el cuenta que estos son intentos de algoritmos para calcular la fuerza repulsiva total, pero n cada uno de estos intentos se hicieron pruebas con distintos alphas y betas, y distancias maximas, asi como la veloidad del coche. 
+        Tener en cuenta que estos son intentos de algoritmos para calcular la fuerza repulsiva total, pero en cada uno de estos intentos se hicieron pruebas con distintos alphas y betas, y distancias máximas, así como la velocidad del coche. 
         <br>
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
         </ul>
-        <p>En el siguiente video se puede observar el fucionamiento del coche, aunque en este no se vea el caso singular de la anulacion de fuerzas a veces se daba, sobretdo cuando al resetear la pagina, no se reseteaban los objetivos por lo que en vez de ir a por el primero, iba al segundo, yendo al lado de la pared hasta anularse las fuerzas. 
-            <br><br> Un inconveniene es que gira muy bruscamene para evitar a los coches</p>
+        <p>En el siguiente video se puede observar el funcionamiento del coche, aunque en este no se vea el caso singular de la anulación de fuerzas a veces se daba, sobre todo cuando al resetear la página, no se reseteaban los objetivos por lo que en vez de ir a por el primero, iba al segundo, yendo al lado de la pared hasta anularse las fuerzas. 
+            <br><br> Un inconveniente es que gira muy bruscamente para evitar a los coches.</p>
         <div style="text-align: center; margin-top: 20px;">
             <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ERdaPF6J_EJJn2RCvck190wBRpmuiwg_alSuQGkwbhNQcw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=4kfSNt" target="_blank">Ver el video</a>
         </div>
         <br>
-       
     </div>
 
-    
     <a href="blogp3.html" class="fixed-box left-box">←</a>
     <a href="index.html" class="fixed-box right-box">→</a>
+
+    <div class="footer">
+        <h3>Contacto</h3>
+        <p>Email: contacto@empresa.com</p>
+        <p>Teléfono: 123-456-789</p>
+        <p>Dirección: Calle Falsa 123, Ciudad</p>
+        <p><a href="privacidad.html">Política de privacidad</a></p>
+    </div>
 </body>
 </html>
