@@ -83,6 +83,7 @@
             <li><a href="#BFS">BFS</a></li>
             <li><a href="#COSTE POR GRADIENTE">Coste por gradiente</a></li>
             <li><a href="#NAVEGACION">Navegacion</a></li>
+            <li><a href="#CONSIDERACIONES">Consideraciones</a></li>
             <li><a href="#PRUEBAS">Pruebas</a></li>
             <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
         </ul>
@@ -134,7 +135,7 @@
             <br>
              <img src="Photo_4_costes.jpg" alt="Patrón de coste" style="width: 500px;"><br>
             Para calcular la distancia, se almacena en cada nodo a explorar tanto su nueva posición como el nodo padre al que pertenece. De esta manera, se calcula la distancia desde el nodo actual hasta su nodo padre, y este valor se suma al coste acumulado del nodo padre.
-            <br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones de las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
+            <br><br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones de las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
         </p>
         <p>
             <strong>Mapa de obstáculos:</strong>Para calcular los obstáculos, se recorren los nodos añadidos previamente a una cola durante el cálculo del mapa de costes. A los píxeles adyacentes a estos nodos (siempre que no sean también obstáculos) se les asigna un coste adicional como penalización.
@@ -148,9 +149,17 @@
              </p>
         <br>
         <ul>
+
+         <li><strong><a name="CONSIDERACIONES"></a>CONSIDERACIONES</strong></li>
+             </ul>
+        <p>
+       <p><strong>Paso de coordenadas Worl a Map y viceversa </strong>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del coche (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. Además, debido a las diferencias en los sistemas de referencia, las coordenadas x y están intercambiadas: lo que en uno corresponde a la x, en el otro es la y, y viceversa.</p>
+       <p><strong>Representacion del mapa</strong> Los costes se calculan en una matriz que admite decimales, pero en la represenacion del mapa, este solo admite enteros de 0 a 255, por lo que se hace una conversion y un grimpado para su correcta visualizacion.</p>
+        <br>
+        <ul>
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
-        <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
+        <p><strong>Calculo cost_map:</strong> Hice varias pruebas, en las cuales los resultados daban mal debido al orden en al recorrer los hijos mencionado antes. <br> Para empezar el calculo de los costes primero lo hice sin BFS, directamente calculando a distancia de cada pixe al target, esto fue para similarizarme con el cambio de map a world y viceversa</p>
         <p><strong>Segundo intento:</strong> Se calculó el vector repulsivo asignando pesos a las distancias más cercanas al frente del vehículo. La primera prueba no fue exitosa debida a un mal cálculo de los pesos, ya que se calculaban a la inversa. Al corregir ese error, la prueba funcionaba correctamente menos en un caso en concreto que había un coche y se chocaba con él.</p>
         <p><strong>Tercer intento:</strong> Hacer que solo tuviese en cuenta las distancias dentro de un cuadrado alrededor del coche para intentar solucionar el error anterior del coche. Pero se acercaba mucho a las paredes así que volví al anterior.</p>
         <br>
