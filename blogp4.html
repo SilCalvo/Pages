@@ -83,7 +83,7 @@
             <li><a href="#BFS">BFS</a></li>
             <li><a href="#COSTE POR GRADIENTE">Coste por gradiente</a></li>
             <li><a href="#NAVEGACION">Navegacion</a></li>
-            <li><a href="#CONSIDERACIONES">Consideraciones</a></li>
+            <li><a href="#CONSIDERACIONES">Considera -ciones</a></li>
             <li><a href="#PRUEBAS">Pruebas</a></li>
             <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
         </ul>
@@ -163,9 +163,9 @@
         <ul>
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
-        <p><strong>Cálculo del cost_map:</strong> Realicé varias pruebas en las que los resultados no eran correctos debido al orden en el que se recorrían los nodos hijos, como se mencionó anteriormente. Inicialmente, para familiarizarme con la conversión entre el mapa y el sistema de coordenadas del mundo, comencé calculando la distancia de cada píxel al objetivo sin usar BFS. Este enfoque me permitió entender mejor la relación entre ambos sistemas de coordenadas. Posteriormente, el cálculo final del mapa de costes se realiza utilizando BFS, tal como se explicó previamente.</p>
-        <p><strong>Cálculo del wall_map:</strong> Para calcular el mapa de obstáculos, al principio no tomaba en cuenta los obstáculos detectados por el cost_map y realizaba el cálculo sobre todo el mapa. Más adelante, optimicé este proceso, descartando las áreas donde no se había calculado el coste, lo que mejoró la eficiencia del algoritmo.</p> 
-        <p><strong>Navegación:</strong> Al principio, para determinar las casillas hacia las cuales se dirigía el coche, utilicé un enfoque en el que el vehículo se desplazaba de un píxel a otro, buscando siempre el píxel de menor coste. El coche llegaba a ese píxel, luego buscaba el siguiente con menor coste, y así sucesivamente. Este método ocasionaba que, en ocasiones, el coche se girara inesperadamente debido al error mencionado anteriormente en el orden de los nodos hijos. Una vez corregido este problema, la navegación mejoró significativamente.</p>
+        <p><strong>Cálculo del cost_map:</strong> <br>Realicé varias pruebas en las que los resultados no eran correctos debido al orden en el que se recorrían los nodos hijos, como se mencionó anteriormente. Inicialmente, para familiarizarme con la conversión entre el mapa y el sistema de coordenadas del mundo, comencé calculando la distancia de cada píxel al objetivo sin usar BFS. Este enfoque me permitió entender mejor la relación entre ambos sistemas de coordenadas. Posteriormente, el cálculo final del mapa de costes se realiza utilizando BFS, tal como se explicó previamente.</p>
+        <p><strong>Cálculo del wall_map:</strong> <br>Para calcular el mapa de obstáculos, al principio no tomaba en cuenta los obstáculos detectados por el cost_map y realizaba el cálculo sobre todo el mapa. Más adelante, optimicé este proceso, descartando las áreas donde no se había calculado el coste, lo que mejoró la eficiencia del algoritmo.</p> 
+        <p><strong>Navegación:</strong> <br>Al principio, para determinar las casillas hacia las cuales se dirigía el coche, utilicé un enfoque en el que el vehículo se desplazaba de un píxel a otro, buscando siempre el píxel de menor coste. El coche llegaba a ese píxel, luego buscaba el siguiente con menor coste, y así sucesivamente. Este método ocasionaba que, en ocasiones, el coche se girara inesperadamente debido al error mencionado anteriormente en el orden de los nodos hijos. Una vez corregido este problema, la navegación mejoró significativamente.</p>
        <br>
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
