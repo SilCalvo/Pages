@@ -82,7 +82,7 @@
             <li><a href="#INTRODUCCION">Introducción</a></li>
             <li><a href="#BFS">BFS</a></li>
             <li><a href="#COSTE POR GRADIENTE">Coste por gradiente</a></li>
-            <li><a href="#CASOS_CONTROLADOS">Casos Controlados</a></li>
+            <li><a href="#NAVEGACION">Navegacion</a></li>
             <li><a href="#PRUEBAS">Pruebas</a></li>
             <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
         </ul>
@@ -130,20 +130,20 @@
             <li><strong><a name="COSTE POR GRADIENTE"></a>COSTE POR GRADIENTE</strong></li>
         </ul>
         <p>
-            <strong>Mapa de costes:</strong> ttr
+            <strong>Mapa de costes:</strong> Se calcula mediante el método de busqueda BFS, y siendo el valor del coste, la distancia al target, como se muestra en la siguiente imagen:
+
+            IMAGEN
+            Para calcular la distancia, se almacena en cada nodo a explorar tanto su nueva posición como el nodo padre al que pertenece. De esta manera, se calcula la distancia desde el nodo actual hasta su nodo padre, y este valor se suma al coste acumulado del nodo padre.
+            <br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones de las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
         </p>
         <p>
-            <strong>Mapa de obstáculos:</strong> rtrt
+            <strong>Mapa de obstáculos:</strong>Para calcular los obstáculos, se recorren los nodos añadidos previamente a una cola durante el cálculo del mapa de costes. A los píxeles adyacentes a estos nodos (siempre que no sean también obstáculos) se les asigna un coste adicional como penalización.
         </p>
         <br>
         <ul>
-            <li><strong><a name="CASOS_CONTROLADOS"></a>CASOS CONTROLADOS</strong></li>
-        </ul>
-        <ol>
-           <li><span style="text-decoration: underline;">Equilibrio de fuerzas:</span> Por la manera de calcular la fuerza resultante es posible que esta sea nula. Esto se debe a que la fuerza atractiva y repulsiva son iguales y opuestos (multiplicados por su alpha correspondiente). Por ello, en mi código si eso llega a pasar se hace que la fuerza restante total sea más osada, dando más fuerza al atrayente.</li>
-        </ol>
-        <br>
-        <ul>
+            <li><strong><a name="NAVEGACION"></a>NAVEGACIONS</strong></li>
+        
+            
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
         <p><strong>Primer intento:</strong> Se calculó el vector repulsivo utilizando solo un punto del láser, el más cercano al vehículo. Aunque funcionó, resultó frágil e inestable.</p>
