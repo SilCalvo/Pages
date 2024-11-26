@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P3 Controlador de máquina expendedora</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('imagesP4.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Cambiado a min-height */
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1; 
+            color: white;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative; 
+            flex-shrink: 0;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Índice</h3>
+        <ul>
+            <li><a href="#INTRODUCCION">Introducción</a></li>
+            <li><a href="#FUNCIONAMIENTO">Funcionamiento</a></li>
+            <li><a href="#COMPONENTES">Componentes</a></li>
+            <li><a href="#CONEXIONADO">Conexionado</a></li>
+            <li><a href="#CONSIDERACIONES">Considera -ciones</a></li>
+            <li><a href="#PRUEBAS">Pruebas</a></li>
+            <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
+        </ul>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+        </div>
+    </div>
+    <div class="content">
+        <div style="text-align: center;">
+            <big><big><span style="font-weight: bold;"> PRACTICA 4 GLOBAL NAVIGATION </span><br>
+            <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+        </div>
+        <br>
+        <ul>
+            <li><a name="INTRODUCCION"></a><strong>INTRODUCCIÓN</strong></li>
+        </ul>
+        <p>
+             La práctica consiste en diseñar e implementar un controlador para una máquina expendedora utilizando un Arduino UNO y diversos sensores y actuadores. 
+         
 
+La práctica consiste en diseñar e implementar un controlador para una máquina expendedora utilizando un **Arduino UNO** y diversos sensores y actuadores. Los componentes obligatorios son: LCD, joystick, sensor de temperatura/humedad (DHT11), sensor de ultrasonidos, botón, y dos LEDs.
+
+<p><strong>1. Arranque</strong></p>
+    <ul>
+        <li>Al iniciar, el <strong>LED1</strong> parpadea 3 veces, y se muestra el mensaje "CARGANDO..." en el LCD.</li>
+        <li>Tras los parpadeos, el <strong>LED1</strong> se apaga y se muestra "Servicio" en el LCD.</li>
+    </ul>
+
+    <p><strong>2. Servicio</strong></p>
+    <ul>
+        <li>Si el usuario está a menos de 1 metro de la máquina, el LCD muestra la temperatura y humedad durante 5 segundos, y luego presenta una lista de productos con precios. Los productos incluyen diferentes tipos de café y chocolate.</li>
+        <li>El usuario puede navegar por la lista utilizando el joystick y seleccionar un producto con el botón del joystick.</li>
+        <li>Tras seleccionar, el LCD muestra "Preparando Café..." por un tiempo aleatorio entre 4 y 8 segundos. Durante este tiempo, el <strong>LED2</strong> se enciende de manera incremental, indicando el progreso de la preparación.</li>
+        <li>Al terminar, el LCD muestra "RETIRE BEBIDA" por 3 segundos y vuelve al estado inicial.</li>
+    </ul>
+
+    <p><strong>3. Admin</strong></p>
+    <ul>
+        <li>Se puede acceder a la interfaz de administración presionando el botón durante 5 segundos.</li>
+        <li>En la vista de Admin, ambos LEDs se encienden y se muestra un menú con opciones para ver la temperatura, la distancia del sensor, el contador de tiempo y modificar los precios de los productos.</li>
+        <li>Los precios se modifican utilizando el joystick y confirmando con el botón. Los cambios de precio se actualizan en el menú de selección de productos.</li>
+        <li>Para salir de la vista Admin, el usuario debe presionar el botón nuevamente durante 5 segundos.</li>
+    </ul>
+
+  Este sistema permite gestionar la máquina expendedora, realizar selecciones de productos y administrarla mediante un interfaz de usuario con los componentes de hardware mencionados.
+             
+            <br> 
+            <li><strong><a name="FUNCIONAMIENTO"></a>Funcionamiento</strong></li>
+        </ul>
+        <p>
+            El algoritmo de búsqueda por superficie (BFS) es un tipo de búsqueda no informada (sin heurísticas) que explora un espacio de estados a través de niveles de profundidad.
+ <br>
+ <p><strong>Exploración por Niveles: </strong> El algoritmo comienza explorando el nodo inicial (target) y luego se expande a todos los nodos en el siguiente nivel (pixeles adyacentes), luego a todos los nodos en el siguiente nivel y así sucesivamente.   </p>
+ 
+ <p><strong>Estrategia de Exploración: </strong> Se exploran los nodos más cercanos al nodo raíz antes de explorar nodos más lejanos.  </p>
+ 
+ <p><strong>Estructura de Datos: </strong> Se usa una cola (FIFO) para almacenar los nodos que serán explorados, ya que la búsqueda en anchura explora primero todos los nodos de un nivel antes de proceder al siguiente.  </p>
+
+ <p><strong>Condición de Parada: </strong> El algoritmo puede parar cuando:  </p>
+
+    <ul>
+            <li>Se encuentra el objetivo.</li>
+            <li>Se han explorado todos los nodos posibles (en el caso de que el espacio de búsqueda sea finito).</li>
+        </ul>
+
+        </p>
+       
+        <br>
+        <ul>
+            <li><strong><a name="COMPONENTES"></a>Componentes</strong></li>
+        </ul>
+        <p>
+            <strong>Mapa de costes:</strong> Se calcula mediante el método de busqueda BFS, y siendo el valor del coste, la distancia al target, como se muestra en la siguiente imagen:
+            <br>
+            <br>
+             <img src="Photo_4_costes.jpg" alt="Patrón de coste" style="width: 500px;"><br>
+            <br>
+            Para calcular la distancia, se almacena en cada nodo a explorar tanto su nueva posición como el nodo padre al que pertenece. De esta manera, se calcula la distancia desde el nodo actual hasta su nodo padre, y este valor se suma al coste acumulado del nodo padre.
+            <br><br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones adyacentes y a continuación, las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
+            <br><br> Tambien hay que añadir inf de coste a los obstaculos, para asi, que en la navegación nunca vaya por ahí.
+        
+        </p>
+        <p>
+            <strong>Mapa de obstáculos:</strong>Para calcular los obstáculos, se recorren los nodos añadidos previamente a una cola durante el cálculo del mapa de costes. A los píxeles adyacentes a estos nodos (siempre que no sean también obstáculos) se les asigna un coste adicional como penalización.
+        </p>
+        <br>
+        <ul>
+            <li><strong><a name="NAVEGACION"></a>NAVEGACION</strong></li>
+             </ul>
+        <p>
+       En la navegación de este proyecto, se evalúa continuamente el píxel de menor coste dentro de un radio X alrededor del coche. A partir de esta información, se calcula el ángulo entre la posición actual y la posición final, considerando la orientación del robot. Este ángulo determina la velocidad angular del coche.tual y la final, teniendo en cuenta hacia donde mira el robot, y esa es la velocidad angular del coche
+             </p>
+        <br>
+        <ul>
+
+         <li><strong><a name="CONSIDERACIONES"></a>CONSIDERACIONES</strong></li>
+             </ul>
+        <p>
+       <p><strong>Paso de coordenadas Worl a Map y viceversa: </strong><br>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del coche (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. Además, debido a las diferencias en los sistemas de referencia, las coordenadas x y están intercambiadas: lo que en uno corresponde a la x, en el otro es la y, y viceversa.</p>
+       <p><strong>Representacion del mapa:</strong><br> Los costes se calculan en una matriz que admite decimales, pero en la represenacion del mapa, este solo admite enteros de 0 a 255, por lo que se hace una conversion y un grimpado para su correcta visualizacion.</p>
+        <p><strong>Cambiar de target:</strong><br>Esta práctica se ha implementado de tal forma que una vez selecionado el target, no va a cambiar hasta que llegue al objetivo, y una vez alcanzado este, ya vuelve a calcular para el siguiente.</p>
+        <br>
+        <br>
+        <ul>
+            <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
+        </ul>
+        <p><strong>Cálculo del cost_map:</strong> <br>Realicé varias pruebas en las que los resultados no eran correctos debido al orden en el que se recorrían los nodos hijos, como se mencionó anteriormente. Inicialmente, para familiarizarme con la conversión entre el mapa y el sistema de coordenadas del mundo, comencé calculando la distancia de cada píxel al objetivo sin usar BFS. Este enfoque me permitió entender mejor la relación entre ambos sistemas de coordenadas. Posteriormente, el cálculo final del mapa de costes se realiza utilizando BFS, tal como se explicó previamente.</p>
+        <p><strong>Cálculo del wall_map:</strong> <br>Para calcular el mapa de obstáculos, al principio no tomaba en cuenta los obstáculos detectados por el cost_map y realizaba el cálculo sobre todo el mapa. Más adelante, optimicé este proceso, descartando las áreas donde no se había calculado el coste, lo que mejoró la eficiencia del algoritmo.</p> 
+        <p><strong>Navegación:</strong> <br>Al principio, para determinar las casillas hacia las cuales se dirigía el coche, utilicé un enfoque en el que el vehículo se desplazaba de un píxel a otro, buscando siempre el píxel de menor coste. El coche llegaba a ese píxel, luego buscaba el siguiente con menor coste, y así sucesivamente. Este método ocasionaba que, en ocasiones, el coche se girara inesperadamente debido al error mencionado anteriormente en el orden de los nodos hijos. Una vez corregido este problema, la navegación mejoró significativamente.</p>
+        <p><strong>Problema de ir hacia arriba:</strong> <br> Una vez hecho todo el proyecto, este no funcionaba al dirigirse hacia arriba en remoto y nunca iba en local, esto se debia al coste de los obstaculos (0) por lo que al intentar navegar se dirigía hacia las posiciones donde había obstáculos. Para solucionarlo, añadí que el coste fuese infinit por donde no pudiese ir el coche.</p>
+       <br>
+        <ul>
+            <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
+        </ul>
+        <p>A continuacion se puede ver el funcionamiento del coche recorriendo la ciudad con varios objetivos.
+            </p>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ERdaPF6J_EJJn2RCvck190wBRpmuiwg_alSuQGkwbhNQcw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=4kfSNt" target="_blank">Ver el video</a>
+        </div>
+        <br>
+    </div>
+
+    <a href="blogp3.html" class="fixed-box left-box">←</a>
+    <a href="index.html" class="fixed-box right-box">→</a>
+
+    <div class="footer">
+        <h3>Contacto</h3>
+        <p>Email: s.calvo.2022@alumnos.urjc.es</p>
+        <p>Dirección:  Cam. del Molino, 5, 28942 Fuenlabrada, Madrid</p>
+        <p>Ingenieria Robótica Software - Robótica Móvil</p>
+    </div>
+</body>
+</html>
