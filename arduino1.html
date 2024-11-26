@@ -139,26 +139,51 @@
         <ul>
             <li><strong><a name="COMPONENTES"></a>COMPONENTES</strong></li>
         </ul>
-        <p>
-            <strong>Mapa de costes:</strong> Se calcula mediante el método de busqueda BFS, y siendo el valor del coste, la distancia al target, como se muestra en la siguiente imagen:
-            <br>
-            <br>
-             <img src="Photo_4_costes.jpg" alt="Patrón de coste" style="width: 500px;"><br>
-            <br>
-            Para calcular la distancia, se almacena en cada nodo a explorar tanto su nueva posición como el nodo padre al que pertenece. De esta manera, se calcula la distancia desde el nodo actual hasta su nodo padre, y este valor se suma al coste acumulado del nodo padre.
-            <br><br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones adyacentes y a continuación, las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
-            <br><br> Tambien hay que añadir inf de coste a los obstaculos, para asi, que en la navegación nunca vaya por ahí.
-        
-        </p>
-        <p>
-            <strong>Mapa de obstáculos:</strong>Para calcular los obstáculos, se recorren los nodos añadidos previamente a una cola durante el cálculo del mapa de costes. A los píxeles adyacentes a estos nodos (siempre que no sean también obstáculos) se les asigna un coste adicional como penalización.
-        </p>
-        <br>
         <ul>
-            <li><strong><a name="NAVEGACION"></a>NAVEGACION</strong></li>
+        <li><strong>Arduino UNO</strong></li>
+        <li><strong>LCD</strong></li>
+        <li><strong>Joystick</strong></li>
+        <li><strong>Sensor Temperatura/Humedad DHT11</strong></li>
+        <li><strong>Sensor Ultrasonidos HC-SR04</strong></li>
+        <li><strong>2 Botones</strong></li>
+        <li><strong>2 LEDs (LED1 Amarillo, LED2 Verde)</strong></li>
+    </ul>
+
+    <p><strong>1. Arduino UNO</strong></p>
+    <p><strong>Para qué sirve:</strong> El Arduino UNO es la placa base que controla y gestiona todos los componentes conectados (sensores, botones, LEDs y la pantalla LCD). Actúa como el cerebro de la máquina expendedora, enviando y recibiendo señales a través de sus pines.</p>
+    <p><strong>Cómo funciona:</strong> A través de sus pines de entrada y salida, el Arduino UNO recibe información de los sensores (como el DHT11 o el sensor ultrasonidos) y envía señales a los LEDs y al LCD. Realiza todas las operaciones necesarias para gestionar la máquina expendedora.</p>
+
+    <p><strong>2. LCD</strong></p>
+    <p><strong>Para qué sirve:</strong> El LCD sirve como interfaz visual entre la máquina y el usuario. Muestra información como la lista de productos, precios, temperatura y humedad, así como mensajes de estado como "Cargando..." o "Preparando Café...".</p>
+    <p><strong>Cómo funciona:</strong> El Arduino UNO controla el LCD, enviando información a través de los pines de datos. El LCD es alimentado por la placa Arduino, y los mensajes que muestra son actualizados según las señales enviadas por el microcontrolador.</p>
+
+    <p><strong>3. Joystick</strong></p>
+    <p><strong>Para qué sirve:</strong> El joystick es un dispositivo de entrada que permite al usuario navegar por los menús y seleccionar productos en la máquina expendedora.</p>
+    <p><strong>Cómo funciona:</strong> El joystick tiene dos funciones: el movimiento hacia arriba/abajo para navegar por las opciones y izquierda para salir del menu de cambio de precios al menu de administrador.</p>
+
+    <p><strong>4. Sensor Temperatura/Humedad DHT11</strong></p>
+    <p><strong>Para qué sirve:</strong> El sensor DHT11 mide la temperatura y la humedad del ambiente y proporciona estos datos al Arduino para que puedan ser mostrados en el LCD.</p>
+    <p><strong>Cómo funciona:</strong> El sensor DHT11 tiene dos pines principales: uno para la alimentación (VCC) y otro para los datos (DATA). El Arduino lee estos datos de forma digital y los muestra en el LCD en tiempo real. El DHT11 es capaz de proporcionar lecturas de temperatura y humedad de manera precisa dentro de un rango determinado.</p>
+
+    <p><strong>5. Sensor Ultrasonidos HC-SR04</strong></p>
+    <p><strong>Para qué sirve:</strong> El sensor ultrasonidos HC-SR04 se utiliza para medir la distancia entre el sensor y un objeto (en este caso, la proximidad del usuario a la máquina expendedora).</p>
+    <p><strong>Cómo funciona:</strong> El sensor emite ondas ultrasónicas a través del pin TRIG, y luego mide el tiempo que tarda la señal reflejada en regresar al pin ECHO. El Arduino calcula la distancia con base en este tiempo de regreso, permitiendo detectar si el usuario está a menos de 1 metro de la máquina.</p>
+
+    <p><strong>6. Boton 1 (Seleccion) Boton 2 (Joystick) </strong></p>
+    <p><strong>Para qué sirven:</strong> El boton 1 permite al usuario interactuar con la máquina. Se utiliza para realizar selecciones de productos y aceptar el cambio de precio de los productos. El botón 2 sirve para acceder al menú del administrador y salir de este.</p>
+    <p><strong>Cómo funcionan:</strong> Los botones están conectados al Arduino, que detecta cuando son presionados, estando conectados a los pines 2 y 3 para las interrupciones</p>
+
+        Son 2 botones porque el del joystick original no funcionaba y lo cambié por un botón normal
+
+    <p><strong>7. LED1 (Amarillo) y LED2 (Verde)</strong></p>
+    <p><strong>Para qué sirven:</strong> Los LEDs indican el estado de la máquina expendedora. El LED1 (amarillo) muestra el estado de arranque o de error, y el LED2 (verde) indica el progreso de la preparación del producto.</p>
+    <p><strong>Cómo funcionan:</strong> El LED1 parpadea al inicio del sistema como una señal visual de que la máquina está arrancando. El LED2 se ilumina de manera progresiva durante la preparación de un producto (como el café), aumentando su intensidad conforme el proceso avanza. Ambos LEDs requieren resistencias de 220 ohmios para evitar que se sobrecalienten.</p>
+
+        <ul>
+            <li><strong><a name="CONEXIONADO"></a>CONEXIONADO</strong></li>
              </ul>
         <p>
-       En la navegación de este proyecto, se evalúa continuamente el píxel de menor coste dentro de un radio X alrededor del coche. A partir de esta información, se calcula el ángulo entre la posición actual y la posición final, considerando la orientación del robot. Este ángulo determina la velocidad angular del coche.tual y la final, teniendo en cuenta hacia donde mira el robot, y esa es la velocidad angular del coche
+       Foto del conexionado FRIZZ
              </p>
         <br>
         <ul>
@@ -166,8 +191,8 @@
          <li><strong><a name="CONSIDERACIONES"></a>CONSIDERACIONES</strong></li>
              </ul>
         <p>
-       <p><strong>Paso de coordenadas Worl a Map y viceversa: </strong><br>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del coche (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. Además, debido a las diferencias en los sistemas de referencia, las coordenadas x y están intercambiadas: lo que en uno corresponde a la x, en el otro es la y, y viceversa.</p>
-       <p><strong>Representacion del mapa:</strong><br> Los costes se calculan en una matriz que admite decimales, pero en la represenacion del mapa, este solo admite enteros de 0 a 255, por lo que se hace una conversion y un grimpado para su correcta visualizacion.</p>
+       <p><strong>Boton joystick: </strong><br>Como ya se ha mencinado antes, el botón del joystic no funcionaba por lo que se usa un botón normal en su lugar.</p>
+       <p><strong>Uso de if else y no switch case :</strong><br> .</p>
         <p><strong>Cambiar de target:</strong><br>Esta práctica se ha implementado de tal forma que una vez selecionado el target, no va a cambiar hasta que llegue al objetivo, y una vez alcanzado este, ya vuelve a calcular para el siguiente.</p>
         <br>
         <br>
