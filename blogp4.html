@@ -151,7 +151,7 @@
             <strong>Mapa de costes:</strong> Se calcula mediante el método de busqueda BFS, y siendo el valor del coste, la distancia al target, como se muestra en la siguiente imagen:
             <br>
             <br>
-             <img src="Photo_4_costes.jpg" alt="Patrón de coste" style="width: 500px;"><br>
+             <img src="Photo_4_costes.jpg" alt="Patrón de coste" style="display: block; margin: 0 auto; width: 500px;"><br>
             <br>
             Para calcular la distancia, se almacena en cada nodo a explorar tanto su nueva posición como el nodo padre al que pertenece. De esta manera, se calcula la distancia desde el nodo actual hasta su nodo padre, y este valor se suma al coste acumulado del nodo padre.
             <br><br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones adyacentes y a continuación, las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
@@ -179,7 +179,7 @@
         <p><strong>Cambiar de target:</strong><br>Esta práctica se ha implementado de tal forma que una vez selecionado el target, no va a cambiar hasta que llegue al objetivo, y una vez alcanzado este, ya vuelve a calcular para el siguiente.</p>
         <p><strong>Espacios en blanco en el mapa:</strong><br> Como se peude ver a continuación, el mapa tiene linea en blanco atravesando las calles por las que puede ir, eso se debe a que esas cuadriculas todavia no se han explorado, por lo que su coste es inf, y al representarse se ve blanco.</p>
         <br>
-        <img src="imagenb4.jpeg" alt="Imagen mapa" style="width: 500px;"><br>
+        <img src="imagenb4.jpeg" alt="Imagen mapa" style="display: block; margin: 0 auto; width: 500px;">
         <br>
         <br>
         <ul>
