@@ -127,12 +127,14 @@
   Este sistema permite gestionar la máquina expendedora, realizar selecciones de productos y administrarla mediante un interfaz de usuario con los componentes de hardware mencionados.
              
             <br> <br> <br>
+         <ul>
             <li><strong><a name="FUNCIONAMIENTO"></a>FUNCIONAMIENTO</strong></li>
         </ul>
         <p>
            Para el control se ha implementado una máquina de estados: </p>
- <br>
+ <br><br>
     Estados del sistema:
+        <br>
  <p><strong>WAITING:</strong> Espera a que un cliente se acerque y active el sistema.</p>
             <p><strong>DATA_SHOW:</strong> Muestra información de temperatura y humedad.</p>
             <p><strong>SELECTION:</strong> Permite al usuario seleccionar el tipo de café.</p>
@@ -140,13 +142,15 @@
             <p><strong>GET_COFFEE:</strong> El usuario puede recoger el café preparado.</p>
             <p><strong>ADMIN_CHOOSING:</strong> Modo de administrador donde se elige qué datos ver o modificar.</p>
             <p><strong>ADMIN_SELECTED:</strong> El administrador ha seleccionado una opción.</p>
+        <br><br>
     Estados del administrador:
+        <br>
 <p><strong>TEMP:</strong> Ver la temperatura del entorno.</p>
             <p><strong>DISTANCE:</strong> Ver la distancia medida por el sensor ultrasónico.</p>
             <p><strong>TIME_PASS:</strong> Ver el tiempo transcurrido desde que se encendió el sistema.</p>
             <p><strong>CHANGE_PRICES:</strong> Cambiar los precios de los cafés.</p>
        
-       
+        <br> FOTO DIAGRAMA DE ESTADOS
         <br>
         <ul>
             <li><strong><a name="COMPONENTES"></a>COMPONENTES</strong></li>
@@ -205,22 +209,21 @@
              </ul>
         <p>
        <p><strong>Boton joystick: </strong><br>Como ya se ha mencinado antes, el botón del joystic no funcionaba por lo que se usa un botón normal en su lugar.</p>
-       <p><strong>Uso de if else y no switch case :</strong><br> .</p>
+       <p><strong>Uso de if else y no switch case :</strong><br> El switch necesita que todas las variables de declaren fuera, y para una mejor compresión del código decidí dejarlo en un else if y poder declarar variables dentro de cada estado.</p>
         <p><strong>Cambiar de target:</strong><br>Esta práctica se ha implementado de tal forma que una vez selecionado el target, no va a cambiar hasta que llegue al objetivo, y una vez alcanzado este, ya vuelve a calcular para el siguiente.</p>
         <br>
         <br>
         <ul>
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
-        <p><strong>Cálculo del cost_map:</strong> <br>Realicé varias pruebas en las que los resultados no eran correctos debido al orden en el que se recorrían los nodos hijos, como se mencionó anteriormente. Inicialmente, para familiarizarme con la conversión entre el mapa y el sistema de coordenadas del mundo, comencé calculando la distancia de cada píxel al objetivo sin usar BFS. Este enfoque me permitió entender mejor la relación entre ambos sistemas de coordenadas. Posteriormente, el cálculo final del mapa de costes se realiza utilizando BFS, tal como se explicó previamente.</p>
-        <p><strong>Cálculo del wall_map:</strong> <br>Para calcular el mapa de obstáculos, al principio no tomaba en cuenta los obstáculos detectados por el cost_map y realizaba el cálculo sobre todo el mapa. Más adelante, optimicé este proceso, descartando las áreas donde no se había calculado el coste, lo que mejoró la eficiencia del algoritmo.</p> 
-        <p><strong>Navegación:</strong> <br>Al principio, para determinar las casillas hacia las cuales se dirigía el coche, utilicé un enfoque en el que el vehículo se desplazaba de un píxel a otro, buscando siempre el píxel de menor coste. El coche llegaba a ese píxel, luego buscaba el siguiente con menor coste, y así sucesivamente. Este método ocasionaba que, en ocasiones, el coche se girara inesperadamente debido al error mencionado anteriormente en el orden de los nodos hijos. Una vez corregido este problema, la navegación mejoró significativamente.</p>
-        <p><strong>Problema de ir hacia arriba:</strong> <br> Una vez hecho todo el proyecto, este no funcionaba al dirigirse hacia arriba en remoto y nunca iba en local, esto se debia al coste de los obstaculos (0) por lo que al intentar navegar se dirigía hacia las posiciones donde había obstáculos. Para solucionarlo, añadí que el coste fuese infinit por donde no pudiese ir el coche.</p>
-       <br>
+        <p><strong>Por pasos:</strong> <br>Para realizar esta práctica, se hizo incremntalmente, probando los sensores y haciendo cada parte por separado. Y luego se pasó a diseñar la máquina de estados.</p>
+        <p><strong>Pantalla Led:</strong> <br>Por como estaba implementado la detección del joystick, la pantalla led se actualizaba cada loop en vez de cada vez que cambiaban los datos, por o que la pantalla parpareaba constantemtente. Para evitar esto se puso que la pantalla solo se actualizase al mover la lista de selccion, o en caso de mostrar datos, cada 500 ms.</p> 
+        <p><strong>Deteccion joystick</strong> <br>Al principio,para la deteccion del joystick hice que se comparase la lectura inmediatamente anterior con la actual para saber si habia incrementado o decrecido el valor, pero esto probocabaque el joystick tuvieses que moverlo en un tiempo exacto, por lo que se perdian muchos intentos. Cambié esto a que detecte cuando haya subido y lo haga solo una vez (activando una variable, un flag), cuando el valor se 0 (+-un margen) se reinicia la variable y así puede detectar un nuevo cambio .</p>
+        <br>
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
         </ul>
-        <p>A continuacion se puede ver el funcionamiento del coche recorriendo la ciudad con varios objetivos.
+        <p>A continuacion se puede ver el funcionamiento de la máquina expendedora, hay dos videos, uno mostrando todo el funcionamiento menos esperar cliente (estaba yo en medio explicando el video entoces nunca detectaba que no hubiesee alguien), y el otro, el funcionamiento de esperar cliente.
             </p>
         <div style="text-align: center; margin-top: 20px;">
             <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ERdaPF6J_EJJn2RCvck190wBRpmuiwg_alSuQGkwbhNQcw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=4kfSNt" target="_blank">Ver el video</a>
