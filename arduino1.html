@@ -130,8 +130,22 @@
             <li><strong><a name="FUNCIONAMIENTO"></a>FUNCIONAMIENTO</strong></li>
         </ul>
         <p>
-           EXPLICACION DEL CODIGO
-        </p>
+           Para el control se ha implementado una máquina de estados: </p>
+ <br>
+    Estados del sistema:
+ <p><strong>WAITING:</strong> Espera a que un cliente se acerque y active el sistema.</p>
+            <p><strong>DATA_SHOW:</strong> Muestra información de temperatura y humedad.</p>
+            <p><strong>SELECTION:</strong> Permite al usuario seleccionar el tipo de café.</p>
+            <p><strong>PREPARING_COFFEE:</strong> El sistema simula la preparación del café.</p>
+            <p><strong>GET_COFFEE:</strong> El usuario puede recoger el café preparado.</p>
+            <p><strong>ADMIN_CHOOSING:</strong> Modo de administrador donde se elige qué datos ver o modificar.</p>
+            <p><strong>ADMIN_SELECTED:</strong> El administrador ha seleccionado una opción.</p>
+    Estados del administrador:
+<p><strong>TEMP:</strong> Ver la temperatura del entorno.</p>
+            <p><strong>DISTANCE:</strong> Ver la distancia medida por el sensor ultrasónico.</p>
+            <p><strong>TIME_PASS:</strong> Ver el tiempo transcurrido desde que se encendió el sistema.</p>
+            <p><strong>CHANGE_PRICES:</strong> Cambiar los precios de los cafés.</p>
+       
        
         <br>
         <ul>
