@@ -142,10 +142,10 @@
          <li><strong><a name="CONSIDERACIONES"></a>CONSIDERACIONES</strong></li>
              </ul>
         <p>
-       <p><strong>Paso de coordenadas Worl a Map y viceversa: </strong><br>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del coche (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. Además, debido a las diferencias en los sistemas de referencia, las coordenadas x y están intercambiadas: lo que en uno corresponde a la x, en el otro es la y, y viceversa.</p>
-       <p><strong>Representacion del mapa:</strong><br> Los costes se calculan en una matriz que admite decimales, pero en la represenacion del mapa, este solo admite enteros de 0 a 255, por lo que se hace una conversion y un grimpado para su correcta visualizacion.</p>
+       <p><strong>Paso de coordenadas Worl a Map y viceversa: </strong><br>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del robot (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. </p>
+        FOTOOOOOOOOOOOO
+        <p><strong>Párticulas:</strong><br> Las particulas se encuentran situadas respecto al mundo, no respecto al mapa. Sin embargo, para calcular la distancia a obstaáculos es necesario hacer respecto del mapa, ya que es donde se encuentran las coordenadas de estos (siendo el valor de su coordenada 0)</p>
         <p><strong>Cambiar de target:</strong><br>Esta práctica se ha implementado de tal forma que una vez selecionado el target, no va a cambiar hasta que llegue al objetivo, y una vez alcanzado este, ya vuelve a calcular para el siguiente.</p>
-        <p><strong>Espacios en blanco en el mapa:</strong><br> Como se peude ver a continuación, el mapa tiene linea en blanco atravesando las calles por las que puede ir, eso se debe a que esas cuadriculas todavia no se han explorado, por lo que su coste es inf, y al representarse se ve blanco.</p>
         <br>
         <img src="imagenb4.jpeg" alt="Imagen mapa" style="display: block; margin: 0 auto; width: 500px;">
         <br>
@@ -153,9 +153,9 @@
         <ul>
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
-        <p><strong>Cálculo del cost_map:</strong> <br>Realicé varias pruebas en las que los resultados no eran correctos debido al orden en el que se recorrían los nodos hijos, como se mencionó anteriormente. Inicialmente, para familiarizarme con la conversión entre el mapa y el sistema de coordenadas del mundo, comencé calculando la distancia de cada píxel al objetivo sin usar BFS. Este enfoque me permitió entender mejor la relación entre ambos sistemas de coordenadas. Posteriormente, el cálculo final del mapa de costes se realiza utilizando BFS, tal como se explicó previamente.</p>
-        <p><strong>Cálculo del wall_map:</strong> <br>Para calcular el mapa de obstáculos, al principio no tomaba en cuenta los obstáculos detectados por el cost_map y realizaba el cálculo sobre todo el mapa. Más adelante, optimicé este proceso, descartando las áreas donde no se había calculado el coste, lo que mejoró la eficiencia del algoritmo.</p> 
-        <p><strong>Navegación:</strong> <br>Al principio, para determinar las casillas hacia las cuales se dirigía el coche, utilicé un enfoque en el que el vehículo se desplazaba de un píxel a otro, buscando siempre el píxel de menor coste. El coche llegaba a ese píxel, luego buscaba el siguiente con menor coste, y así sucesivamente. Este método ocasionaba que, en ocasiones, el coche se girara inesperadamente debido al error mencionado anteriormente en el orden de los nodos hijos. Una vez corregido este problema, la navegación mejoró significativamente.</p>
+        <p><strong>Convergencia:</strong> <br> Para comprobar si el algortimo convergia, primero lo probé creando las particulas cerca del robot usando el getPose() y una vez comprobado que funcionaba (V1 en el código), pasé a generar las particulas iniciales al azar.</p>
+        <p><strong>Bump and Go: Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br>.</p> 
+        <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados FOTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.</p>
         <p><strong>Problema de ir hacia arriba:</strong> <br> Una vez hecho todo el proyecto, este no funcionaba al dirigirse hacia arriba en remoto y nunca iba en local, esto se debia al coste de los obstaculos (0) por lo que al intentar navegar se dirigía hacia las posiciones donde había obstáculos. Para solucionarlo, añadí que el coste fuese infinit por donde no pudiese ir el coche. Tambien era debido al calculo del paso de coordenadas absolutas a relativas en mundo.</p>
        <br>
         <ul>
