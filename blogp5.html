@@ -83,7 +83,6 @@
             <li><a href="#INTRODUCCION">Introducción</a></li>
             <li><a href="#MCL">MCL</a></li>
             <li><a href="#CALCULO PROBABILISTICO">Calculo probabilistico</a></li>
-            <li><a href="#NAVEGACION">Navegacion</a></li>
             <li><a href="#CONSIDERACIONES">Considera -ciones</a></li>
             <li><a href="#PRUEBAS">Pruebas</a></li>
             <li><a href="#RESULTADO_FINAL">Resultado Final</a></li>
@@ -120,9 +119,9 @@
       <p>
             Consta de 3 partes:
          <ul>
-           <li><strong>Modelo de observación -</strong> En esta etapa, se crean muchas partículas aleatorias que representan diferentes posiciones posibles del robot en el espacio. Estas partículas son distribuciones hipotéticas que representan posibles posiciones iniciales dentro del mapa.</li>
-           <li><strong>Modelo de movimeinto -</strong> En esta fase, el robot se mueve según comandos de desplazamiento, y cada partícula se actualiza para reflejar ese movimiento, añadiendo un poco de ruido para simular la incertidumbre en el movimiento real.</li>
-           <li><strong>Regeneracion de particulas (Resampling) -</strong> Después de actualizar el movimiento de las partículas, comparamos las mediciones del sensor láser del robot (distancias reales a paredes u objetos cercanos) con las mediciones esperadas para cada partícula en el mapa conocido.</li>
+           <li><strong>Modelo probabilistico de observación -</strong> En esta etapa, se crean muchas partículas aleatorias que representan diferentes posiciones posibles del robot en el espacio. Estas partículas son distribuciones hipotéticas que representan posibles posiciones iniciales dentro del mapa.</li>
+           <br><li><strong>Modelo de movimeinto -</strong> En esta fase, el robot se mueve según comandos de desplazamiento, y cada partícula se actualiza para reflejar ese movimiento, añadiendo un poco de ruido para simular la incertidumbre en el movimiento real.</li>
+           <br><li><strong>Regeneracion de particulas (Resampling) -</strong> Después de actualizar el movimiento de las partículas, comparamos las mediciones del sensor láser del robot (distancias reales a paredes u objetos cercanos) con las mediciones esperadas para cada partícula en el mapa conocido.</li>
            </ul>
         </p>
        
@@ -132,18 +131,11 @@
         </ul>
         <p>
             Para hayar los pesos de cada particula, se haya la diferencia entre el laser real y el laser teorico de cada partícula. Para hacer que sea proporcionalmente inverso (cuanta menor la direncia, mayor el peso) se calcula de la siguinete manera:
-             <br> peso =  1 / (1 + diferencia)
+             <br> <br>peso =  1 / (1 + diferencia)
             
         
         </p>
        
-        <br>
-        <ul>
-            <li><strong><a name="NAVEGACION"></a>NAVEGACION</strong></li>
-             </ul>
-        <p>
-       En la navegación de este proyecto, se evalúa continuamente el píxel de menor coste dentro de un radio X alrededor del coche. A partir de esta información, se calcula el ángulo entre la posición actual y la posición final, considerando la orientación del robot. Este ángulo determina la velocidad angular del coche.tual y la final, teniendo en cuenta hacia donde mira el robot, y esa es la velocidad angular del coche
-             </p>
         <br>
         <ul>
 
