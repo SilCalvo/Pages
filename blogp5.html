@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>P5_Montecarlo_laser_localitation</title>
-    <style>
+    <style> 
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -82,7 +82,7 @@
         <ul>
             <li><a href="#INTRODUCCION">Introducción</a></li>
             <li><a href="#MCL">MCL</a></li>
-            <li><a href="#COSTE POR GRADIENTE">Coste por gradiente</a></li>
+            <li><a href="#CALCULO PROBABILISTICO">Calculo probabilistico</a></li>
             <li><a href="#NAVEGACION">Navegacion</a></li>
             <li><a href="#CONSIDERACIONES">Considera -ciones</a></li>
             <li><a href="#PRUEBAS">Pruebas</a></li>
@@ -120,30 +120,23 @@
       <p>
             Consta de 3 partes:
          <ul>
-           Modelo inicial - En esta etapa, se crean muchas partículas aleatorias que representan diferentes posiciones posibles del robot en el espacio. Estas partículas son distribuciones hipotéticas que representan posibles posiciones iniciales dentro del mapa.
-           Modelo de movimeinto - En esta fase, el robot se mueve según comandos de desplazamiento, y cada partícula se actualiza para reflejar ese movimiento, añadiendo un poco de ruido para simular la incertidumbre en el movimiento real.
-           Regeneracion de particulas (Resampling) - Después de actualizar el movimiento de las partículas, comparamos las mediciones del sensor láser del robot (distancias reales a paredes u objetos cercanos) con las mediciones esperadas para cada partícula en el mapa conocido.
+           <li><strong>Modelo de observación -</strong> En esta etapa, se crean muchas partículas aleatorias que representan diferentes posiciones posibles del robot en el espacio. Estas partículas son distribuciones hipotéticas que representan posibles posiciones iniciales dentro del mapa.</li>
+           <li><strong>Modelo de movimeinto -</strong> En esta fase, el robot se mueve según comandos de desplazamiento, y cada partícula se actualiza para reflejar ese movimiento, añadiendo un poco de ruido para simular la incertidumbre en el movimiento real.</li>
+           <li><strong>Regeneracion de particulas (Resampling) -</strong> Después de actualizar el movimiento de las partículas, comparamos las mediciones del sensor láser del robot (distancias reales a paredes u objetos cercanos) con las mediciones esperadas para cada partícula en el mapa conocido.</li>
            </ul>
         </p>
        
         <br>
         <ul>
-            <li><strong><a name="COSTE POR GRADIENTE"></a>COSTE POR GRADIENTE</strong></li>
+            <li><strong><a name="CALCULO PROBABILISTICO"></a>CALCULO PROBABILISTICO</strong></li>
         </ul>
         <p>
-            <strong>Mapa de costes:</strong> Se calcula mediante el método de busqueda BFS, y siendo el valor del coste, la distancia al target, como se muestra en la siguiente imagen:
-            <br>
-            <br>
-             <img src="Photo_4_costes.jpg" alt="Patrón de coste" style="display: block; margin: 0 auto; width: 500px;"><br>
-            <br>
-            Para calcular la distancia, se almacena en cada nodo a explorar tanto su nueva posición como el nodo padre al que pertenece. De esta manera, se calcula la distancia desde el nodo actual hasta su nodo padre, y este valor se suma al coste acumulado del nodo padre.
-            <br><br>El orden en el que se recorren los nodos hijos es crucial para garantizar una correcta suma de los píxeles. Es importante inspeccionar primero las posiciones adyacentes y a continuación, las esquinas, siguiendo el patrón de recorrido: [0,-1], [0,1], [1,0], [-1,0], [-1,-1], [-1,+1], [1,1], [1,-1].
-            <br><br> Tambien hay que añadir inf de coste a los obstaculos, para asi, que en la navegación nunca vaya por ahí.
+            Para hayar los pesos de cada particula, se haya la diferencia entre el laser real y el laser teorico de cada partícula. Para hacer que sea proporcionalmente inverso (cuanta menor la direncia, mayor el peso) se calcula de la siguinete manera:
+             <br> peso =  1 / (1 + diferencia)
+            
         
         </p>
-        <p>
-            <strong>Mapa de obstáculos:</strong>Para calcular los obstáculos, se recorren los nodos añadidos previamente a una cola durante el cálculo del mapa de costes. A los píxeles adyacentes a estos nodos (siempre que no sean también obstáculos) se les asigna un coste adicional como penalización.
-        </p>
+       
         <br>
         <ul>
             <li><strong><a name="NAVEGACION"></a>NAVEGACION</strong></li>
