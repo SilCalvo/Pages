@@ -101,7 +101,7 @@
             <li><a name="INTRODUCCION"></a><strong>INTRODUCCIÓN</strong></li>
         </ul>
         <p>
-            Se desarrolló un programa en Unibotics para realizar el algoritmo de localizacion Montecarlo. Para hayar el incremento de del movimiento del robot se usa la propia localizacion del robot debido a que al ser simulado y no tener otras opciones como odom, es la manera más robusta y precisa que tenemos de calcular su movimiento
+            Se desarrolló un programa en Unibotics para realizar el algoritmo de localizacion Montecarlo. Para hayar el incremento de del movimiento del robot se usaba la propia localizacion del robot debido a que al ser simulado y no tenía otras opciones como odom. Más tarde, Unibotics añadió esta función de getOdom(), que devolvía la odometría en vez de la posición y asi calculamos el avance.
 
             
         </p>
@@ -145,7 +145,7 @@
        <p><strong>Paso de coordenadas Worl a Map y viceversa: </strong><br>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del robot (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. </p>
         FOTOOOOOOOOOOOO
         <p><strong>Párticulas:</strong><br> Las particulas se encuentran situadas respecto al mundo, no respecto al mapa. Sin embargo, para calcular la distancia a obstaáculos es necesario hacer respecto del mapa, ya que es donde se encuentran las coordenadas de estos (siendo el valor de su coordenada 0)</p>
-        <p><strong>Cambiar de target:</strong><br>Esta práctica se ha implementado de tal forma que una vez selecionado el target, no va a cambiar hasta que llegue al objetivo, y una vez alcanzado este, ya vuelve a calcular para el siguiente.</p>
+        <p><strong>Pesos:</strong><br>Esta práctica muestra las partículas y muestra su peso de tal manera que cuanto más opaca sea la partícula, mayoy es su peso.</p>
         <br>
         <img src="imagenb4.jpeg" alt="Imagen mapa" style="display: block; margin: 0 auto; width: 500px;">
         <br>
@@ -154,14 +154,13 @@
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
         <p><strong>Convergencia:</strong> <br> Para comprobar si el algortimo convergia, primero lo probé creando las particulas cerca del robot usando el getPose() y una vez comprobado que funcionaba (V1 en el código), pasé a generar las particulas iniciales al azar.</p>
-        <p><strong>Bump and Go: Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br>.</p> 
+        <p><strong>Bump and Go: :</strong><br>Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br>.</p> 
         <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados FOTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.</p>
-        <p><strong>Problema de ir hacia arriba:</strong> <br> Una vez hecho todo el proyecto, este no funcionaba al dirigirse hacia arriba en remoto y nunca iba en local, esto se debia al coste de los obstaculos (0) por lo que al intentar navegar se dirigía hacia las posiciones donde había obstáculos. Para solucionarlo, añadí que el coste fuese infinit por donde no pudiese ir el coche. Tambien era debido al calculo del paso de coordenadas absolutas a relativas en mundo.</p>
-       <br>
+        <br>
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
         </ul>
-        <p>A continuacion se puede ver el funcionamiento del coche recorriendo la ciudad con varios objetivos.
+        <p>A continuacion se puede ver el funcionamiento del algoritmo en un robot roomba que recorre una casa mediante un bump and go.
             </p>
         <div style="text-align: center; margin-top: 20px;">
             <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ESy0pi361wBOoYUSz-MIEwoB1ej-aLjwzqzoG1nlFvl2Kw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=j72C8N" target="_blank">Ver el video</a>
