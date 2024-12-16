@@ -131,7 +131,8 @@
         </ul>
         <p>
             Para hayar los pesos de cada particula, se haya la diferencia entre el laser real y el laser teorico de cada partícula. Para hacer que sea proporcionalmente inverso (cuanta menor la direncia, mayor el peso) se calcula de la siguinete manera:
-             <br> <br>peso =  1 / (1 + diferencia)
+             <br> <br> ANTES: peso =  1 / (1 + diferencia)
+            <br> <br> DESPUES: peso =  
             
         
         </p>
@@ -155,7 +156,9 @@
         </ul>
         <p><strong>Convergencia:</strong> <br> Para comprobar si el algortimo convergia, primero lo probé creando las particulas cerca del robot usando el getPose() y una vez comprobado que funcionaba (V1 en el código), pasé a generar las particulas iniciales al azar.</p>
         <p><strong>Bump and Go: :</strong><br>Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br>.</p> 
-        <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados FOTOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.</p>
+        <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados.</p>
+        <p><strong>Multiprocesing:</strong> <br>Al principio el código no constaba de multiprocesing pero esto lo hacia muy lento y pesado y se paraba mucho (como se puede ver en el siguiente video) Tras usarlo, el tiempo bajó significativamente. FOTOOOOOO TIEMPO</p>
+        
         <br>
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
