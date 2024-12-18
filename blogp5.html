@@ -144,19 +144,16 @@
              </ul>
         <p>
        <p><strong>Paso de coordenadas Worl a Map y viceversa: </strong><br>El mapa se representa como una matriz en la que las coordenadas se almacenan de izquierda a derecha y de arriba hacia abajo. En cambio, en el mundo real, la coordenada (0,0) corresponde al punto de inicio del robot (ubicado en el centro del mapa). Debido a esto, las coordenadas no coinciden directamente entre ambos sistemas. </p>
-        FOTOOOOOOOOOOOO
-        <p><strong>Párticulas:</strong><br> Las particulas se encuentran situadas respecto al mundo, no respecto al mapa. Sin embargo, para calcular la distancia a obstaáculos es necesario hacer respecto del mapa, ya que es donde se encuentran las coordenadas de estos (siendo el valor de su coordenada 0)</p>
-        <p><strong>Pesos:</strong><br>Esta práctica muestra las partículas y muestra su peso de tal manera que cuanto más opaca sea la partícula, mayoy es su peso.</p>
-        <br>
-        <img src="imagenb4.jpeg" alt="Imagen mapa" style="display: block; margin: 0 auto; width: 500px;">
-        <br>
+        <p><strong>Párticulas:</strong><br> Las particulas se encuentran situadas respecto al mundo, no respecto al mapa. Sin embargo, para calcular la distancia a obstáculos es necesario hacer respecto del mapa, ya que es donde se encuentran las coordenadas de estos (siendo el valor de su coordenada 0)</p>
+        <p><strong>Pesos:</strong><br>Esta práctica muestra las partículas y muestra su peso de tal manera que cuanto más opaca sea la partícula, mayor es su peso.</p>
+
         <br>
         <ul>
             <li><a name="PRUEBAS"></a><strong>PRUEBAS</strong></li>
         </ul>
-        <p><strong>Convergencia:</strong> <br> Para comprobar si el algortimo convergia, primero lo probé creando las particulas cerca del robot usando el getPose() y una vez comprobado que funcionaba (V1 en el código), pasé a generar las particulas iniciales al azar.</p>
-        <p><strong>Bump and Go: :</strong><br>Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br>.</p> 
-        <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados.</p>
+        <p><strong>Convergencia:</strong> <br> Para comprobar si el algortimo convergia, primero lo probé creando las particulas cerca del robot usando el getPose() y una vez comprobado que funcionaba (V1 en el código), pasé a generar las particulas iniciales al azar. Y finalmente usé getOdom() en vez de getPose()</p>
+        <p><strong>Bump and Go: :</strong><br>Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br></p> 
+        <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados ya que calculaba mal la manera de reducirla y se reducian mucho y se creaban muchas constatemente..</p>
         <p><strong>Multiprocesing:</strong> <br>Al principio el código no constaba de multiprocesing pero esto lo hacia muy lento y pesado y se paraba mucho (como se puede ver en el siguiente video) Tras usarlo, el tiempo bajó significativamente. FOTOOOOOO TIEMPO</p>
         
         <br>
