@@ -154,16 +154,22 @@
         <p><strong>Convergencia:</strong> <br> Para comprobar si el algortimo convergia, primero lo probé creando las particulas cerca del robot usando el getPose() y una vez comprobado que funcionaba (V1 en el código), pasé a generar las particulas iniciales al azar. Y finalmente usé getOdom() en vez de getPose()</p>
         <p><strong>Bump and Go: :</strong><br>Para el movimiento del robot primero hice un código simle de prueba, que el robot fuese hacia adelante y girando todo el rato, incluso aunque se chocase, más adelante lo cambié a un Bump and Go simple para que se alejase de los obstáculos.</strong> <br></p> 
         <p><strong>AMCL:</strong> <br>Intenté hacer el Adaptive Monte Carlo Localitation pero esto no generaba buenos resultados ya que calculaba mal la manera de reducirla y se reducian mucho y se creaban muchas constatemente..</p>
-        <p><strong>Multiprocesing:</strong> <br>Al principio el código no constaba de multiprocesing pero esto lo hacia muy lento y pesado y se paraba mucho (como se puede ver en el siguiente video) Tras usarlo, el tiempo bajó significativamente. FOTOOOOOO TIEMPO</p>
-        
+        <p><strong>Multiprocesing:</strong> <br>Al principio el código no constaba de multiprocesing pero esto lo hacia muy lento y pesado y se paraba mucho (como se puede ver en el siguiente video) Tras usarlo, el tiempo bajó significativamente.</p>
+        <br> 
+        <img src="sin_m.png" alt="Con multiprocesing" style="display: block; margin: 0 auto; width: 500px;"><br>
+        <img src="con_m.png" alt="Sin multiprocesin" style="display: block; margin: 0 auto; width: 500px;"><br>
+        <br>
+         <div style="text-align: center; margin-top: 20px;">
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ec3cKxgTV35KqprvBBk2ZQwB94Mhh4zF6NANcEXVW8iXwQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=QGOr21" target="_blank">Ver el video</a>
+        </div>
         <br>
         <ul>
             <li><a name="RESULTADO_FINAL"></a><strong>RESULTADO FINAL</strong></li>
         </ul>
-        <p>A continuacion se puede ver el funcionamiento del algoritmo en un robot roomba que recorre una casa mediante un bump and go.
+        <p>A continuacion se puede ver el funcionamiento del algoritmo en un robot roomba que recorre una casa mediante un bump and go. Aunque parezca que a veces no hay puntos, si hay, es solo que como la ultima versión se calcula con la fórmula exponencial, por lo que los pesos son valores menores y se ve menos intensos.
             </p>
         <div style="text-align: center; margin-top: 20px;">
-            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ESy0pi361wBOoYUSz-MIEwoB1ej-aLjwzqzoG1nlFvl2Kw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=j72C8N" target="_blank">Ver el video</a>
+            <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EdX-TR4lbwFCjWTjHU0pBUkBNUyuYM3iZSyChx8cys0N_A?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=5MaoXz" target="_blank">Ver el video</a>
         </div>
         <br>
     </div>
