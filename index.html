@@ -28,69 +28,78 @@
             background-color: rgba(0, 0, 0, 0.5);
             margin: auto;
             border-radius: 8px;
-            margin-top: 40px; 
+            margin-top: 40px;
             display: inline-block; 
         }
         a {
             color: white;
             text-decoration: none;
-            display: flex; /* Hacer que el enlace sea un contenedor flex */
-            align-items: center; /* Centrado vertical */
-            justify-content: center; /* Centrado horizontal */
-            width: 100%; /* Ocupa todo el ancho del cuadrado */
-            height: 100%; /* Ocupa todo el alto del cuadrado */
+            display: block;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
         }
         .square-container {
             display: flex;
-            flex-direction: column; /*columna */
-            align-items: center; /*centrados */
-            gap: 20px; /* Espacio entre los cuadrados */
-            margin-top: 20px; /* Espacio adicional */
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
         }
-
         .square {
-            width: 125px; 
-            height: 50px; 
-            background-color: rgba(255, 255, 255, 0.3); 
-            border: 2px solid white; 
-            border-radius: 5px; 
-            color: blue; /* Color del texto dentro del cuadrado */
-            text-align: center; /* Asegura que el texto esté centrado */
-            cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
-            position: relative; /* Permite que el enlace se posicione adecuadamente */
+            width: 80%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 8px;
+            color: blue;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+        .square:hover {
+            transform: translateY(-10px);
+        }
+        .square h2 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .square p {
+            font-size: 1.1em;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>SILVIA CALVO CABELLO TFG </h1>
-   
+    <h1>SILVIA CALVO CABELLO TFG</h1>
 </header>
 
 <div class="square-container">
-    
     <a href="weekly_updates/week1.html" class="square">
-        Instalación y comprobación de entornos
+        <h2>Instalación y comprobación de entornos</h2>
+        <p>Esta sección cubre la instalación y la comprobación de los entornos necesarios para comenzar con el proyecto.</p>
     </a>
     <a href="blogp2.html" class="square">
-        P2 Follow Line
+        <h2>P2 Follow Line</h2>
+        <p>Aquí se describe el desarrollo del sistema de seguimiento de línea para el robot.</p>
     </a>
-     <a href="blogp3.html" class="square">
-        P3 Obstacle avoidance
+    <a href="blogp3.html" class="square">
+        <h2>P3 Obstacle Avoidance</h2>
+        <p>En esta sección se explica cómo implementamos el sistema para evitar obstáculos en el camino del robot.</p>
     </a>
-        </a>
-     <a href="blogp4.html" class="square">
-        P4 Global navigation
+    <a href="blogp4.html" class="square">
+        <h2>P4 Global Navigation</h2>
+        <p>Descripción de cómo logramos que el robot navegue globalmente en un entorno desconocido.</p>
     </a>
-     <a href="blogp5.html" class="square">
-        P5 Montecarlo Localitation
+    <a href="blogp5.html" class="square">
+        <h2>P5 Montecarlo Localization</h2>
+        <p>Explicación sobre la implementación de la localización del robot utilizando el algoritmo de Monte Carlo.</p>
     </a>
-
-
-   
 </div>
-    
+
 <div class="content">
     <div style="text-align: center;">
         <big><big>
