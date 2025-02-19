@@ -3,7 +3,7 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>TFG Silvia Calvo</title>
-    <style>
+   <style>
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -20,7 +20,10 @@
             display: flex;
             justify-content: center; 
             align-items: center; 
-            position: relative;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
         }
         header img {
             position: absolute;
@@ -30,7 +33,7 @@
             height: auto;
         }
         .sidebar {
-            height: calc(100vh - 60px);
+            height: calc(100vh - 100px);
             position: fixed;
             top: 100px; 
             width: 175px;
@@ -52,6 +55,7 @@
             flex: 1;
             margin-left: 200px;
             padding: 20px;
+            margin-top: 120px;
         }
         .content-section {
             background-color: rgba(255, 255, 255, 0.1);
@@ -60,15 +64,14 @@
             margin: 20px 0;
             border-radius: 8px;
         }
-        .content-section h3,
         .content-section h3 {
             font-size: 1.8em;
             margin: 0;
             color: #ffffff;
-            text-align: center; /* Esto centra el título */
+            text-align: center;
         }
         .content-section p {
-            font-size: 1.2em;
+            font-size: 1em;
             color: #cccccc;
             margin-top: 10px;
         }
@@ -131,15 +134,13 @@
             Para comprobar que funciona todo sigue los pasos del repositorio: 
             <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04" target="_blank" style="color: #4CAF50;">GitHub Diego</a>.
             Hay dos maneras de ejecutar el siguiente ejercicio, haciendo uso de la tarjeta gráfica para conseguir un mayor rendimeinto o sin usarla por lo que este será peor.
-             <br>Para usarlo con tarjeta grafica el comando para lanzar el docker con el ejercicio es el siguinte:
-            <br><br><code>docker run -it --device /dev/dri --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>.
-        <p>Para probar Docker con GPU, usa:</p>
+              <p>Para probar Docker con GPU, usa:</p>
         <code>docker run -it --device /dev/dri --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>
         <p>Sin GPU:</p>
         <code>docker run -it --device /dev/dri -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>
         <p>Si el contenedor ya existe, elimínalo con:</p>
         <code>sudo docker stop ejercicio_pickplace</code>
-        <code>sudo docker rm ejercicio_pickplace</code>
+          <br> <code>sudo docker rm ejercicio_pickplace</code>
 
               <br> <br> Durante la ejecucion se puede observar por la salida de terminal las acciones que está realizando el UR. 
 
