@@ -131,20 +131,21 @@
         <p>Para comprobar el funcionamiento de MoveIt, sigue los tutoriales de la página oficial mencionada anteriormente.</p>
 
          <p>
-            Para comprobar que funciona todo sigue los pasos del repositorio: 
+            A continuacion se  muestra un ejemplo de un ejercicio pick and place que se encuentra en: 
             <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04" target="_blank" style="color: #4CAF50;">GitHub Diego</a>.
-            Hay dos maneras de ejecutar el siguiente ejercicio, haciendo uso de la tarjeta gráfica para conseguir un mayor rendimeinto o sin usarla por lo que este será peor.
+           <br> Hay dos maneras de ejecutar el siguiente ejercicio, haciendo uso de la tarjeta gráfica para conseguir un mayor rendimeinto o sin usarla por lo que este será peor.
               <p>Para probar Docker con GPU, usa:</p>
         <code>docker run -it --device /dev/dri --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>
         <p>Sin GPU:</p>
         <code>docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>
         <p>Si el contenedor ya existe, elimínalo con:</p>
         <code>sudo docker stop ejercicio_pickplace</code>
-          <br> <code>sudo docker rm ejercicio_pickplace</code>
+         <br> <br> <code>sudo docker rm ejercicio_pickplace</code>
 
-              <br> <br> Durante la ejecucion se puede observar por la salida de terminal las acciones que está realizando el UR. 
+              <br> <br> A continuación, mostraré un video de la ejecucion sin hacer uso de la tarjeta grafica y se podrá comporbar lo despacio que va, incluso estando el video x4 hasta la ejecucion del ejercio donde se puede ver a tiempo real. podemos observar que los FPS apenas llega a 1.
+         <br>Durante la ejecucion se puede observar por la salida de terminal las acciones que está realizando el UR. 
 
-             link video
+              <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04" target="_blank" style="color: #4CAF50;">Link video</a>.
              
              
         </p>
