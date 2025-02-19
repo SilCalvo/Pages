@@ -113,6 +113,8 @@
         <p>
             También necesitarás instalar <strong>Docker</strong>. Puedes encontrar los pasos de instalación para Ubuntu 22.04 en el siguiente enlace: 
             <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04" target="_blank" style="color: #4CAF50;">Instalar Docker en Ubuntu 22.04</a>.
+            Puedes configurar el docker para que no tengas que usar sudo y lo ejecutes desde root o puedes usar sudo en los comando. En mis videos se podrá observar que yo uso sudo.
+        
         </p>
         <p>
             Para la visualización y comparación del rendimiento gráfico, se recomienda usar <strong>glxgears</strong>. Esta herramienta te permitirá medir el rendimiento gráfico de tu sistema. Para instalarla, usa el siguiente comando: <br>
@@ -124,6 +126,28 @@
     <div class="content-section">
         <h3>Pruebas iniciales</h3>
         <p>Para comprobar el funcionamiento de MoveIt, sigue los tutoriales de la página oficial mencionada anteriormente.</p>
+
+         <p>
+            Para comprobar que funciona todo sigue los pasos del repositorio: 
+            <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04" target="_blank" style="color: #4CAF50;">GitHub Diego</a>.
+            Hay dos maneras de ejecutar el siguiente ejercicio, haciendo uso de la tarjeta gráfica para conseguir un mayor rendimeinto o sin usarla por lo que este será peor.
+             <br>Para usarlo con tarjeta grafica el comando para lanzar el docker con el ejercicio es el siguinte:
+            <br><br><code>docker run -it --device /dev/dri --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>.
+        <p>Para probar Docker con GPU, usa:</p>
+        <code>docker run -it --device /dev/dri --gpus all -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>
+        <p>Sin GPU:</p>
+        <code>docker run -it --device /dev/dri -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/root/.Xauthority -e XAUTHORITY=/root/.Xauthority --name ejercicio_pickplace diegomrt/pickplace_exercise_ros2:1.1</code>
+        <p>Si el contenedor ya existe, elimínalo con:</p>
+        <code>sudo docker stop ejercicio_pickplace</code>
+        <code>sudo docker rm ejercicio_pickplace</code>
+
+              <br> <br> Durante la ejecucion se puede observar por la salida de terminal las acciones que está realizando el UR. 
+
+             link video
+             
+             
+        </p>
+        
     </div>
 
 </div>
