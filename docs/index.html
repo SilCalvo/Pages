@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>TFG Silvia Calvo</title>
+    <style>
+        body {
+           margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #202124; 
+            color: white; 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+           background-color: rgba(0, 0, 0, 0.7);
+            height: 100px; 
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+        }
+        header img {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 75px; 
+            height: auto;
+        }
+        .sidebar {
+            height: calc(100vh - 60px);
+            position: fixed;
+            top: 100px; 
+            width: 175px;
+            left: 0px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            margin-right: 5px;
+        }
+        .sidebar img {
+            width: 100px; 
+            height: auto;
+            margin-bottom: 10px; 
+        }
+        a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .square-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .square {
+            width: 80%;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 2px solid white;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+        .square:hover {
+            transform: translateY(-10px);
+        }
+        .square h2 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+        .square p {
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="images/logo.png" alt="Logo"> 
+    <h2>ROBOTICS LABS URJC - TFG</h2>
+</header>
+
+<div class="sidebar">
+    <img src="images/me_picture.png" alt="Mi Foto">
+    <h4>Silvia Calvo Cabello</h4>
+    <p>Ingeniería Robótica Software URJC</p>
+
+    <p>Email: <a href="mailto:s.calvo.2022@alumnos.urjc.es">s.calvo.2022</a></p>
+</div>
+
+<div class="square-container">
+    <a href="weekly_updates/week1.html" class="square">
+        <h2>Instalación y comprobación de entornos</h2>
+        <p>Esta sección cubre la instalación y la comprobación de los entornos necesarios para comenzar con el proyecto.</p>
+    </a>
+</div>
+
+</body>
+</html>
