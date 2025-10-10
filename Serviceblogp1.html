@@ -71,6 +71,8 @@
     <ul>
         <li><a href="#INTRODUCCION" title="Introducción">Introducción</a></li>
         <li><a href="#BSA" title="BSA">BSA</a></li>
+        <li><a href="#BFS" title="BFS">BFS</a></li>
+        <li><a href="#MAPA_PIXEL" title="Mapa a pixel">Mapa a pixelL</a></li>
         <li><a href="#PRUEBAS" title="Pruebas">Pruebas</a></li>
         <li><a href="#RESULTADO_FINAL" title="Resultado Final">Resultado Final</a></li>
         <li><a href="#VIDEO_DE_MUESTRA" title="Video de Muestra">Video de Muestra</a></li>
@@ -84,7 +86,7 @@
 
 <div class="content">
     <div style="text-align: center;">
-        <big><big><span style="font-weight: bold;">ROOMBA - lOCALICE VACUUM CLEANER</span><br>
+        <big><big><span style="font-weight: bold;">ROOMBA - LOCALICE VACUUM CLEANER</span><br>
         <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
     </div>
     <br>
@@ -101,35 +103,49 @@
     El algoritmo de BSA consiste en .<br>
     <br>
 
+     <ul>
+        <li><a name="BFS"></a><span style="font-weight: bold;">BFS</span></li>
+    </ul>
+    El algoritmo de BFS consiste en .<br>
+    <br>
+
+     <ul>
+        <li><a name="MAPA_PIXEL"></a><span style="font-weight: bold;">MAPA_PIXEL</span></li>
+    </ul>
+    Para pasar de coordenadas del mapa al pixel primero mandé al robot a distintas esquinas del mapa y me guardé sus coordenadas, y luego busqué el pixel aproximado en el mapa que correspondía con ese punto. Repeti este proceso varias vecdes. Caundo ya tenia los puntos correspondientes mediante minimos cuadrados calcule la matriz de transformación de un sistema de coordenadas a otro. En elcodigo qestá en dos funciones diferentes, uno que crea la matriz, y otro que transforma los puntos, de esta maneraa las misma funciones sirven para tranformar de un sistema a otro y viceiversa y podria usarse para mas transformaciones futuras.<br>
+    <br>
+    
     <ul>
         <li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS</span></li>
     </ul>
     Para lograr el objetivo se crearon varios intentos de algoritmos que pudiesen recorrer toda la casa. A continuación, explico y muestro cada uno de los intentos y sus resultados, así como los problemas que se fueron resolviendo hasta llegar al algoritmo final.
 
     <h4>ALGORITMO Nº1 APROXIMACIÓN</h4>
-    Mi primer intento fue crear el mapa de rejilla en unobtics. Tuve problemas a la hora de entender el dibujar las rejillas, porque creaba una matriz con las rejillas, pero no entendia el dibujar los pixeles.<br>
+    Mi primer intento fue crear el mapa de rejilla en unibtics. Tuve problemas a la hora de entender el dibujar las rejillas, porque creaba una matriz con las rejillas, pero no entendia el dibujar los pixeles.<br>
     <br>
-    A continuación intenté realizar el algorimo de BSA. Tuve problemas para entender si era continuo todo el rato, o si era siempre que se pueda ir en la direcion primaria.
-    Después intenté programar la parte de salir de los puntos criticos hacia los puntos de retorno. Mi primea aproximación era mediante la medida Mnahatan, el problema de esta es que no tiene en cuenta los obstaculos ni las celdas ya visitadas.    
+    A continuación intenté realizar el algorimo de BSA. Tuve problemas para entender si era continuo todo el rato, o si era siempre que se pueda ir en la direccion primaria.
+    Después intenté programar la parte de salir de los puntos criticos hacia los puntos de retorno. Mi primea aproximación era mediante la medida Manhatan, el problema de esta es que no tiene en cuenta los obstaculos ni las celdas ya visitadas.    
 
-    <h4>ALGORITMO Nº2 ESTADO RECUPERACIÓN</h4>
-    Se añadió un estado que consiste en retroceder y girar ciertos grados al chocar con un obstáculo, permitiendo cubrir gran parte del mapa.<br>
-    <img src="Photo2.png" alt="Foto del mapa" style="width: 300px;"><br>
-    <strong>Problemas:</strong>
-    <ul>
-        <li>Funciona con obstáculos, pero no con esquinas, ya que al girar y avanzar vuelve a chocar.</li>
-    </ul>
-
-    <h4>ALGORITMO Nº3 ESTADO ESCAPE</h4>
-    Se introdujo el estado SCAPE, que intenta salir de esquinas usando el láser para medir distancias a las paredes y encontrar huecos.<br>
-    <strong>Problemas:</strong>
-    <ul>
-        <li>No llegaba a todas las salas.</li>
-    </ul>
-    <img src="Photo3.png" alt="Foto del mapa" style="width: 300px;"><br>
+    <h4>ALGORITMO Nº2 APROXIMACIÓN</h4>
+    Mi primer intento fue hacer que recorriera el path pbstenido con anterioridad, teniendo en cuenta que había que transformar el path a coordenadas del mundo. Con el PID, primero hice que girara hasta el obejtivo y luego YA AVANZar, pero esto daba problemas ya que si se desviaba no corregia. por lo que luego hice que si el angulo fuese mayor de 10 grados no se moviese en lineal, y si era menor si se moviese y ya fuese correigiendo constatemente, asi tambien evitabadmos chocques con paredes al hacer giros muy grandes con velodicadad lineal tambien.   
 
     
-    <h4>VIDEO DE MUESTRA</h4>
+    <h4>Algoritmo final V1</h4>
+    Esta versión ya es funcional, se cambió el calculo del punto de retorno con el algoritmo Manhatan al BFS para encontrar la celda libre mas cercana. En esta version el BSA se dirige en la direccion en la que está hasta que se encuentre con un obstaculo o con una celda ya visitada (Norte, este/oeste,sur,este/oeste). Este genera muchos puntos criticos y de retorno por lo que se hizo la versión 2. Tambien se añadió el estado de chocque, en caso de que chocase se volviese para atras y  <br>
+    <img src="Servicephoto1.png" alt="Foto del mapa" style="width: 300px;"><br>
+   
+   <h4>Algoritmo final V2</h4>
+    Esta versión ya es funcional, cambié el algoritmo BSA y en esta ocasion era la menera de que siempre que pueda en la direccion primaria (norte) va a ir en esa dirrecion, luego la secundaria (oeste) y así continua. ,  <br>
+    <img src="Servicephoto1.png" alt="Foto del mapa" style="width: 300px;"><br>
+
+      <ul>
+        <li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO FINAL</span></li>
+    </ul>
+    Diferencia de versiones. En el primero tiene mas puntos de retorno, y en el segundo menos. Varian en eso, dependiendo de la prioridad que se quiera dar, pero ambos recorren toda la casa en un periodo muy parecido entre 8 y 9 minutos. Abajo se peuden ver los videos de ambas versiones
+    
+     <ul>
+        <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEOS DE MUESTRA</span></li>
+    </ul>
     A partir del día 26 de septiembre, la granja de ordenadores de la universidad dejó de funcionar, por lo que las pruebas se realizaron con mi ordenador, siendo su rendimiento mucho más bajo. A continuación se muestra un video (velocidad x4) donde la pantalla de gazebo y la visualización de zonas recorridas van desfasadas.<br>
     <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EUKfurEL5gJOlo5tyHCTFbsBL5IvTUK8W0beVo4eNPNEfw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=LFKA4W" style="color: white; text-decoration: none;">Ver el video</a>
 </div>
