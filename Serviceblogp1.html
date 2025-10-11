@@ -145,19 +145,27 @@
     Se implementó una condición para evitar movimiento lineal cuando el ángulo de error superaba los 10°, lo que permitió giros más suaves y evitó colisiones con paredes. Esta mejora estabilizó el comportamiento del robot en entornos estrechos.
     <br><br>
 
-    <h4>ALGORITMO FINAL V1</h4>
+    <h4>ALGORITMO V1</h4>
     En esta versión el algoritmo ya era funcional. Se sustituyó la distancia Manhattan por el <strong>BFS</strong> para calcular los puntos de retorno de forma más precisa. 
     <br><br>
     El robot mantenía su dirección mientras no encontrase obstáculos ni celdas visitadas, generando varios puntos críticos y de retorno. También se implementó un estado de “choque” que permitía retroceder brevemente en caso de impacto y reintentar una nueva dirección.
     <br><br>
     <img src="Servicephoto1.png" alt="Foto del mapa" style="width: 300px;"><br><br>
    
-    <h4>ALGORITMO FINAL V2</h4>
+    <h4>ALGORITMO V2</h4>
     En esta versión se optimizó el comportamiento del BSA: el robot prioriza moverse siempre que sea posible en su dirección primaria (por ejemplo, norte), y solo cambia a direcciones secundarias cuando no puede avanzar. 
     <br><br>
     Esto redujo el número de puntos de retorno y mejoró la eficiencia del recorrido. El resultado fue una cobertura más fluida y menos redundante.
     <br><br>
     <img src="Servicephoto2.png" alt="Foto del mapa" style="width: 300px;"><br><br>
+
+    <h4>ALGORITMO V3</h4>
+    En esta versión se cambió el regristro del mapa ya que antes las delcillas se hcaian con un tamaño de 40 pixeles pero era necesario bajarlo a un tamaño menor del robot por loq ue se puso en 32. de esta manera no quedaban huecos vacíospor el recorrido.
+    <br><br>
+    Esto hace que tenga masceldillas y lo hace más lento.
+    <br><br>
+    <img src="Servicephoto2.png" alt="Foto del mapa" style="width: 300px;"><br><br>
+
 
     <ul>
         <li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO FINAL</span></li>
@@ -170,11 +178,15 @@
     <ul>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
 
-    En los siguientes videos (reproducido a velocidad x2) puede verse la ejecución del robot en Gazebo junto con la visualización de las zonas recorridas. 
+    En los siguientes videos (reproducido a velocidad x2) puede verse la ejecución del robot en Gazebo junto con la visualización de las zonas recorridas de. 
     <br><br>
     <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EcUbdIHozy5DlRdJEC0CVQMBrlWcEfTz8vFCxREAYf8WjQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=Plqnyd" style="color: white;">Ver el video V1</a>
+    <br>
     <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ea1EAQRkGZ5Pvd5Ru4z4RjEB1-UajFw3rFKzRqv0HX_CwQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=Jo6wmW" style="color: white;">Ver el video V2</a>
+    <br>
 
+     <br>
+     <br>
 
 </div>
 
