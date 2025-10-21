@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRON - RECUEE MISSION</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('roomba.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Índice</h3>
+    <ul>
+        <li><a href="#INTRODUCCION">Introducción</a></li>
+        <li><a href="#HAAR">HAAR</a></li>
+        <li><a href="#COORDENADAS">COORDENADAS</a></li>
+        <li><a href="#MOVIMIENTO">Movimiento</a></li>
+        <li><a href="#PRUEBAS">Pruebas</a></li>
+        <li><a href="#RESULTADO_FINAL">Resultado final</a></li>
+        <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
+    </ul>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+    </div>
+</div>
+
+<div class="content">
+    <div style="text-align: center;">
+        <big><big><span style="font-weight: bold;">DRON - RECUEE MISSION</span><br>
+        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+    </div>
+    <br>
+    
+     <ul>
+        <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+    </ul>
+    El objetivo principal de este proyecto es desarrollar un sistema autónomo que permita a un dron localizar y rescatar personas en zonas donde se ha perdido el contacto con el barco de rescate. Este dron deberá ser capaz de identificar caras humanas en imágenes capturadas por su cámara, navegar a las posiciones correspondientes, y así proporcionar ayuda en entornos hostiles o de difícil acceso.
+
+    Para lograr este objetivo, se emplea un algoritmo de detección de rostros basado en el método de Haar, combinado con un sistema de control de movimiento autónomo para el dron. El sistema debe ser capaz de interpretar coordenadas globales, detectar las caras en las imágenes y orientar al dron hacia el lugar exacto donde se encuentra la persona que necesita ayuda.
+
+    <ul>
+        <li><a name="HAAR"></a><span style="font-weight: bold;">HAAR</span></li>
+    </ul>
+    El algoritmo de detección de rostros de Haar es un método popular en visión por computadora para localizar y reconocer objetos dentro de imágenes. Este enfoque se basa en el uso de características simples que describen la diferencia en la intensidad de píxeles en una imagen, lo cual permite detectar patrones como rostros, ojos, sonrisas, entre otros. El modelo de Haar es entrenado previamente para identificar estas características a través de un conjunto de imágenes etiquetadas.
+
+    En este proyecto, el sistema utiliza Haar específicamente para detectar caras humanas, lo que resulta útil en situaciones de rescate donde la identificación de personas es crucial. Sin embargo, una de las limitaciones del detector Haar es que funciona de manera óptima cuando las caras están orientadas rectamente (con una inclinación de hasta ±10 grados). Por esta razón, cada imagen capturada por el dron es sometida a una rotación para asegurarse de que el sistema detecte las caras sin importar su orientación, aumentando así la probabilidad de éxito del rescate.
+
+    <ul>
+        <li><a name="COORDENADAS"></a><span style="font-weight: bold;">COORDENADAS (Breadth-First Search)</span></li>
+    </ul>
+    El entorno en el que opera el dron está modelado en un sistema de coordenadas bidimensionales (X, Y) con el barco de rescate como punto de referencia. El eje X es positivo hacia el norte, y el eje Y es negativo hacia el este. Para garantizar que el dron pueda navegar de manera eficiente, las posiciones geográficas del barco de rescate y de las personas perdidas están representadas en el sistema de coordenadas UTM (Universal Transverse Mercator). 
+
+    Dado que las coordenadas en las imágenes están en píxeles y las coordenadas del mundo real están en unidades geográficas, es necesario realizar una conversión de coordenadas entre estos dos sistemas para poder ubicar al dron correctamente. En este proceso, se utiliza un offset de referencia (por ejemplo, (40, 30)) que permite al dron calcular las posiciones de las personas con respecto al barco. Además, cuando se detecta una cara en una imagen, se deben transformar las coordenadas del píxel donde se encuentra la cara en coordenadas geográficas, teniendo en cuenta la orientación del dron en ese momento.
+
+    Esta transformación es crucial para que el dron pueda navegar correctamente hacia el lugar exacto donde se encuentra la persona a rescatar.Se hace de la siguiente manera: se crea un vector desde el centro de imagen(dron) hasta el pixel y se proroga hasta detectar z = 0
+
+    <ul>
+        <li><a name="MOVIMIENTO"></a><span style="font-weight: bold;">MOVIMIENTO</span></li>
+    </ul>
+    El dron utiliza un algoritmo de movimiento en zig-zag para cubrir de manera eficiente el área en busca de personas. El patrón de movimiento es diseñado para cubrir una gran extensión del terreno, desplazándose hacia el norte, girando hacia el este, avanzando unos pasos y luego girando hacia el sur, repitiendo este proceso continuamente hasta asegurar que toda la zona esté inspeccionada.
+
+    Esta estrategia de movimiento garantiza que el dron recorra un área amplia, minimizando la posibilidad de pasar por alto una persona. Además, al ser un algoritmo simple, el dron puede operar de manera eficiente en entornos desconocidos sin necesidad de realizar cálculos complejos sobre el terreno.
+
+    <ul>
+        <li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS Y DESARROLLO</span></li>
+    </ul>
+    A lo largo del proyecto se realizaron diferentes versiones del algoritmo, ajustando su comportamiento hasta conseguir una cobertura completa y eficiente del entorno.
+
+    <h4>ALGORITMO Nº1 - PRIMERA APROXIMACIÓN</h4>
+    En la primera versión, se intentó crear un mapa en rejilla en <em>Unibotics</em>. Inicialmente hubo dificultades para representar las celdas y convertir las posiciones del robot en píxeles. 
+    <br><br>
+    En esta etapa, el HAAR no estaba completamente implementado: el robot avanzaba sin control de dirección estable y no resolvía bien los puntos críticos. El cálculo de retorno se hacía mediante la <strong>distancia Manhattan</strong>, pero esta no consideraba los obstáculos ni las celdas ya visitadas, provocando bloqueos frecuentes.
+    <br><br>
+
+   
+    <ul>
+        <li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO FINAL</span></li>
+    </ul>
+     En esta versión se cambió el regristro del mapa ya que antes las delcillas se hcaian con un tamaño de 40 pixeles pero era necesario bajarlo a un tamaño menor del robot por lo que se puso en 33. de esta manera no quedaban huecos vacíospor el recorrido.
+    <br><br>
+    Esto hace que tenga mas celdillas y lo hace más lento pero limpia más zona y mejor.
+    <br><br>
+    <img src="ServicePhoto3.PNG" alt="Foto del mapa" style="width: 300px;"><br><br>
+   <br><br>
+
+    <ul>
+        <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
+
+    En los siguientes videos (reproducido a velocidad x2) puede verse la ejecución del robot en Gazebo en las 3 versiones. 
+    <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EcUbdIHozy5DlRdJEC0CVQMBrlWcEfTz8vFCxREAYf8WjQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=Plqnyd" style="color: white;">Ver el video V1</a>
+    
+    
+     <br>
+     <br>
+
+</div>
+
+<a href="Serviceblogp1.html" class="fixed-box left-box">←</a>
+<a href="index.html" class="fixed-box right-box">→</a>
+</body>
+</html>
