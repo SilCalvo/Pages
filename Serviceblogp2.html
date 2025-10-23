@@ -125,32 +125,64 @@ Se ha creado una bateria virtual que va bajando y en caso de descargarse acude a
 <ul>
         <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
     </ul>
-    """" dESCRIBIR LAS FUNCIONES CREADAS Y EXPLICACION DEL CODIGO, QUE HACE
-    <ul>
-        <li><a name="PRUEBAS"></a><span style="font-weight: bold;">PRUEBAS Y DESARROLLO</span></li>
-    </ul>
-    A lo largo del proyecto se realizaron diferentes versiones del algoritmo, ajustando su comportamiento hasta conseguir una cobertura completa y eficiente del entorno.
+    <h4>Explicaion del programa</h4>
 
-    <h4>ALGORITMO Nº1 - PRIMERA APROXIMACIÓN</h4>
-    En la primera versión, se intentó crear un mapa en rejilla en <em>Unibotics</em>. Inicialmente hubo dificultades para representar las celdas y convertir las posiciones del robot en píxeles. 
-    <br><br>
-    En esta etapa, el HAAR no estaba completamente implementado: el robot avanzaba sin control de dirección estable y no resolvía bien los puntos críticos. El cálculo de retorno se hacía mediante la <strong>distancia Manhattan</strong>, pero esta no consideraba los obstáculos ni las celdas ya visitadas, provocando bloqueos frecuentes.
+    Este programa implementa un sistema de búsqueda y rescate autónomo con un dron, que utiliza visión por computadora para localizar personas en una zona determinada. El dron despega, se dirige a un punto de inicio predefinido y realiza un recorrido sistemático en zigzag sobre el área de búsqueda. Durante su vuelo, captura imágenes desde su cámara ventral y analiza cada fotograma para detectar rostros humanos utilizando un clasificador Haar Cascade entrenado con ejemplos de caras frontales.
+<br><br>
+Para mejorar la detección, el código ajusta el contraste de las imágenes mediante el algoritmo CLAHE (Contrast Limited Adaptive Histogram Equalization), que resalta los detalles de la cara sin sobreexponer el resto de la imagen. Además, se aplica una rotación progresiva de la imagen (en pasos de 10 grados) con el fin de detectar rostros aunque estén inclinados o girados respecto a la cámara.
+<br><br>
+Cuando se detecta un rostro, el programa calcula su posición real en el terreno en función de la altura y orientación del dron, el campo de visión de la cámara y las coordenadas de la imagen. A partir de esa información, convierte las coordenadas locales del dron a coordenadas geográficas UTM, de modo que se pueda registrar la ubicación exacta del posible “superviviente”.
+<br><br>
+El sistema evita registrar la misma persona varias veces mediante una comparación de posiciones. Si la nueva detección está muy cerca de una anterior, se considera repetida y no se guarda.
+<br><br>
+Mientras ejecuta su misión, el dron monitoriza constantemente su nivel de batería: si baja de un umbral (55%), interrumpe la búsqueda, regresa a un punto seguro, aterriza para simular una recarga, y luego despega de nuevo para continuar. Durante todo el proceso, el programa muestra en la interfaz del WebGUI tanto la imagen de la cámara frontal como la ventral, junto con información del vuelo, detecciones y estado del sistema.
+<br><br>
+Cuando la búsqueda termina al alcanzar el límite del área asignada, el dron aterriza y el programa muestra en consola las posiciones detectadas de las caras y sus correspondientes coordenadas UTM, completando así la misión de exploración y rescate.
+      <br><br>
     <br><br>
 
+    <h4>Funciones del programa</h4>
+
+<h5>get_yaw(target_x, target_y)</h5>
+<p>
+Calcula el ángulo de orientación yaw que el dron debe girar para mirar hacia un punto objetivo en el plano, 
+utilizando su posición actual y las coordenadas de destino. Devuelve el ángulo en radianes, que luego se usa para orientar el dron correctamente durante el desplazamiento.
+</p>
+
+<h5>get_utm(coordinate)</h5>
+<p>
+Convierte las coordenadas locales del dron (en metros) a coordenadas geográficas UTM basadas en un punto de referencia inicial 
+(latitud y longitud definidas en el código). Esto permite ubicar con precisión en el mapa las posiciones donde se detectaron rostros.
+</p>
+
+<h5>get_pose_face(centre_face)</h5>
+<p>
+Determina la posición real de un rostro detectado en la imagen en relación con el terreno, suponiendo un fov (el básico de cámaras)
+Utiliza la altura del dron, su orientación yaw y los parámetros del campo de visión (FOV) de la cámara para convertir 
+la posición del rostro en la imagen (en píxeles) a coordenadas métricas sobre el suelo.
+</p>
+
+<h5>is_new_face(centre_face)</h5>
+<p>
+Comprueba si una nueva cara detectada corresponde a una detección ya registrada previamente. 
+Si la nueva posición está dentro de un rango de 3 metros respecto a una detección anterior, se considera la misma persona. 
+En caso contrario, se añade la nueva posición a la lista de rostros detectados y se guarda su ubicación en coordenadas UTM.
+</p>
+
+<h5>detectAndDisplay(frame)</h5>
+<p>
+Procesa un fotograma de la cámara ventral para detectar rostros. 
+Convierte la imagen a escala de grises, mejora el contraste usando el algoritmo CLAHE, 
+y aplica rotaciones de la imagen en intervalos de 10 grados para detectar caras que estén inclinadas. 
+Cuando encuentra una, calcula su posición original en la imagen sin rotar, la muestra medianteWebGUI, 
+y llama a las funciones correspondientes para registrar la detección en el entorno del dron.
+</p>
    
     <ul>
-        <li><a name="RESULTADO_FINAL"></a><span style="font-weight: bold;">RESULTADO FINAL</span></li>
-    </ul>
-    
-    <img src="ServicePhoto3.PNG" alt="Foto del mapa" style="width: 300px;"><br><br>
-   <br><br>
-
-    <ul>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
-
-    En los siguientes videos (reproducido a velocidad x2) puede verse la ejecución del robot en Gazebo en las 3 versiones. 
-    <br><br>
-    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EcUbdIHozy5DlRdJEC0CVQMBrlWcEfTz8vFCxREAYf8WjQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&e=Plqnyd" style="color: white;">Ver el video V1</a>
+        El siguiente video está cortado y acelerado porque el dron va muy lento, se puede ver como despepga, va a la zona de busqueda, encuentra a personas (es cierto que a veces no solo detecta la cara si no el cuerpo, pero solo personas, ya no detecta olas) y luego vuelve a cargar la bateria y aterriza y vuelve con su vuelo de busqueda.
+     <br><br>
+    <a href="" style="color: white;">Ver el video</a>
     
     
      <br>
