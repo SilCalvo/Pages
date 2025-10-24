@@ -166,6 +166,14 @@ Comprueba si una nueva cara detectada corresponde a una detección ya registrada
 Si la nueva posición está dentro de un rango de 3 metros respecto a una detección anterior, se considera la misma persona. 
 En caso contrario, se añade la nueva posición a la lista de rostros detectados y se guarda su ubicación en coordenadas UTM.
 </p>
+<h5>go_to(pos_x,pos_y,altura)</h5>
+<p>
+Mueve el dron hasta una posición objetivo especificada por las coordenadas (pos_x, pos_y) y una altura determinada.  
+Durante el desplazamiento, el dron ajusta su orientación (yaw) para dirigirse correctamente hacia el destino.  
+Mientras avanza, se actualizan las imágenes del entorno en la interfaz WebGUI, se reduce progresivamente el nivel de batería y se muestra por consola la información de estado, incluyendo el número de personas detectadas y sus posiciones UTM.  
+El bucle termina cuando el dron se encuentra a menos de 0.2 metros de la posición objetivo en los ejes X e Y.
+
+</p>
 
 <h5>detectAndDisplay(frame)</h5>
 <p>
@@ -178,9 +186,9 @@ y llama a las funciones correspondientes para registrar la detección en el ento
    <br>
     <ul>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
-       <br> El siguiente video está cortado y acelerado porque el dron va muy lento, se puede ver como despepga, va a la zona de busqueda, encuentra a personas (es cierto que a veces no solo detecta la cara si no el cuerpo, pero solo personas, ya no detecta olas) y luego vuelve a cargar la bateria y aterriza y vuelve con su vuelo de busqueda.
+       <br> El siguiente video está acelerado x4 porque el dron va muy lento, se puede ver como despepga, va a la zona de busqueda, encuentra a personas y luego vuelve a cargar la bateria y aterriza y vuelve con su vuelo de busqueda encontrando a otra persona.
      <br><br>
-    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ETJckXbxjSVJvvdkkHEd4CoBm9SelECISTAhD5zPF5uogg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=pcTnpW" style="color: white;">Ver el video</a>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EWyAxSN823RFpQgRVi58UgkB0aJHDRMP7pZMU5MSevOqWw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=qouCT1" style="color: white;">Ver el video</a>
     
     
      <br>
