@@ -102,18 +102,19 @@ Al principio, como no sabemos cómo está orientado ni posicionado el coche, est
     <li><a name="HUECO"></a><span style="font-weight: bold;">HUECO</span></li>
 </ul>
 Probé varias formas de calcular el hueco. Primero contaba las líneas libres y usaba la media en el ángulo 90°, pero esto no funcionaba si el coche cambiaba la distancia respecto a los otros vehículos. Los ángulos calculados funcionaban solo en un escenario concreto, así que no era nada robusto.  
-<br>
+<br><br>
 Después opté por calcular el hueco en metros reales entre los obstáculos. Esto resultó mucho más preciso y fiable, usando trigonometría para hacerlo.
 <br>
 <ul>
     <li><a name="APARCAR"></a><span style="font-weight: bold;">APARCAR</span></li>
 </ul>
 Al principio intenté aparcar con dos giros: primero hacia atrás y luego hacia adelante, pero no funcionaba.  
-<br>
+<br><br>
 Luego probé a hacerlo como en la vida real: girar hacia atrás, continuar con el giro contrario y finalmente colocarte correctamente hacia adelante.  
-<br>
+<br><br>
 Para calcular la maniobra, primero probé usando los láseres de delante y detrás, pero podría no haber un coche de referencia, así que finalmente usé la odometría incremental. También se usa para avanzar una distancia concreta una vez detectado el hueco, ya que no podemos asumir que siempre habrá un coche delante.
        <br> 
+    <ul>
     <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
     </ul>
     <h4>Explicaion del programa</h4>
