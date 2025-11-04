@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DRON - RECUEE MISSION</title>
+    <title>CAR - AUTOPARKING</title>
     <style>
         body {
             margin: 0;
@@ -70,9 +70,9 @@
     <h3>Índice</h3>
     <ul>
         <li><a href="#INTRODUCCION">Introducción</a></li>
-        <li><a href="#HAAR">HAAR</a></li>
-        <li><a href="#COORDENADAS">Coordenadas</a></li>
-        <li><a href="#MOVIMIENTO">Movimiento</a></li>
+        <li><a href="#INICIO">Inicio</a></li>
+        <li><a href="#HUECO">Hueco</a></li>
+        <li><a href="#APARCAR">Aparcar</a></li>
         <li><a href="#CODIGO">Codigo</a></li>
         <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
     </ul>
@@ -83,45 +83,38 @@
 
 <div class="content">
     <div style="text-align: center;">
-        <big><big><span style="font-weight: bold;">DRON - RECUEE MISSION</span><br>
+        <big><big><span style="font-weight: bold;">CAR - AUTOPARKING</span><br>
         <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
     </div>
     <br>
     
-     <ul>
-        <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
-    </ul>
-    El objetivo principal de este proyecto es desarrollar un sistema autónomo que permita a un dron localizar y rescatar personas en zonas donde se ha perdido el contacto con el barco de rescate. Este dron deberá ser capaz de identificar caras humanas en imágenes capturadas por su cámara, navegar a las posiciones correspondientes, y así proporcionar ayuda en entornos hostiles o de difícil acceso.
-<br><br>
-    Para lograr este objetivo, se emplea un algoritmo de detección de rostros basado en el método de Haar, combinado con un sistema de control de movimiento autónomo para el dron. El sistema debe ser capaz de interpretar coordenadas globales, detectar las caras en las imágenes y orientar al dron hacia el lugar exacto donde se encuentra la persona que necesita ayuda.
-
     <ul>
-        <li><a name="HAAR"></a><span style="font-weight: bold;">HAAR</span></li>
-    </ul>
-    El algoritmo de detección de rostros de Haar es un método popular en visión por computadora para localizar y reconocer objetos dentro de imágenes. Este enfoque se basa en el uso de características simples que describen la diferencia en la intensidad de píxeles en una imagen, lo cual permite detectar patrones como rostros, ojos, sonrisas, entre otros. El modelo de Haar es entrenado previamente para identificar estas características a través de un conjunto de imágenes etiquetadas.
-<br><br>
-    En este proyecto, el sistema utiliza Haar específicamente para detectar caras humanas, lo que resulta útil en situaciones de rescate donde la identificación de personas es crucial. Sin embargo, una de las limitaciones del detector Haar es que funciona de manera óptima cuando las caras están orientadas rectamente (con una inclinación de hasta ±10 grados). Por esta razón, cada imagen capturada por el dron es sometida a una rotación para asegurarse de que el sistema detecte las caras sin importar su orientación, aumentando así la probabilidad de éxito del rescate.
-
-    <ul>
-        <li><a name="COORDENADAS"></a><span style="font-weight: bold;">COORDENADAS (Breadth-First Search)</span></li>
-    </ul>
-    El entorno en el que opera el dron está modelado en un sistema de coordenadas bidimensionales (X, Y) con el barco de rescate como punto de referencia. El eje X es positivo hacia el norte, y el eje Y es negativo hacia el este. Para garantizar que el dron pueda navegar de manera eficiente, las posiciones geográficas del barco de rescate y de las personas perdidas están representadas en el sistema de coordenadas UTM (Universal Transverse Mercator). 
-<br><br>
-    Dado que las coordenadas en las imágenes están en píxeles y las coordenadas del mundo real están en unidades geográficas, es necesario realizar una conversión de coordenadas entre estos dos sistemas para poder ubicar al dron correctamente. En este proceso, se utiliza un offset de referencia (por ejemplo, (40, 30)) que permite al dron calcular las posiciones de las personas con respecto al barco. Además, cuando se detecta una cara en una imagen, se deben transformar las coordenadas del píxel donde se encuentra la cara en coordenadas geográficas, teniendo en cuenta la orientación del dron en ese momento.
-<br><br>
-    Esta transformación es crucial para que el dron pueda navegar correctamente hacia el lugar exacto donde se encuentra la persona a rescatar.Se hace de la siguiente manera: se crea un vector desde el centro de imagen(dron) hasta el pixel y se proroga hasta detectar z = 0
-
-    <ul>
-        <li><a name="MOVIMIENTO"></a><span style="font-weight: bold;">MOVIMIENTO</span></li>
-    </ul>
-    El dron utiliza un algoritmo de movimiento en zig-zag para cubrir de manera eficiente el área en busca de personas. El patrón de movimiento es diseñado para cubrir una gran extensión del terreno, desplazándose hacia el norte, girando hacia el este, avanzando unos pasos y luego girando hacia el sur, repitiendo este proceso continuamente hasta asegurar que toda la zona esté inspeccionada.
-<br><br>
-    Esta estrategia de movimiento garantiza que el dron recorra un área amplia, minimizando la posibilidad de pasar por alto una persona. Además, al ser un algoritmo simple, el dron puede operar de manera eficiente en entornos desconocidos sin necesidad de realizar cálculos complejos sobre el terreno.
-<br><br>
-Se ha creado una bateria virtual que va bajando y en caso de descargarse acude a cargarse al barco de vuelta.
-
+    <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+</ul>
+La practica consiste en un coche autonomo. El coche tiene que poder aparcar en paralelo, ya sea teniendo dos coches de referencia (delante y detrás) o solo uno (delante o detrás). Para esto, cuenta con tres láseres de 180°: uno delante, uno detrás y uno a la derecha. Con ellos detectamos si hay hueco para aparcar y nos aseguramos de no chocar. Además, el coche tiene odometría, pero no se usará para localización global; solo servirá de manera incremental para movimientos relativos.
+<br>
 <ul>
-        <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
+    <li><a name="INICIO"></a><span style="font-weight: bold;">INICIO</span></li>
+</ul>
+Al principio, como no sabemos cómo está orientado ni posicionado el coche, este se coloca para que la calle quede paralela. Luego, se sitúa a la distancia correcta para poder aparcar.
+<br>
+<ul>
+    <li><a name="HUECO"></a><span style="font-weight: bold;">HUECO</span></li>
+</ul>
+Probé varias formas de calcular el hueco. Primero contaba las líneas libres y usaba la media en el ángulo 90°, pero esto no funcionaba si el coche cambiaba la distancia respecto a los otros vehículos. Los ángulos calculados funcionaban solo en un escenario concreto, así que no era nada robusto.  
+<br>
+Después opté por calcular el hueco en metros reales entre los obstáculos. Esto resultó mucho más preciso y fiable, usando trigonometría para hacerlo.
+<br>
+<ul>
+    <li><a name="APARCAR"></a><span style="font-weight: bold;">APARCAR</span></li>
+</ul>
+Al principio intenté aparcar con dos giros: primero hacia atrás y luego hacia adelante, pero no funcionaba.  
+<br>
+Luego probé a hacerlo como en la vida real: girar hacia atrás, continuar con el giro contrario y finalmente colocarte correctamente hacia adelante.  
+<br>
+Para calcular la maniobra, primero probé usando los láseres de delante y detrás, pero podría no haber un coche de referencia, así que finalmente usé la odometría incremental. También se usa para avanzar una distancia concreta una vez detectado el hueco, ya que no podemos asumir que siempre habrá un coche delante.
+       <br> 
+    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
     </ul>
     <h4>Explicaion del programa</h4>
 
@@ -196,7 +189,7 @@ y llama a las funciones correspondientes para registrar la detección en el ento
 
 </div>
 
-<a href="Serviceblogp1.html" class="fixed-box left-box">←</a>
+<a href="Serviceblogp2.html" class="fixed-box left-box">←</a>
 <a href="index.html" class="fixed-box right-box">→</a>
 </body>
 </html>
