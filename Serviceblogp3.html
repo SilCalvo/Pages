@@ -101,10 +101,9 @@ Al principio, como no sabemos cómo está orientado ni posicionado el coche, est
 <ul>
     <li><a name="HUECO"></a><span style="font-weight: bold;">HUECO</span></li>
 </ul>
-Probé varias formas de calcular el hueco. Primero contaba las líneas libres y usaba la media en el ángulo 90°, pero esto no funcionaba si el coche cambiaba la distancia respecto a los otros vehículos. Los ángulos calculados funcionaban solo en un escenario concreto, así que no era nada robusto.  
-<br><br>
-Después opté por calcular el hueco en metros reales entre los obstáculos. Esto resultó mucho más preciso y fiable, usando trigonometría para hacerlo.
+Para calcular el hueco mido las lineas con espacio estado a la derecha recto del coche. Cuando detecta que hay sufieciente hueco con la media en angulo 90, empieza a aparcar.
 <br>
+
 <ul>
     <li><a name="APARCAR"></a><span style="font-weight: bold;">APARCAR</span></li>
 </ul>
@@ -192,9 +191,15 @@ Al finalizar, el coche queda preparado para recorrer la vía en busca de huecos.
    <br>
     <ul>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
-       <br> El siguiente video está acelerado x4 porque el dron va muy lento, se puede ver como despepga, va a la zona de busqueda, encuentra a personas y luego vuelve a cargar la bateria y aterriza y vuelve con su vuelo de busqueda encontrando a otra persona.
+       <br> A continuación se muestran varios videos. El primero, el coche se encuentra paralelo a la calle y hay dos coches de referencia. <br>
+        En el segundo, el coche se encuentra girado respecto de la calle, y sigue habiendo dos coches de referencia.<br>
+        Y el tercero, el coche se encuentra paralelo a la calle pero solo hay un coche de referencia.<br>
      <br><br>
-    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EWyAxSN823RFpQgRVi58UgkB0aJHDRMP7pZMU5MSevOqWw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=qouCT1" style="color: white;">Ver el video</a>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ea70vrbdpXtAvFrvevUJ5n8B-Phzk6yDjNe48mMYgtrMXQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XqhnXf" style="color: white;">Ver el video V1</a>
+        <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ESYWxkkFbHFHi5lOHzpdkscBhHo0r3N0rBdV8qrVJkPJiw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=DFMjFY" style="color: white;">Ver el video V2</a>
+        <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EVo29rayMEpCqOCuc8qigCMBNeN_N79-BUP9R9ca-Uv5Ng?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ZuU8cj" style="color: white;">Ver el video V3</a>
     
     
      <br>
