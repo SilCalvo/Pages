@@ -117,65 +117,77 @@ Para calcular la maniobra, primero probé usando los láseres de delante y detr�
     <ul>
     <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
     </ul>
-    <h4>Explicaion del programa</h4>
+<h4>Explicación del programa</h4>
 
-    Este programa implementa un sistema de búsqueda y rescate autónomo con un dron, que utiliza visión por computadora para localizar personas en una zona determinada. El dron despega, se dirige a un punto de inicio predefinido y realiza un recorrido sistemático en zigzag sobre el área de búsqueda. Durante su vuelo, captura imágenes desde su cámara ventral y analiza cada fotograma para detectar rostros humanos utilizando un clasificador Haar Cascade entrenado con ejemplos de caras frontales.
+Este programa implementa un sistema de aparcamiento autónomo para un vehículo controlado mediante sensores láser y módulos de simulación proporcionados por la interfaz HAL y WebGUI.  
+El objetivo es que el coche detecte un espacio libre en el lateral derecho, se coloque de forma paralela al entorno, y luego realice una maniobra de aparcamiento en varias fases hasta quedar correctamente estacionado entre dos obstáculos simulados.
 <br><br>
-Para mejorar la detección, el código ajusta el contraste de las imágenes mediante el algoritmo CLAHE (Contrast Limited Adaptive Histogram Equalization), que resalta los detalles de la cara sin sobreexponer el resto de la imagen. Además, se aplica una rotación progresiva de la imagen (en pasos de 10 grados) con el fin de detectar rostros aunque estén inclinados o girados respecto a la cámara.
-<br><br>
-Cuando se detecta un rostro, el programa calcula su posición real en el terreno en función de la altura y orientación del dron, el campo de visión de la cámara y las coordenadas de la imagen. A partir de esa información, convierte las coordenadas locales del dron a coordenadas geográficas UTM, de modo que se pueda registrar la ubicación exacta del posible “superviviente”.
-<br><br>
-El sistema evita registrar la misma persona varias veces mediante una comparación de posiciones. Si la nueva detección está muy cerca de una anterior, se considera repetida y no se guarda.
-<br><br>
-Mientras ejecuta su misión, el dron monitoriza constantemente su nivel de batería: si baja de un umbral (55%), interrumpe la búsqueda, regresa a un punto seguro, aterriza para simular una recarga, y luego despega de nuevo para continuar. Durante todo el proceso, el programa muestra en la interfaz del WebGUI tanto la imagen de la cámara frontal como la ventral, junto con información del vuelo, detecciones y estado del sistema.
-<br><br>
-Cuando la búsqueda termina al alcanzar el límite del área asignada, el dron aterriza y el programa muestra en consola las posiciones detectadas de las caras y sus correspondientes coordenadas UTM, completando así la misión de exploración y rescate.
-      <br><br>
-    
 
-    <h4>Funciones del programa</h4>
+El flujo principal comienza con una alineación del vehículo respecto a la acera (determinando si está paralelo mediante un análisis de los datos del láser derecho). Una vez que el coche está bien orientado, avanza por la vía mientras busca huecos adecuados para estacionar utilizando los datos del láser lateral.
+<br><br>
 
-<h5>get_yaw(target_x, target_y)</h5>
+Cuando se detecta un espacio libre que cumpla las condiciones de tamaño mínimo, el programa ejecuta la secuencia de maniobra de aparcamiento: avanza para posicionarse, da marcha atrás girando primero hacia un lado, luego hacia el contrario, y finalmente ajusta su orientación hasta quedar recto.
+<br><br>
+
+Durante todo el proceso, el sistema analiza los datos de los sensores delantero, trasero y lateral para evitar colisiones. También verifica si existen vehículos delante o detrás (mediante detección de distancias cortas), y modifica la estrategia en función de ello.
+<br><br>
+
+Una vez completada la maniobra, el vehículo se detiene completamente.
+<br><br>
+
+<h4>Funciones del programa</h4>
+
+<h5>is_paralell()</h5>
 <p>
-Calcula el ángulo de orientación yaw que el dron debe girar para mirar hacia un punto objetivo en el plano, 
-utilizando su posición actual y las coordenadas de destino. Devuelve el ángulo en radianes, que luego se usa para orientar el dron correctamente durante el desplazamiento.
+Analiza los datos del láser derecho para determinar si el coche está paralelo a una pared o línea lateral.  <br>
+El proceso consiste en segmentar los puntos válidos del láser, calcular el tramo más largo (la pared detectada), y obtener su pendiente mediante la diferencia entre el primer y último punto del segmento.  
+<br>Si el ángulo de esa línea está dentro del rango de 89.5° a 90.8°, se considera que el coche está recto respecto a la pared y devuelve 90.  
+<br>En caso contrario, devuelve el ángulo calculado, indicando el grado de desviación.
 </p>
 
-<h5>get_utm(coordinate)</h5>
+<h5>is_horizontal(laser)</h5>
 <p>
-Convierte las coordenadas locales del dron (en metros) a coordenadas geográficas UTM basadas en un punto de referencia inicial 
-(latitud y longitud definidas en el código). Esto permite ubicar con precisión en el mapa las posiciones donde se detectaron rostros.
+Evalúa si los datos de un sensor láser (ya sea el delantero o el trasero) corresponden a una superficie horizontal al coche.  <br>
+Divide las lecturas en segmentos continuos, calcula la inclinación de cada tramo y comprueba si alguno de ellos tiene un ángulo entre 89.5° y 90.5°.  <br>
+Si lo encuentra, devuelve <code>True</code>, indicando que el coche está alineado correctamente frente a una pared u obstáculo.<br>
 </p>
 
-<h5>get_pose_face(centre_face)</h5>
+<h5>get_space()</h5>
 <p>
-Determina la posición real de un rostro detectado en la imagen en relación con el terreno, suponiendo un fov (el básico de cámaras)
-Utiliza la altura del dron, su orientación yaw y los parámetros del campo de visión (FOV) de la cámara para convertir 
-la posición del rostro en la imagen (en píxeles) a coordenadas métricas sobre el suelo.
+Analiza las lecturas del láser derecho para detectar huecos libres que puedan ser utilizados como plazas de aparcamiento.  <br>
+Considera un punto como “libre” si su distancia es igual o mayor que el rango máximo menos un umbral (threshold).  <br>
+Cuando detecta una secuencia continua de puntos libres, la registra como un posible hueco, guardando el índice de inicio, fin y el número de lecturas consecutivas.  <br>
+Devuelve una lista con todos los espacios detectados. <br>
 </p>
 
-<h5>is_new_face(centre_face)</h5>
+<h5>is_parking_lot(wanted_mid, min_ang, min_count)</h5>
 <p>
-Comprueba si una nueva cara detectada corresponde a una detección ya registrada previamente. 
-Si la nueva posición está dentro de un rango de 3 metros respecto a una detección anterior, se considera la misma persona. 
-En caso contrario, se añade la nueva posición a la lista de rostros detectados y se guarda su ubicación en coordenadas UTM.
-</p>
-<h5>go_to(pos_x,pos_y,altura)</h5>
-<p>
-Mueve el dron hasta una posición objetivo especificada por las coordenadas (pos_x, pos_y) y una altura determinada.  
-Durante el desplazamiento, el dron ajusta su orientación (yaw) para dirigirse correctamente hacia el destino.  
-Mientras avanza, se actualizan las imágenes del entorno en la interfaz WebGUI, se reduce progresivamente el nivel de batería y se muestra por consola la información de estado, incluyendo el número de personas detectadas y sus posiciones UTM.  
-El bucle termina cuando el dron se encuentra a menos de 0.2 metros de la posición objetivo en los ejes X e Y.
-
+Determina si existe un espacio adecuado para aparcar en el área lateral del coche.  <br>
+Utiliza los huecos encontrados por <code>get_space()</code> y verifica si alguno cumple con dos condiciones:  
+que esté dentro del rango angular deseado y que tenga al menos un tamaño mínimo.  <br>
+Si cumple ambos criterios, devuelve <code>True</code> e imprime el mensaje “Hueco detectado”.
 </p>
 
-<h5>detectAndDisplay(frame)</h5>
+<h5>park()</h5>
 <p>
-Procesa un fotograma de la cámara ventral para detectar rostros. 
-Convierte la imagen a escala de grises, mejora el contraste usando el algoritmo CLAHE, 
-y aplica rotaciones de la imagen en intervalos de 10 grados para detectar caras que estén inclinadas. 
-Cuando encuentra una, calcula su posición original en la imagen sin rotar, la muestra medianteWebGUI, 
-y llama a las funciones correspondientes para registrar la detección en el entorno del dron.
+Ejecuta lamaniobra completa de aparcamiento en varias fases, controlando las velocidades lineal y angular del coche.  
+<br>
+Las etapas son: <br>
+<ul>
+<li><b>POSITION:</b> El vehículo avanza una distancia determinada hacia adelante para posicionarse antes de retroceder.</li>
+<li><b>BACK_LEFT:</b> Da marcha atrás girando hacia la izquierda hasta alcanzar un ángulo de 35° respecto a la orientación inicial.</li>
+<li><b>BACK_RIGHT:</b> Gira en sentido contrario (derecha) mientras sigue retrocediendo, hasta completar nuevamente un ángulo de 35°.  
+Durante esta etapa se monitorea el sensor trasero para evitar colisiones con obstáculos cercanos.</li>
+<li><b>FRONT:</b> Finalmente, avanza hacia adelante enderezando el vehículo, comprobando que no haya obstáculos ni vehículos delante.</li>
+</ul>
+El bucle finaliza cuando el coche queda recto (según los sensores) o cuando detecta una distancia de seguridad mínima.  
+</p>
+
+<h5>colocar_coche()</h5>
+<p>
+Función auxiliar encargada de ajustar la posición inicial del coche antes de iniciar la búsqueda de aparcamiento.  
+Primero avanza hasta acercarse a una pared delantera (a 1.5 m), luego realiza un giro controlado hasta que la función <code>is_paralell()</code> determine que el coche está correctamente alineado (ángulo de 90°).  
+Al finalizar, el coche queda preparado para recorrer la vía en busca de huecos.
 </p>
    <br>
     <ul>
