@@ -1,1 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGV - WAREHOUSE</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('imagesP3_.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
 
+<div class="sidebar">
+    <h3>Índice</h3>
+    <ul>
+        <li><a href="#INTRODUCCION">Introducción</a></li>
+        <li><a href="#MAPA">Mapa</a></li>
+        <li><a href="#OMPL">OMPL</a></li>
+        <li><a href="#ISVALID">ISVALID</a></li>
+        <li><a href="#CODIGO">Codigo</a></li>
+        <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
+    </ul>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+    </div>
+</div>
+
+<div class="content">
+    <div style="text-align: center;">
+        <big><big><span style="font-weight: bold;">AGV - WAREHOUSE</span><br>
+        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+    </div>
+    <br>
+    
+    <ul>
+  <ul>
+    <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+</ul>
+<p>
+La práctica consiste en el control de un robot móvil AGV dentro de un almacén para realizar tareas de logística. 
+En este caso, el robot debe desplazarse hasta las estanterías, recogerlas utilizando la bandeja elevadora (lift) y transportarlas a otra zona. 
+Para planificar las rutas entre puntos y evitar colisiones se utiliza el planificador OMPL.
+</p>
+
+<ul>
+    <li><a name="MAPA"></a><span style="font-weight: bold;">MAPA</span></li>
+</ul>
+<p>
+Para trabajar con el mapa del almacén, primero fue necesario relacionar las coordenadas reales del robot (en metros) con las coordenadas en píxeles de la imagen del mapa.
+</p>
+<p>
+Para ello:
+</p>
+<ul>
+    <li>Envié el robot a varios puntos de referencia distribuidos por el almacén (esquinas y puntos intermedios).</li>
+    <li>Registré sus coordenadas reales.</li>
+    <li>Localicé los píxeles correspondientes en la imagen del mapa.</li>
+</ul>
+<p>
+Con estos pares de puntos, calculé la matriz de transformación entre ambos sistemas mediante el método de mínimos cuadrados. 
+El código se divide en dos funciones: una que obtiene la matriz de transformación y otra que aplica dicha matriz a cualquier punto para convertirlo entre coordenadas del mundo y del mapa.
+</p>
+<p>
+Además, el mapa incluye las estanterías dibujadas originalmente. Como el robot las mueve, es necesario modificar dinámicamente el mapa: cuando el robot recoge una estantería, se eliminan sus píxeles como obstáculo; cuando la deja en otro lugar, se añaden como nueva zona no transitable.
+</p>
+
+<ul>
+    <li><a name="OMPL"></a><span style="font-weight: bold;">OMPL</span></li>
+</ul>
+<p>
+OMPL es un planificador de movimiento que permite generar trayectorias libres de colisiones. 
+Para esta práctica se emplea RRT*, configurado para buscar el camino más corto y válido entre la posición actual del robot y su objetivo. 
+El planificador utiliza la función de validez isStateValid() para asegurarse de que ninguna pose propuesta esté en colisión.
+</p>
+
+<ul>
+    <li><a name="ISVALID"></a><span style="font-weight: bold;">ISVALID</span></li>
+</ul>
+<p>
+OMPL dispone de dos métodos principales para detectar colisiones:
+</p>
+<ol>
+    <li><strong>Colisión automática con modelos .dae:</strong> Esta es la forma más precisa: OMPL carga el modelo del robot y del mapa en formato DAE y calcula colisiones físicas reales. Sin embargo, en Unibotics no está disponible, porque no se incluyen las extensiones necesarias de OMPL y no existe un modelo DAE del robot holonómico.</li>
+    <li><strong>Colisión manual (la opción usada en esta práctica):</strong> Se indica manualmente qué zonas del mapa son obstáculos. Para ello:
+        <ul>
+            <li>Se calculan las dimensiones del robot en píxeles.</li>
+            <li>Se calculan también las dimensiones del robot con estantería sobre la bandeja.</li>
+            <li>La variable with_shelf indica a isStateValid() qué tamaño debe usar en cada momento.</li>
+        </ul>
+    </li>
+</ol>
+<p>
+Como cuando el robot lleva una estantería deja de ser cuadrado, la orientación (yaw) es importante. Por eso la función genera un rectángulo con el tamaño adecuado, lo rota según el yaw del robot y comprueba si todos los píxeles ocupados por ese rectángulo están libres en el mapa.
+</p>
+
+    <ul>
+    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
+    </ul>
+<h4>Explicación del programa</h4>
+
+Este programa implementa un sistema autónomo de planificación y movimiento para un robot que recoge estanterías de un almacén y las transporta a otra zona.  
+Se basa en un mapa extraído de una imagen, la simulación robótica proporcionada por HAL y WebGUI, y en el uso del planificador RRT* del framework OMPL para generar trayectorias que eviten colisiones.
+
+El funcionamiento se divide en varias etapas: carga del mapa, transformación entre coordenadas, evaluación de colisiones, planificación óptima de trayectorias, seguimiento del camino y actualización del mapa al mover las estanterías.  
+A continuación se describen las principales partes del código.
+
+<br><br>
+
+<h4>Funciones del programa</h4>
+
+<h5><code>transformation()</code> y <code>transform_point()</code></h5>
+<p>
+El sistema trabaja simultáneamente en dos espacios de coordenadas:  
+<ul>
+<li><b>Coordenadas del mundo</b>: donde se mueve el robot (metros).</li>
+<li><b>Coordenadas del mapa</b>: donde se dibujan obstáculos en la imagen (píxeles).</li>
+</ul>
+
+La función <code>transformation()</code> calcula una matriz de transformación afín a partir de puntos de calibración.  
+La función <code>transform_point()</code> aplica esa transformación a cualquier punto para convertirlo de un sistema al otro.  
+Ambas permiten que el planificador use el mapa correctamente para detectar colisiones.
+</p>
+
+<h5><code>isStateValid()</code></h5>
+<p>
+Comprueba si un estado del robot es válido o si colisiona con las estanterías u obstáculos.  
+El proceso consiste en:  
+<ul>
+<li>Transformar la posición del robot a coordenadas del mapa.</li>
+<li>Generar un rectángulo de puntos equivalente al tamaño del robot.</li>
+<li>Rotarlo según su orientación (<i>yaw</i>).</li>
+<li>Verificar si alguno de esos puntos cae sobre una zona prohibida del mapa.</li>
+</ul>
+
+Devuelve <code>True</code> si el robot está en una posición segura y <code>False</code> si está chocando.
+</p>
+
+<h5><code>create_numpy_path()</code></h5>
+<p>
+Convierte el camino generado por OMPL en dos formatos:
+<ul>
+<li><b>Coordenadas de mundo</b>: para que el robot siga la ruta.</li>
+<li><b>Coordenadas de píxeles</b>: para visualizar el camino en WebGUI.</li>
+</ul>
+</p>
+
+<h5><code>next_target()</code></h5>
+<p>
+Es la función que ejecuta la planificación completa hacia una meta definida.  
+<ul>
+<li>Crea un problema de planificación partiendo de la posición actual del robot.</li>
+<li>Define el objetivo (posición y orientación deseadas).</li>
+<li>Configura RRT* como planificador óptimo.</li>
+<li>Intenta encontrar un camino durante 5 segundos.</li>
+<li>Si tiene éxito, muestra la ruta en WebGUI y llama a <code>follow_path()</code> para que el robot la recorra.</li>
+</ul>
+Si no encuentra un camino, lo indica por consola.
+</p>
+
+<h5><code>follow_path()</code></h5>
+<p>
+Controla al robot para que siga la trayectoria planificada.  
+Para cada punto:
+<ul>
+<li>Calcula la distancia al siguiente objetivo.</li>
+<li>Calcula el ángulo hacia el punto y la corrección necesaria.</li>
+<li>Ajusta las velocidades lineal y angular mediante control proporcional.</li>
+<li>Avanza al siguiente punto cuando se alcanza el anterior con suficiente precisión.</li>
+</ul>
+Cuando la ruta finaliza, detiene completamente al robot.
+</p>
+
+<h5><code>paint_map()</code></h5>
+<p>
+Actualiza dinámicamente el mapa para marcar estanterías como ocupadas o libres según el robot las recoge o las deja en su destino.  
+Esto garantiza que el planificador tenga en cuenta su nueva posición al planificar trayectorias posteriores.
+</p>
+
+<h5>Flujo principal del programa</h5>
+<p>
+<ul>
+<li>Se carga el mapa y se inicializan variables globales.</li>
+<li>El robot comienza sin transportar estanterías.</li>
+<li>Para cada estantería en la lista:
+    <ul>
+        <li>Se planifica y ejecuta un camino hacia su posición.</li>
+        <li>El robot la recoge y se añade al mapa como ocupada.</li>
+        <li>Se planifica un nuevo camino hacia el área de descarga.</li>
+        <li>Se actualiza el mapa marcando la estantería como depositada.</li>
+    </ul>
+</li>
+<li>Al finalizar todas, el programa indica que se han movido todas las estanterías.</li>
+</ul>
+</p>
+
+
+    <ul>
+        <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
+       <br> A continuación se muestran varios videos. El primero, el coche se encuentra paralelo a la calle y hay dos coches de referencia. <br>
+        En el segundo, el coche se encuentra girado respecto de la calle, y sigue habiendo dos coches de referencia.<br>
+        Y el tercero, el coche se encuentra paralelo a la calle pero solo hay un coche de referencia.<br>
+     <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ea70vrbdpXtAvFrvevUJ5n8B-Phzk6yDjNe48mMYgtrMXQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XqhnXf" style="color: white;">Ver el video V1</a>
+        <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ESYWxkkFbHFHi5lOHzpdkscBhHo0r3N0rBdV8qrVJkPJiw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=DFMjFY" style="color: white;">Ver el video V2</a>
+        <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EVo29rayMEpCqOCuc8qigCMBNeN_N79-BUP9R9ca-Uv5Ng?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ZuU8cj" style="color: white;">Ver el video V3</a>
+    
+    
+     <br>
+     <br>
+
+</div>
+
+<a href="Serviceblogp2.html" class="fixed-box left-box">←</a>
+<a href="index.html" class="fixed-box right-box">→</a>
+</body>
+</html>
