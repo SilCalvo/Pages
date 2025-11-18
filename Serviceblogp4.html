@@ -136,7 +136,7 @@ El planificador utiliza la función de validez isStateValid() para asegurarse de
 OMPL dispone de dos métodos principales para detectar colisiones:
 </p>
 <ol>
-    <li><strong>Colisión automática con modelos .dae:</strong> Esta es la forma más precisa: OMPL carga el modelo del robot y del mapa en formato DAE y calcula colisiones físicas reales. Sin embargo, en Unibotics no está disponible, porque no se incluyen las extensiones necesarias de OMPL y no existe un modelo DAE del robot holonómico.</li>
+    <li><strong>Colisión automática con modelos .dae:</strong> Esta es la forma más precisa: OMPL carga el modelo del robot y del mapa en formato DAE y calcula colisiones físicas reales y el controlador necesario. Sin embargo, en Unibotics no está disponible, porque no se incluyen las extensiones necesarias de OMPL y no existe un modelo DAE del robot holonómico. Y aunque en ackerman si, la libreria necesaria para usarlo no se encunetra disponible en unibotics.</li>
     <li><strong>Colisión manual (la opción usada en esta práctica):</strong> Se indica manualmente qué zonas del mapa son obstáculos. Para ello:
         <ul>
             <li>Se calculan las dimensiones del robot en píxeles.</li>
