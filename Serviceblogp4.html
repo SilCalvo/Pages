@@ -163,91 +163,96 @@ A continuación se describen las principales partes del código.
 <br><br>
 
 <h4>Funciones del programa</h4>
-
-<h5><code>transformation()</code> y <code>transform_point()</code></h5>
-<p>
+<h5>transformation() y transform_point()</h5>
 El sistema trabaja simultáneamente en dos espacios de coordenadas:  
 <ul>
-<li><b>Coordenadas del mundo</b>: donde se mueve el robot (metros).</li>
-<li><b>Coordenadas del mapa</b>: donde se dibujan obstáculos en la imagen (píxeles).</li>
+  <br>Coordenadas del mundo: donde se mueve el robot (metros).<br>
+  <br>Coordenadas del mapa: donde se dibujan obstáculos en la imagen (píxeles).<br>
 </ul>
 
-La función <code>transformation()</code> calcula una matriz de transformación afín a partir de puntos de calibración.  
-La función <code>transform_point()</code> aplica esa transformación a cualquier punto para convertirlo de un sistema al otro.  
-Ambas permiten que el planificador use el mapa correctamente para detectar colisiones.
-</p>
+La función transformation() calcula una matriz de transformación afín a partir de un conjunto de puntos de calibración en dos espacios diferentes (puntos en el mundo y puntos en el mapa). Esta matriz se utiliza para transformar cualquier punto de un espacio a otro.<br>  
+La función transform_point() aplica la matriz de transformación a un punto específico, convirtiéndolo de las coordenadas del mundo a las coordenadas del mapa o viceversa.<br>  
+Ambas funciones permiten que el planificador use el mapa correctamente para detectar colisiones al realizar la planificación de la ruta.
 
-<h5><code>isStateValid()</code></h5>
-<p>
-Comprueba si un estado del robot es válido o si colisiona con las estanterías u obstáculos.  
-El proceso consiste en:  
+<h5>isStateValid()</h5>
+La función isStateValid() verifica si el robot se encuentra en un estado válido, es decir, si no colisiona con obstáculos o estanterías en el mapa. El proceso se lleva a cabo en los siguientes pasos:  
 <ul>
-<li>Transformar la posición del robot a coordenadas del mapa.</li>
-<li>Generar un rectángulo de puntos equivalente al tamaño del robot.</li>
-<li>Rotarlo según su orientación (<i>yaw</i>).</li>
-<li>Verificar si alguno de esos puntos cae sobre una zona prohibida del mapa.</li>
+  <br>Se transforma la posición del robot (en coordenadas del mundo) a coordenadas del mapa usando la función transform_point().<br>
+  <br>Se genera un conjunto de puntos que representa el contorno del robot (basado en su tamaño y orientación).<br>
+  <br>Se rota este conjunto de puntos de acuerdo a la orientación (yaw) del robot.<br>
+  <br>Se comprueba si alguno de estos puntos cae sobre una zona ocupada del mapa.<br>
 </ul>
+Si alguno de los puntos del robot cae fuera del mapa o sobre una zona ocupada, la función devuelve False, indicando que el estado no es válido. Si no hay colisión, devuelve True.
 
-Devuelve <code>True</code> si el robot está en una posición segura y <code>False</code> si está chocando.
-</p>
-
-<h5><code>create_numpy_path()</code></h5>
-<p>
-Convierte el camino generado por OMPL en dos formatos:
+<h5>create_numpy_path()</h5>
+La función create_numpy_path() toma la cadena de texto de los estados generados por el planificador y la convierte en dos tipos de coordenadas:
 <ul>
-<li><b>Coordenadas de mundo</b>: para que el robot siga la ruta.</li>
-<li><b>Coordenadas de píxeles</b>: para visualizar el camino en WebGUI.</li>
+  <br>Coordenadas de mundo: Estos son los puntos que el robot debe seguir en el mundo real (en metros).<br>
+  <br>Coordenadas de píxeles: Estos son los puntos transformados al espacio del mapa, para ser mostrados en WebGUI (en píxeles).<br>
 </ul>
-</p>
+Esta función facilita la visualización del camino generado y también permite al robot seguirlo de manera precisa en el mundo real.
 
-<h5><code>next_target()</code></h5>
-<p>
-Es la función que ejecuta la planificación completa hacia una meta definida.  
+<h5>get_path()</h5>
+La función get_path() es responsable de crear un problema de planificación y encontrar una trayectoria óptima desde la posición actual del robot hasta una meta dada.  
 <ul>
-<li>Crea un problema de planificación partiendo de la posición actual del robot.</li>
-<li>Define el objetivo (posición y orientación deseadas).</li>
-<li>Configura RRT* como planificador óptimo.</li>
-<li>Intenta encontrar un camino durante 5 segundos.</li>
-<li>Si tiene éxito, muestra la ruta en WebGUI y llama a <code>follow_path()</code> para que el robot la recorra.</li>
+  <br>Crea un espacio de información (SpaceInformation) que incluye el espacio SE(2) y la función de validez del estado (isStateValid()).<br>
+  <br>Define el estado inicial del robot (start) y el objetivo (goal) a alcanzar, configurando las posiciones y orientaciones.<br>
+  <br>Configura el optimizador para la minimización de la longitud del camino y selecciona el planificador RRTstar para encontrar el camino.<br>
+  <br>Ejecuta la búsqueda del camino durante un tiempo máximo de 10 segundos.<br>
+  <br>Si se encuentra un camino, la función devuelve la ruta encontrada en las coordenadas del mundo y las coordenadas de píxeles, que luego se visualizan en WebGUI.<br>
 </ul>
-Si no encuentra un camino, lo indica por consola.
-</p>
+Si no se encuentra un camino en el tiempo asignado, la función indica que no se ha encontrado solución.
 
-<h5><code>follow_path()</code></h5>
-<p>
-Controla al robot para que siga la trayectoria planificada.  
-Para cada punto:
+<h5>orientated_to()</h5>
+La función orientated_to() ajusta la orientación del robot para que apunte hacia un ángulo objetivo.  
 <ul>
-<li>Calcula la distancia al siguiente objetivo.</li>
-<li>Calcula el ángulo hacia el punto y la corrección necesaria.</li>
-<li>Ajusta las velocidades lineal y angular mediante control proporcional.</li>
-<li>Avanza al siguiente punto cuando se alcanza el anterior con suficiente precisión.</li>
+  <br>El robot gira hasta que la diferencia entre su orientación actual (yaw) y la orientación objetivo (target_yaw) sea menor que un umbral dado (yaw_threshold).<br>
+  <br>Durante este proceso, la velocidad angular (w) se ajusta en función del error angular, y el robot no avanza hasta estar correctamente orientado.<br>
+  <br>Cuando la orientación deseada se alcanza, el robot deja de girar y la función termina.<br>
 </ul>
-Cuando la ruta finaliza, detiene completamente al robot.
-</p>
+Esta función asegura que el robot esté correctamente orientado antes de moverse hacia el objetivo.
 
-<h5><code>paint_map()</code></h5>
-<p>
-Actualiza dinámicamente el mapa para marcar estanterías como ocupadas o libres según el robot las recoge o las deja en su destino.  
-Esto garantiza que el planificador tenga en cuenta su nueva posición al planificar trayectorias posteriores.
-</p>
+<h5>go_to()</h5>
+La función go_to() mueve al robot hacia un objetivo específico (x_target, y_target).  
+<ul>
+  <br>Calcula la distancia al objetivo y el ángulo (yaw) necesario para dirigir al robot hacia él.<br>
+  <br>La velocidad lineal (v) se ajusta en función de la distancia al objetivo, y la velocidad angular (w) se ajusta en función de la diferencia entre la orientación actual y la deseada.<br>
+  <br>El robot se mueve hacia el objetivo hasta que la distancia sea menor que el umbral threshold, momento en el cual la velocidad lineal se establece a 0 y el movimiento se detiene.<br>
+  <br>Si es necesario, también ajusta la orientación para asegurar que el robot siga el camino correcto.<br>
+</ul>
 
+<h5>next_target()</h5>
+La función next_target() ejecuta todo el proceso de planificación para mover al robot hacia un objetivo dado, y luego lo sigue a lo largo de la ruta generada.  
+<ul>
+  <br>Genera una ruta desde la posición actual del robot hasta el objetivo especificado (x_target, y_target, yaw_target) mediante el planificador de caminos get_path().<br>
+  <br>Una vez que se encuentra un camino, el robot sigue cada punto de la ruta utilizando la función go_to() y se orienta correctamente con orientated_to().<br>
+  <br>El robot se mueve de un punto al siguiente, corrigiendo su orientación y avanzando hasta llegar al destino final.<br>
+</ul>
+Esta función permite al robot seguir un camino óptimo de manera eficiente y precisa.
+
+<h5>paint_map()</h5>
+La función paint_map() se encarga de actualizar dinámicamente el mapa para reflejar las estanterías que el robot ha recogido o dejado en su destino.  
+<ul>
+  <br>Modifica el mapa del almacén para marcar una zona ocupada cuando el robot recoge una estantería, y la marca como libre cuando la deja en un nuevo lugar.<br>
+  <br>Se asegura de que el planificador tenga en cuenta estos cambios al generar nuevas rutas, actualizando el mapa para evitar futuras colisiones.<br>
+</ul>
+Esta función es fundamental para mantener el mapa actualizado y garantizar que el robot navegue de manera eficiente.
+<br>
+        
 <h5>Flujo principal del programa</h5>
-<p>
+El flujo del programa se realiza en varias etapas:  
 <ul>
-<li>Se carga el mapa y se inicializan variables globales.</li>
-<li>El robot comienza sin transportar estanterías.</li>
-<li>Para cada estantería en la lista:
+  <br>El mapa se carga y se inicializan las variables globales.<br>
+  <br>El robot comienza sin transportar estanterías.<br>
+  <br>Para cada estantería en la lista:
     <ul>
-        <li>Se planifica y ejecuta un camino hacia su posición.</li>
-        <li>El robot la recoge y se añade al mapa como ocupada.</li>
-        <li>Se planifica un nuevo camino hacia el área de descarga.</li>
-        <li>Se actualiza el mapa marcando la estantería como depositada.</li>
+      <br>Se planifica y ejecuta un camino hacia la estantería.<br>
+      <br>El robot la recoge y la marca como ocupada en el mapa.<br>
+      <br>Se planifica un nuevo camino hacia el área de descarga.<br>
+      <br>Se actualiza el mapa marcando la estantería como depositada en el nuevo destino.<br>
     </ul>
-</li>
-<li>Al finalizar todas, el programa indica que se han movido todas las estanterías.</li>
+  <br>Cuando todas las estanterías han sido movidas, el programa termina y el robot detiene su movimiento.<br>
 </ul>
-</p>
 
 
     <ul>
