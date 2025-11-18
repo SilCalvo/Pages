@@ -196,9 +196,9 @@ Esta función facilita la visualización del camino generado y también permite 
 <h5>get_path()</h5>
 La función get_path() es responsable de crear un problema de planificación y encontrar una trayectoria óptima desde la posición actual del robot hasta una meta dada.  
 
-  <br>Crea un espacio de información (SpaceInformation) que incluye el espacio SE(2) y la función de validez del estado (isStateValid()).<br>
-  <br>Define el estado inicial del robot (start) y el objetivo (goal) a alcanzar, configurando las posiciones y orientaciones.<br>
-  <br>Configura el optimizador para la minimización de la longitud del camino y selecciona el planificador RRTstar para encontrar el camino.<br>
+  <br>Crea un espacio de información (SpaceInformation) que incluye el espacio SE(2) y la función de validez del estado (isStateValid()).
+  <br>Define el estado inicial del robot (start) y el objetivo (goal) a alcanzar, configurando las posiciones y orientaciones.
+  <br>Configura el optimizador para la minimización de la longitud del camino y selecciona el planificador RRTstar para encontrar el camino.
   <br>Ejecuta la búsqueda del camino durante un tiempo máximo de 10 segundos.<br>
   <br>Si se encuentra un camino, la función devuelve la ruta encontrada en las coordenadas del mundo y las coordenadas de píxeles, que luego se visualizan en WebGUI.<br>
 
@@ -207,8 +207,8 @@ Si no se encuentra un camino en el tiempo asignado, la función indica que no se
 <h5>orientated_to()</h5>
 La función orientated_to() ajusta la orientación del robot para que apunte hacia un ángulo objetivo.  
 
-  <br>El robot gira hasta que la diferencia entre su orientación actual (yaw) y la orientación objetivo (target_yaw) sea menor que un umbral dado (yaw_threshold).<br>
-  <br>Durante este proceso, la velocidad angular (w) se ajusta en función del error angular, y el robot no avanza hasta estar correctamente orientado.<br>
+  <br>El robot gira hasta que la diferencia entre su orientación actual (yaw) y la orientación objetivo (target_yaw) sea menor que un umbral dado (yaw_threshold).
+  <br>Durante este proceso, la velocidad angular (w) se ajusta en función del error angular, y el robot no avanza hasta estar correctamente orientado.
   <br>Cuando la orientación deseada se alcanza, el robot deja de girar y la función termina.<br>
 
 Esta función asegura que el robot esté correctamente orientado antes de moverse hacia el objetivo.
@@ -216,17 +216,17 @@ Esta función asegura que el robot esté correctamente orientado antes de movers
 <h5>go_to()</h5>
 La función go_to() mueve al robot hacia un objetivo específico (x_target, y_target).  
 
-  <br>Calcula la distancia al objetivo y el ángulo (yaw) necesario para dirigir al robot hacia él.<br>
-  <br>La velocidad lineal (v) se ajusta en función de la distancia al objetivo, y la velocidad angular (w) se ajusta en función de la diferencia entre la orientación actual y la deseada.<br>
-  <br>El robot se mueve hacia el objetivo hasta que la distancia sea menor que el umbral threshold, momento en el cual la velocidad lineal se establece a 0 y el movimiento se detiene.<br>
+  <br>Calcula la distancia al objetivo y el ángulo (yaw) necesario para dirigir al robot hacia él.
+  <br>La velocidad lineal (v) se ajusta en función de la distancia al objetivo, y la velocidad angular (w) se ajusta en función de la diferencia entre la orientación actual y la deseada.
+  <br>El robot se mueve hacia el objetivo hasta que la distancia sea menor que el umbral threshold, momento en el cual la velocidad lineal se establece a 0 y el movimiento se detiene.
   <br>Si es necesario, también ajusta la orientación para asegurar que el robot siga el camino correcto.<br>
 
 
 <h5>next_target()</h5>
 La función next_target() ejecuta todo el proceso de planificación para mover al robot hacia un objetivo dado, y luego lo sigue a lo largo de la ruta generada.  
 
-  <br>Genera una ruta desde la posición actual del robot hasta el objetivo especificado (x_target, y_target, yaw_target) mediante el planificador de caminos get_path().<br>
-  <br>Una vez que se encuentra un camino, el robot sigue cada punto de la ruta utilizando la función go_to() y se orienta correctamente con orientated_to().<br>
+  <br>Genera una ruta desde la posición actual del robot hasta el objetivo especificado (x_target, y_target, yaw_target) mediante el planificador de caminos get_path().
+  <br>Una vez que se encuentra un camino, el robot sigue cada punto de la ruta utilizando la función go_to() y se orienta correctamente con orientated_to().
   <br>El robot se mueve de un punto al siguiente, corrigiendo su orientación y avanzando hasta llegar al destino final.<br>
 
 Esta función permite al robot seguir un camino óptimo de manera eficiente y precisa.
@@ -234,7 +234,7 @@ Esta función permite al robot seguir un camino óptimo de manera eficiente y pr
 <h5>paint_map()</h5>
 La función paint_map() se encarga de actualizar dinámicamente el mapa para reflejar las estanterías que el robot ha recogido o dejado en su destino.  
 
-  <br>Modifica el mapa del almacén para marcar una zona ocupada cuando el robot recoge una estantería, y la marca como libre cuando la deja en un nuevo lugar.<br>
+  <br>Modifica el mapa del almacén para marcar una zona ocupada cuando el robot recoge una estantería, y la marca como libre cuando la deja en un nuevo lugar.
   <br>Se asegura de que el planificador tenga en cuenta estos cambios al generar nuevas rutas, actualizando el mapa para evitar futuras colisiones.<br>
 
 Esta función es fundamental para mantener el mapa actualizado y garantizar que el robot navegue de manera eficiente.
