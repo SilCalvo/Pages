@@ -117,7 +117,7 @@ Con estos pares de puntos, calculé la matriz de transformación entre ambos sis
 El código se divide en dos funciones: una que obtiene la matriz de transformación y otra que aplica dicha matriz a cualquier punto para convertirlo entre coordenadas del mundo y del mapa.
 </p>
 <p>
-Además, el mapa incluye las estanterías dibujadas originalmente. Como el robot las mueve, es necesario modificar dinámicamente el mapa: cuando el robot recoge una estantería, se eliminan sus píxeles como obstáculo; cuando la deja en otro lugar, se añaden como nueva zona no transitable.
+Además, el mapa incluye las estanterías dibujadas originalmente. Como el robot las mueve, es necesario modificar dinámicamente el mapa: cuando el robot recoge una estantería, se eliminan sus píxeles como obstáculo; cuando la deja en otro lugar, se añaden al mapa.
 </p>
 
 <ul>
@@ -260,16 +260,11 @@ El flujo del programa se realiza en varias etapas:
 
     <ul>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
-       <br> A continuación se muestran varios videos. El primero, el coche se encuentra paralelo a la calle y hay dos coches de referencia. <br>
-        En el segundo, el coche se encuentra girado respecto de la calle, y sigue habiendo dos coches de referencia.<br>
-        Y el tercero, el coche se encuentra paralelo a la calle pero solo hay un coche de referencia.<br>
+       <br> A continuacion se muestra el video del funcioinamineto donde el AGV calcula la ruta para llegar a la estanteria, la levanta, elimina los obstaculos guardando una copia de los rectangulos al rededor para poder calcular la nueva ruta a dejar la estanteria y al dejarla en su sitio coloca de nuevo esa imagen de copia donde corresponde para calcular el siguiente punto teniwndo en cuenta la nueva posicion de la estanteria<br>
      <br><br>
-    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/Ea70vrbdpXtAvFrvevUJ5n8B-Phzk6yDjNe48mMYgtrMXQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XqhnXf" style="color: white;">Ver el video V1</a>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYoU4h8rkTFJm_4L5XvnLZEBpCok0ee_wyakaK6Pr5BnMA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Tubi0F" style="color: white;">Ver el video</a>
         <br><br>
-    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/ESYWxkkFbHFHi5lOHzpdkscBhHo0r3N0rBdV8qrVJkPJiw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=DFMjFY" style="color: white;">Ver el video V2</a>
-        <br><br>
-    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EVo29rayMEpCqOCuc8qigCMBNeN_N79-BUP9R9ca-Uv5Ng?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ZuU8cj" style="color: white;">Ver el video V3</a>
-    
+   
     
      <br>
      <br>
