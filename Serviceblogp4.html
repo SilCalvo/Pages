@@ -241,23 +241,24 @@ Esta función es fundamental para mantener el mapa actualizado y garantizar que 
 <br><br>
       
 <h5>Flujo principal del programa</h5>  
-<p>
+<br>
 El flujo del programa se realiza en varias etapas:  
-
-  <p>El mapa se carga y se inicializan las variables globales.</p>
-  <p>El robot comienza sin transportar estanterías.</p>
-  <p>Para cada estantería en la lista:
-    
-      <p>Se planifica y ejecuta un camino hacia la estantería.</p>
-      <p>El robot la recoge y la elimina del mapa.</p>
-      <p>Se planifica un nuevo camino hacia el área de descarga.</p>
-      <p>Se actualiza el mapa marcando la estantería como depositada en el nuevo destino.</p>
-  </p>
-  <p>Cuando todas las estanterías han sido movidas, el programa termina y el robot detiene su movimiento.</p>
-
-</p>
-
+<ul>
+  <br>El mapa se carga y se inicializan las variables globales.
+  <br>El robot comienza sin transportar estanterías.
+  <br>Para cada estantería en la lista:
     <ul>
+      <br>Se planifica y ejecuta un camino hacia la estantería.
+      <br>El robot la recoge y la elimina del mapa.
+      <br>Se planifica un nuevo camino hacia el área de descarga.
+      <br>Se actualiza el mapa marcando la estantería como depositada en el nuevo destino.
+    </ul>
+  
+  <br>Cuando todas las estanterías han sido movidas, el programa termina y el robot detiene su movimiento.
+</ul>
+
+
+    
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
        <br> A continuacion se muestra el video del funcioinamineto donde el AGV calcula la ruta para llegar a la estanteria, la levanta, elimina los obstaculos guardando una copia de los rectangulos al rededor para poder calcular la nueva ruta a dejar la estanteria y al dejarla en su sitio coloca de nuevo esa imagen de copia donde corresponde para calcular el siguiente punto teniwndo en cuenta la nueva posicion de la estanteria<br>
      <br><br>
