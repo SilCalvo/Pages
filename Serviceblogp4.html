@@ -243,19 +243,18 @@ Esta función es fundamental para mantener el mapa actualizado y garantizar que 
 <h5>Flujo principal del programa</h5>  
 <p>
 El flujo del programa se realiza en varias etapas:  
-<ul>
+
   <p>El mapa se carga y se inicializan las variables globales.</p>
   <p>El robot comienza sin transportar estanterías.</p>
   <p>Para cada estantería en la lista:
-    <ul>
+    
       <p>Se planifica y ejecuta un camino hacia la estantería.</p>
-      <p>El robot la recoge y la marca como ocupada en el mapa.</p>
+      <p>El robot la recoge y la elimina del mapa.</p>
       <p>Se planifica un nuevo camino hacia el área de descarga.</p>
       <p>Se actualiza el mapa marcando la estantería como depositada en el nuevo destino.</p>
-    </ul>
   </p>
   <p>Cuando todas las estanterías han sido movidas, el programa termina y el robot detiene su movimiento.</p>
-</ul>
+
 </p>
 
     <ul>
