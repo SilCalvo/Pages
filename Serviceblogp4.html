@@ -261,18 +261,18 @@ El flujo del programa se realiza en varias etapas:
         <li><a name="OTROS_CODIGOS"></a><span style="font-weight: bold;">OTROS_CODIGOS</span></li>
         
    <h4>Mapa “engordado”</h4>
-<br>
+
 La idea es bastante similar, pero en <code>is_valid</code> el robot se considera como un punto. 
 <br>Al generar el mapa, este se “engorda” según si el robot lleva estantería o no. 
 <br>Este método no es muy eficiente: si el robot tiene estantería, hay que engordar los obstáculos según la medida más grande. 
 Como resultado, el robot puede pensar que ciertas zonas son inaccesibles, aunque en realidad podría pasar con la orientación adecuada.
-<br>
+<br><br>
 
 <h4>Código Ackerman</h4>
-<br>
+
 La lógica del programa sigue siendo la misma, pero cambia el planificador para que tenga en cuenta que el robot es Ackerman. 
 Además, en el control ya no puede girar sobre sí mismo, por lo que se añade un control diferente para manejar esta limitación.
-<br>
+<br><br>
 
     <br>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
