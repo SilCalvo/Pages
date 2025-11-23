@@ -150,7 +150,7 @@ Como cuando el robot lleva una estantería deja de ser cuadrado, la orientación
 </p>
 
     <ul>
-    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
+    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO version holonomica</span></li>
     </ul>
 <h4>Explicación del programa</h4>
 
@@ -256,8 +256,14 @@ El flujo del programa se realiza en varias etapas:
   
   <br>Cuando todas las estanterías han sido movidas, el programa termina y el robot detiene su movimiento.
 </ul>
-
-
+<br><br>
+    <h4>Codigo engordado del mapa</h4>  
+        <br>
+        Es igual solo que en is valid el robot es un punto, y a la hora de hacer el mapa, este se debe engordar dependediendo de si lleva estanteria o no. Este método es muy poco eficaz, ya que en el caso de llevar estanteria, debes engordar los obstaculos como la medida mayor, haciendo que el robot piense que no puede pasar por zonas que en realidad si podria con una orientación adecuada.
+    <br>
+            <h4>Codigo ackerman</h4>  
+        La logica del programa es igual solo cambia el planificador usado (para que tenga en cuenta que es ackerman) y en el control, ya no puede girar sobre simismo por lo que se añade un control diferente.
+<br>
     <br>
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
        <br> A continuacion se muestra el video del funcioinamineto donde el AGV calcula la ruta para llegar a la estanteria, la levanta, elimina los obstaculos guardando una copia de los rectangulos al rededor para poder calcular la nueva ruta a dejar la estanteria y al dejarla en su sitio coloca de nuevo esa imagen de copia donde corresponde para calcular el siguiente punto teniwndo en cuenta la nueva posicion de la estanteria<br>
