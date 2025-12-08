@@ -88,27 +88,55 @@
     <br>
     
     <ul>
-  <ul>
+ <ul>
     <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
 </ul>
+
 <p>
-La práctica consiste crear un mapa a partir de la inforacion obtenida del laser de amr. El objetivo de este ejercicio es desarrollar un algoritmo de navegación que permita a un robot explorar de forma autónoma un entorno de almacén mientras genera un mapa preciso del área utilizando los datos del sensor LIDAR.
-    Y posterioirmente con este mismo mapa, realizar un algorimo de bsa para asegurarse de recorrer toda la zona. 
+La práctica consiste en generar un mapa del entorno a partir de la información obtenida por el sensor LIDAR del robot. 
+El objetivo principal es desarrollar un algoritmo de navegación capaz de explorar de forma autónoma un área de almacén 
+mientras construye un mapa preciso del entorno utilizando los datos del láser.  
+Posteriormente, empleando ese mismo mapa, se implementa un algoritmo basado en <b>BSA</b> que permite recorrer 
+sistemáticamente todas las zonas accesibles.
 </p>
 
 <ul>
     <li><a name="MAPA"></a><span style="font-weight: bold;">MAPA</span></li>
 </ul>
-Para crear el mapa desde la informacion del laser, es necesario conocer los angulos del laser (360, 1 por cada grado) y donde esta el origen de coordenadas (laser 0 alante, laser derecha 270), el rango maximo del laser (3.5) y ademas es importante saber en que orientacion se encuentra el robot para aplicar una conversion inversa a los angulos de esta manera el mapa se formará correctamente, poninedo 255 donde no haya obstaculo y 0 donde si detecte obstaculo.
 
-<ul>
-    <li><a name="RECORRIDO"></a><span style="font-weight: bold;">Recorrido</span></li>
-</ul>
 <p>
-
-    Para realizar un buen mapeo es importante tener un recorrido adecuado, para ello, me fijé en algunas roombas domesticas, primero recorren el perimetro de la casa y luego recorren toda la casa, eso es lo que hace esta practica, encunetra la pared del este mas cerca y empieza a recorrer el perimetro de la casa mientras mapea, y tras tener un mapa preliminar de por donde puede ir, empieza un recorrido usando el algortmo BSA, de esta manera nos aseguramos que roecorra todas las zonas posibles.
+Para construir el mapa a partir de los datos del láser es necesario conocer varios parámetros fundamentales:  
+<ul>
+    <li>El sensor proporciona <b>360 lecturas</b>, una por cada grado.</li>
+    <li>El láser 0 apunta hacia delante y el láser 270 hacia la derecha.</li>
+    <li>El alcance máximo del sensor es de <b>3.5 metros</b>.</li>
+    <li>Es imprescindible conocer la orientación del robot para poder transformar correctamente 
+        los ángulos del láser al marco global.</li>
+</ul>
+Con esta información se trazan los rayos del LIDAR sobre el mapa, marcando con <b>255</b> las zonas libres 
+y con <b>0</b> las posiciones donde se detectan obstáculos, generando así un mapa de ocupación.
 </p>
 
+<ul>
+    <li><a name="RECORRIDO"></a><span style="font-weight: bold;">RECORRIDO</span></li>
+</ul>
+
+<p>
+Para obtener un mapa completo y fiable es necesario diseñar un recorrido adecuado.  
+La solución adoptada se inspira en el comportamiento de robots domésticos como las aspiradoras tipo Roomba:  
+primero recorren el perímetro del área para definir los límites del espacio y luego realizan un barrido sistemático 
+del interior.  
+
+En esta práctica, el robot sigue una estrategia similar:  
+<ul>
+    <li>Primero localiza la pared más cercana en la dirección Este.</li>
+    <li>Después recorre todo el perímetro del entorno siguiendo la pared y actualizando el mapa.</li>
+    <li>Una vez delimitado el contorno, se ejecuta un recorrido completo del área utilizando un algoritmo 
+        de <b>Bsa</b> , asegurando así que el robot visita todas las zonas libres identificadas.</li>
+</ul>
+
+De esta forma se garantiza que el robot explora y mapea la totalidad del entorno accesible de manera eficiente y ordenada.
+</p>
 
 
     <ul>
@@ -135,7 +163,7 @@ Este sistema funciona con:
 </ul>
 </p>
 
-<br><br>
+<br>
 
 <h4>Funciones del programa</h4>
 
@@ -287,7 +315,7 @@ Este mapa es la base del grid final.
 Convierte distancias en metros a desplazamientos en píxeles usando WebGUI.
 </p>
 
-<br><br>
+<br>
 
 <h4>Flujo principal del programa</h4>
 
