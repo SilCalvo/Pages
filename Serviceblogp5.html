@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AMR - LASER MAPPING</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('p4_servicios.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Índice</h3>
+    <ul>
+        <li><a href="#INTRODUCCION">Introducción</a></li>
+        <li><a href="#MAPA">Mapa</a></li>
+        <li><a href="#RECORRIDO">Recorrido</a></li>
+        <li><a href="#CODIGO">Codigo</a></li>
+        <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
+    </ul>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+    </div>
+</div>
+
+<div class="content">
+    <div style="text-align: center;">
+        <big><big><span style="font-weight: bold;">AMR - LASER MAPPING</span><br>
+        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+    </div>
+    <br>
+    
+    <ul>
+  <ul>
+    <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+</ul>
+<p>
+La práctica consiste crear un mapa a partir de la inforacion obtenida del laser de amr. El objetivo de este ejercicio es desarrollar un algoritmo de navegación que permita a un robot explorar de forma autónoma un entorno de almacén mientras genera un mapa preciso del área utilizando los datos del sensor LIDAR.
+    Y posterioirmente con este mismo mapa, realizar un algorimo de bsa para asegurarse de recorrer toda la zona. 
+</p>
+
+<ul>
+    <li><a name="MAPA"></a><span style="font-weight: bold;">MAPA</span></li>
+</ul>
+Para crear el mapa desde la informacion del laser, es necesario conocer los angulos del laser (360, 1 por cada grado) y donde esta el origen de coordenadas (laser 0 alante, laser derecha 270), el rango maximo del laser (3.5) y ademas es importante saber en que orientacion se encuentra el robot para aplicar una conversion inversa a los angulos de esta manera el mapa se formará correctamente, poninedo 255 donde no haya obstaculo y 0 donde si detecte obstaculo.
+
+<ul>
+    <li><a name="RECORRIDO"></a><span style="font-weight: bold;">Recorrido</span></li>
+</ul>
+<p>
+
+    Para realizar un buen mapeo es importante tener un recorrido adecuado, para ello, me fijé en algunas roombas domesticas, primero recorren el perimetro de la casa y luego recorren toda la casa, eso es lo que hace esta practica, encunetra la pared del este mas cerca y empieza a recorrer el perimetro de la casa mientras mapea, y tras tener un mapa preliminar de por donde puede ir, empieza un recorrido usando el algortmo BSA, de esta manera nos aseguramos que roecorra todas las zonas posibles.
+</p>
+
+
+
+    <ul>
+    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO version holonomica</span></li>
+    </ul>
+<h4>Explicación del programa</h4>
+
+<p>
+Este programa implementa un sistema autónomo de exploración del entorno mediante <b>mapeo</b>, 
+<b>recorrido de paredes</b>, <b>conversión del mapa a cuadrícula</b>, <b>engrosamiento de obstáculos</b> 
+y finalmente la generación de un <b>camino zigzag</b> tipo cobertura que recorre todas las celdas libres del mapa.  
+Utiliza la simulación provista por <b>HAL</b> y la visualización mediante <b>WebGUI</b>, 
+construyendo un mapa propio a partir del láser.
+</p>
+
+<p>
+Este sistema funciona con:  
+<ul>
+  <li>Mapeo dinámico con mapping()</li>
+  <li>Recorrido de paredes para delimitar el entorno</li>
+  <li>Conversión del mapa a celdas</li>
+  <li>Generación de recorrido completo mediante zigzag y BFS</li>
+  <li>Seguimiento celda a celda mediante go_to()</li>
+</ul>
+</p>
+
+<br><br>
+
+<h4>Funciones del programa</h4>
+
+<h5>pixel_a_celda() y celda_a_pixel()</h5>
+<p>
+El robot usa dos espacios de coordenadas:  
+<ul>
+  <li><b>Mapa en píxeles</b></li>
+  <li><b>Mapa en celdas</b></li>
+</ul>
+Las funciones convierten entre estos dos sistemas:  
+<ul>
+  <li><b>pixel_a_celda()</b>: pasa de píxeles a celda</li>
+  <li><b>celda_a_pixel()</b>: devuelve el centro de una celda en píxeles</li>
+</ul>
+Esto permite al robot navegar celda a celda siguiendo el recorrido generado.
+</p>
+
+<h5>orientar()</h5>
+<p>
+Ajusta la orientación del robot hacia un ángulo objetivo:
+<ul>
+  <li>Calcula el error angular</li>
+  <li>Elige el giro más corto</li>
+  <li>Gira hasta que el error sea menor a 0.1 rad</li>
+  <li>Detiene el movimiento angular</li>
+</ul>
+Es fundamental antes de avanzar en línea recta.
+</p>
+
+<h5>avanzar()</h5>
+<p>
+Avanza una distancia dada mientras no haya obstáculos.
+<ul>
+  <li>Guarda posición inicial</li>
+  <li>Lee el láser continuamente</li>
+  <li>Detiene el avance si aparece un obstáculo</li>
+  <li>Detiene el avance si llega a la distancia requerida</li>
+  <li>Actualiza el mapa y celdas visitadas</li>
+</ul>
+</p>
+
+<h5>map_visit_rellenar()</h5>
+<p>
+Marca en una matriz qué celdas ha visitado el robot:
+<ul>
+  <li>Obtiene la pose</li>
+  <li>Convierte a píxeles → celda</li>
+  <li>Marca la celda como visitada</li>
+</ul>
+Esto permite que el zigzag evite repetir celdas.
+</p>
+
+<h5>recorrer_pared()</h5>
+<p>
+Implementa un algoritmo de seguimiento de pared (wall-following):
+<ul>
+  <li>Mira si tiene pared a la derecha</li>
+  <li>Si no hay pared, gira a la derecha y avanza</li>
+  <li>Si la hay, avanza recto</li>
+  <li>Si encuentra un obstáculo frontal, gira a la izquierda</li>
+  <li>Va rellenando mapa y celdas visitadas</li>
+  <li>Termina al volver cerca del punto inicial</li>
+</ul>
+Sirve para delimitar el entorno completo.
+</p>
+
+<h5>go_to()</h5>
+<p>
+Mueve el robot hacia un punto dado en píxeles.
+<ul>
+  <li>Convierte la pose actual a píxeles</li>
+  <li>Calcula la dirección hacia el objetivo</li>
+  <li>Orienta el robot</li>
+  <li>Avanza hasta alcanzar el punto o detectar un obstáculo</li>
+</ul>
+Es la función usada para seguir el recorrido zigzag.
+</p>
+
+<h5>convert_map_to_grid()</h5>
+<p>
+Convierte el mapa continuo en una cuadrícula binaria:
+<ul>
+  <li>Divide el mapa en bloques del tamaño CELDA</li>
+  <li>Calcula el brillo promedio</li>
+  <li>Celdas claras → libres (255)</li>
+  <li>Celdas oscuras → ocupadas (0)</li>
+  <li>Actualiza WebGUI</li>
+</ul>
+Es el mapa usado para la planificación BFS.
+</p>
+
+<h5>engordar_obstaculos()</h5>
+<p>
+Expande los obstáculos del grid para aumentar la seguridad:
+<ul>
+  <li>Por cada celda ocupada, marca como ocupadas las celdas vecinas</li>
+</ul>
+Evita que la ruta pase demasiado cerca de paredes.
+</p>
+
+<h5>bfs_find_shortest_path()</h5>
+<p>
+Busca un camino más corto entre dos celdas libres usando BFS:
+<ul>
+  <li>Expande en 4 direcciones</li>
+  <li>Guarda el camino recorrido</li>
+  <li>Devuelve la lista de celdas desde origen a destino</li>
+</ul>
+Se usa cuando el zigzag necesita saltar a otra región.
+</p>
+
+<h5>bfs_find_nearest_free_cell()</h5>
+<p>
+Encuentra la celda libre más cercana no visitada:
+<ul>
+  <li>Expande BFS desde la posición actual</li>
+  <li>Detiene al encontrar la primera celda libre sin visitar</li>
+</ul>
+Usado en zonas donde no se puede avanzar más en zigzag.
+</p>
+
+<h5>zigzag_spiral_path()</h5>
+<p>
+Genera el camino completo para cubrir el mapa:
+<ul>
+  <li>Obtiene todas las celdas libres no visitadas</li>
+  <li>Comienza desde la celda inicial</li>
+  <li>Intenta avanzar en prioridad N → O → E → S</li>
+  <li>Si no puede avanzar, usa BFS para saltar a la celda libre más cercana</li>
+  <li>Continúa hasta visitar todas las celdas</li>
+</ul>
+Este es el núcleo del sistema de cobertura.
+</p>
+
+<h5>mapping()</h5>
+<p>
+Construye dinámicamente un mapa de ocupación usando el láser:
+<ul>
+  <li>Para cada rayo calcula el punto final</li>
+  <li>Dibuja en mapa los puntos libres hasta ese punto</li>
+  <li>Si hubo impacto, marca el punto final como ocupado</li>
+</ul>
+Este mapa es la base del grid final.
+</p>
+
+<h5>metros_a_pixeles()</h5>
+<p>
+Convierte distancias en metros a desplazamientos en píxeles usando WebGUI.
+</p>
+
+<br><br>
+
+<h4>Flujo principal del programa</h4>
+
+<p>
+El programa sigue los siguientes pasos:
+<ul>
+  <li>Carga inicial y cálculo de escala metro → píxel</li>
+  <li>Orientación inicial hacia el Este</li>
+  <li>Avance hasta detectar una pared</li>
+  <li>Orientación hacia el Norte</li>
+  <li>Recorrido completo de pared con mapeo</li>
+  <li>Conversión del mapa en una cuadrícula de celdas</li>
+  <li>Engordar el mapa</li>
+  <li>Generación del recorrido completo zigzag</li>
+  <li>Seguimiento celda a celda usando go_to()</li>
+  <li>Marcado de celdas visitadas</li>
+  <li>Detención del robot al terminar</li>
+</ul>
+</p>
+
+<p>
+Al finalizar, el robot habrá mapeado el entorno y recorrido la totalidad del espacio navegable.
+</p>
+
+
+        <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
+       <br> A continuacion se muestra el video del funcioinamineto de la creacion del mapa <br>
+     <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYoU4h8rkTFJm_4L5XvnLZEBpCok0ee_wyakaK6Pr5BnMA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Tubi0F" style="color: white;">Ver el video</a>
+        <br><br>
+
+         <br> Video de la construccion de mapa recorriendo la pared.<br>
+     <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EZq1GYUmx4BMhSfDK5W6JV8BYlfh8LJ-4xM57SuJBJT1dA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ZpuNdc" style="color: white;">Ver el video</a>
+        <br><br>
+   
+    
+     <br>
+     <br>
+
+</div>
+
+<a href="Serviceblogp3.html" class="fixed-box left-box">←</a>
+<a href="index.html" class="fixed-box right-box">→</a>
+</body>
+</html>
