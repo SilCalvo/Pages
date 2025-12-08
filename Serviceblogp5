@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMR - WAREHOUSE</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('p4_servicios.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Índice</h3>
+    <ul>
+        <li><a href="#INTRODUCCION">Introducción</a></li>
+        <li><a href="#MAPA">Mapa</a></li>
+        <li><a href="#OMPL">OMPL</a></li>
+        <li><a href="#ISVALID">ISVALID</a></li>
+        <li><a href="#CODIGO">Codigo</a></li>
+        <li><a href="#OTROS_CODIGOS">Otros codigos</a></li>
+        <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
+    </ul>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+    </div>
+</div>
+
+<div class="content">
+    <div style="text-align: center;">
+        <big><big><span style="font-weight: bold;">AMR - WAREHOUSE</span><br>
+        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+    </div>
+    <br>
+    
+    <ul>
+  <ul>
+    <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+</ul>
+<p>
+La práctica consiste en el control de un robot móvil AGV dentro de un almacén para realizar tareas de logística. 
+En este caso, el robot debe desplazarse hasta las estanterías, recogerlas utilizando la bandeja elevadora (lift) y transportarlas a otra zona. 
+Para planificar las rutas entre puntos y evitar colisiones se utiliza el planificador OMPL.
+</p>
+
+<ul>
+    <li><a name="MAPA"></a><span style="font-weight: bold;">MAPA</span></li>
+</ul>
+<p>
+Para trabajar con el mapa del almacén, primero fue necesario relacionar las coordenadas reales del robot (en metros) con las coordenadas en píxeles de la imagen del mapa.
+</p>
+<p>
+Para ello:
+</p>
+<ul>
+    <li>Envié el robot a varios puntos de referencia distribuidos por el almacén (esquinas y puntos intermedios).</li>
+    <li>Registré sus coordenadas reales.</li>
+    <li>Localicé los píxeles correspondientes en la imagen del mapa.</li>
+</ul>
+<p>
+Con estos pares de puntos, calculé la matriz de transformación entre ambos sistemas mediante el método de mínimos cuadrados. 
+El código se divide en dos funciones: una que obtiene la matriz de transformación y otra que aplica dicha matriz a cualquier punto para convertirlo entre coordenadas del mundo y del mapa.
+</p>
+<p>
+Además, el mapa incluye las estanterías dibujadas originalmente. Como el robot las mueve, es necesario modificar dinámicamente el mapa: cuando el robot recoge una estantería, se eliminan sus píxeles como obstáculo; cuando la deja en otro lugar, se añaden al mapa.
+</p>
+
+<ul>
+    <li><a name="OMPL"></a><span style="font-weight: bold;">OMPL</span></li>
+</ul>
+<p>
+OMPL es un planificador de movimiento que permite generar trayectorias libres de colisiones. 
+Para esta práctica se emplea RRT*, configurado para buscar el camino más corto y válido entre la posición actual del robot y su objetivo. 
+El planificador utiliza la función de validez isStateValid() para asegurarse de que ninguna pose propuesta esté en colisión.
+</p>
+
+<ul>
+    <li><a name="ISVALID"></a><span style="font-weight: bold;">ISVALID</span></li>
+</ul>
+<p>
+OMPL dispone de dos métodos principales para detectar colisiones:
+</p>
+<ol>
+    <li><strong>Colisión automática con modelos .dae:</strong> Esta es la forma más precisa: OMPL carga el modelo del robot y del mapa en formato DAE y calcula colisiones físicas reales y el controlador necesario. Sin embargo, en Unibotics no está disponible, porque no se incluyen las extensiones necesarias de OMPL y no existe un modelo DAE del robot holonómico. Y aunque en ackerman si, la libreria necesaria para usarlo no se encunetra disponible en unibotics.</li>
+    <li><strong>Colisión manual (la opción usada en esta práctica):</strong> Se indica manualmente qué zonas del mapa son obstáculos. Para ello:
+        <ul>
+            <li>Se calculan las dimensiones del robot en píxeles.</li>
+            <li>Se calculan también las dimensiones del robot con estantería sobre la bandeja.</li>
+            <li>La variable with_shelf indica a isStateValid() qué tamaño debe usar en cada momento.</li>
+        </ul>
+    </li>
+</ol>
+<p>
+Como cuando el robot lleva una estantería deja de ser cuadrado, la orientación (yaw) es importante. Por eso la función genera un rectángulo con el tamaño adecuado, lo rota según el yaw del robot y comprueba si todos los píxeles ocupados por ese rectángulo están libres en el mapa.
+</p>
+
+    <ul>
+    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO version holonomica</span></li>
+    </ul>
+<h4>Explicación del programa</h4>
+
+Este programa implementa un sistema autónomo de planificación y movimiento para un robot que recoge estanterías de un almacén y las transporta a otra zona.  
+Se basa en un mapa extraído de una imagen, la simulación robótica proporcionada por HAL y WebGUI, y en el uso del planificador RRT* del framework OMPL para generar trayectorias que eviten colisiones.
+
+El funcionamiento se divide en varias etapas: carga del mapa, transformación entre coordenadas, evaluación de colisiones, planificación óptima de trayectorias, seguimiento del camino y actualización del mapa al mover las estanterías.  
+A continuación se describen las principales partes del código.
+
+<br><br>
+
+<h4>Funciones del programa</h4>
+<h5>transformation() y transform_point()</h5>
+El sistema trabaja simultáneamente en dos espacios de coordenadas:  
+<ul>
+  <br>Coordenadas del mundo: donde se mueve el robot (metros).<br>
+  <br>Coordenadas del mapa: donde se dibujan obstáculos en la imagen (píxeles).<br>
+</ul>
+        <br>
+
+La función transformation() calcula una matriz de transformación afín a partir de un conjunto de puntos de calibración en dos espacios diferentes (puntos en el mundo y puntos en el mapa). Esta matriz se utiliza para transformar cualquier punto de un espacio a otro.<br>  
+La función transform_point() aplica la matriz de transformación a un punto específico, convirtiéndolo de las coordenadas del mundo a las coordenadas del mapa o viceversa.<br>  
+Ambas funciones permiten que el planificador use el mapa correctamente para detectar colisiones al realizar la planificación de la ruta.
+
+<h5>isStateValid()</h5>
+La función isStateValid() verifica si el robot se encuentra en un estado válido, es decir, si no colisiona con obstáculos o estanterías en el mapa. El proceso se lleva a cabo en los siguientes pasos:  
+
+  <br>Se transforma la posición del robot (en coordenadas del mundo) a coordenadas del mapa usando la función transform_point().<br>
+  <br>Se genera un conjunto de puntos que representa el contorno del robot (basado en su tamaño y orientación).<br>
+  <br>Se rota este conjunto de puntos de acuerdo a la orientación (yaw) del robot.<br>
+  <br>Se comprueba si alguno de estos puntos cae sobre una zona ocupada del mapa.<br>
+
+Si alguno de los puntos del robot cae fuera del mapa o sobre una zona ocupada, la función devuelve False, indicando que el estado no es válido. Si no hay colisión, devuelve True.
+
+<h5>create_numpy_path()</h5>
+La función create_numpy_path() toma la cadena de texto de los estados generados por el planificador y la convierte en dos tipos de coordenadas:
+
+  <br>Coordenadas de mundo: Estos son los puntos que el robot debe seguir en el mundo real (en metros).<br>
+  <br>Coordenadas de píxeles: Estos son los puntos transformados al espacio del mapa, para ser mostrados en WebGUI (en píxeles).<br>
+
+Esta función facilita la visualización del camino generado y también permite al robot seguirlo de manera precisa en el mundo real.
+
+<h5>get_path()</h5>
+La función get_path() es responsable de crear un problema de planificación y encontrar una trayectoria óptima desde la posición actual del robot hasta una meta dada.  
+
+  <br>Crea un espacio de información (SpaceInformation) que incluye el espacio SE(2) y la función de validez del estado (isStateValid()).
+  <br>Define el estado inicial del robot (start) y el objetivo (goal) a alcanzar, configurando las posiciones y orientaciones.
+  <br>Configura el optimizador para la minimización de la longitud del camino y selecciona el planificador RRTstar para encontrar el camino.
+  <br>Ejecuta la búsqueda del camino durante un tiempo máximo de 10 segundos.<br>
+  <br>Si se encuentra un camino, la función devuelve la ruta encontrada en las coordenadas del mundo y las coordenadas de píxeles, que luego se visualizan en WebGUI.<br>
+
+Si no se encuentra un camino en el tiempo asignado, la función indica que no se ha encontrado solución.
+
+<h5>orientated_to()</h5>
+La función orientated_to() ajusta la orientación del robot para que apunte hacia un ángulo objetivo.  
+
+  <br>El robot gira hasta que la diferencia entre su orientación actual (yaw) y la orientación objetivo (target_yaw) sea menor que un umbral dado (yaw_threshold).
+  <br>Durante este proceso, la velocidad angular (w) se ajusta en función del error angular, y el robot no avanza hasta estar correctamente orientado.
+  <br>Cuando la orientación deseada se alcanza, el robot deja de girar y la función termina.<br>
+
+Esta función asegura que el robot esté correctamente orientado antes de moverse hacia el objetivo.
+
+<h5>go_to()</h5>
+La función go_to() mueve al robot hacia un objetivo específico (x_target, y_target).  
+
+  <br>Calcula la distancia al objetivo y el ángulo (yaw) necesario para dirigir al robot hacia él.
+  <br>La velocidad lineal (v) se ajusta en función de la distancia al objetivo, y la velocidad angular (w) se ajusta en función de la diferencia entre la orientación actual y la deseada.
+  <br>El robot se mueve hacia el objetivo hasta que la distancia sea menor que el umbral threshold, momento en el cual la velocidad lineal se establece a 0 y el movimiento se detiene.
+  <br>Si es necesario, también ajusta la orientación para asegurar que el robot siga el camino correcto.<br>
+
+
+<h5>next_target()</h5>
+La función next_target() ejecuta todo el proceso de planificación para mover al robot hacia un objetivo dado, y luego lo sigue a lo largo de la ruta generada.  
+
+  <br>Genera una ruta desde la posición actual del robot hasta el objetivo especificado (x_target, y_target, yaw_target) mediante el planificador de caminos get_path().
+  <br>Una vez que se encuentra un camino, el robot sigue cada punto de la ruta utilizando la función go_to() y se orienta correctamente con orientated_to().
+  <br>El robot se mueve de un punto al siguiente, corrigiendo su orientación y avanzando hasta llegar al destino final.<br>
+
+Esta función permite al robot seguir un camino óptimo de manera eficiente y precisa.
+
+<h5>paint_map()</h5>
+La función paint_map() se encarga de actualizar dinámicamente el mapa para reflejar las estanterías que el robot ha recogido o dejado en su destino.  
+
+  <br>Modifica el mapa del almacén para marcar una zona ocupada cuando el robot recoge una estantería, y la marca como libre cuando la deja en un nuevo lugar.
+  <br>Se asegura de que el planificador tenga en cuenta estos cambios al generar nuevas rutas, actualizando el mapa para evitar futuras colisiones.<br>
+
+Esta función es fundamental para mantener el mapa actualizado y garantizar que el robot navegue de manera eficiente.
+<br><br>
+      
+<h5>Flujo principal del programa</h5>  
+
+El flujo del programa se realiza en varias etapas:  
+<ul>
+  <br>El mapa se carga y se inicializan las variables globales.
+  <br>El robot comienza sin transportar estanterías.
+  <br>Para cada estantería en la lista:
+    <ul>
+      <br>Se planifica y ejecuta un camino hacia la estantería.
+      <br>El robot la recoge y la elimina del mapa.
+      <br>Se planifica un nuevo camino hacia el área de descarga.
+      <br>Se actualiza el mapa marcando la estantería como depositada en el nuevo destino.
+    </ul>
+  
+  <br>Cuando todas las estanterías han sido movidas, el programa termina y el robot detiene su movimiento.
+</ul>
+<br>
+        <li><a name="OTROS_CODIGOS"></a><span style="font-weight: bold;">OTROS_CODIGOS</span></li>
+        
+   <h4>Mapa “engordado”</h4>
+
+La idea es bastante similar, pero en <code>is_valid</code> el robot se considera como un punto. 
+<br>Al generar el mapa, este se “engorda” según si el robot lleva estantería o no. 
+<br>Este método no es muy eficiente: si el robot tiene estantería, hay que engordar los obstáculos según la medida más grande. 
+Como resultado, el robot puede pensar que ciertas zonas son inaccesibles, aunque en realidad podría pasar con la orientación adecuada.
+<br><br>
+
+<h4>Código Ackerman</h4>
+
+La lógica del programa sigue siendo la misma, pero cambia el planificador para que tenga en cuenta que el robot es Ackerman. 
+Además, en el control ya no puede girar sobre sí mismo, por lo que se añade un control diferente para manejar esta limitación.
+<br><br>
+
+    <br>
+        <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
+       <br> A continuacion se muestra el video del funcioinamineto donde el AGV holonomico calcula la ruta para llegar a la estanteria, la levanta, elimina los obstaculos guardando una copia de los rectangulos al rededor para poder calcular la nueva ruta a dejar la estanteria y al dejarla en su sitio coloca de nuevo esa imagen de copia donde corresponde para calcular el siguiente punto teniwndo en cuenta la nueva posicion de la estanteria<br>
+     <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EYoU4h8rkTFJm_4L5XvnLZEBpCok0ee_wyakaK6Pr5BnMA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Tubi0F" style="color: white;">Ver el video</a>
+        <br><br>
+
+         <br> Para mostrar el funcinamiento del AGV ackerman se muestra el video del funcioinamineto donde el robot calcula la ruta para llegar a la estanteria y se dirige hacia ella. El problema es que se buggeo el simulador y estaba la plataforma elevada pero el simulador no lo detecta, por lo que se choca con la estanteria.<br>
+     <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EZq1GYUmx4BMhSfDK5W6JV8BYlfh8LJ-4xM57SuJBJT1dA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ZpuNdc" style="color: white;">Ver el video</a>
+        <br><br>
+   
+    
+     <br>
+     <br>
+
+</div>
+
+<a href="Serviceblogp3.html" class="fixed-box left-box">←</a>
+<a href="index.html" class="fixed-box right-box">→</a>
+</body>
+</html>
