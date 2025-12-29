@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> AMR - MARKER BASED VISUAL LOC</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('p5_servicios.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+            height: 100vh;
+            display: flex;
+        }
+        .sidebar {
+            width: 125px;
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            margin-right: 5px;
+        }
+        .content {
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            max-width: calc(60% - 50px);
+            margin: auto;
+            border-radius: 8px;
+            flex: 1;
+        }
+        .fixed-box {
+            width: 75px;
+            height: 35px;
+            position: fixed; 
+            bottom: 20px;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .left-box {
+            left: 20px;
+        }
+        .right-box {
+            right: 20px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Índice</h3>
+    <ul>
+        <li><a href="#INTRODUCCION">Introducción</a></li>
+        <li><a href="#MOVIMIENTO">Movimiento</a></li>
+        <li><a href="#CALCULO_POSICION">Calculo de posicion</a></li>
+        <li><a href="#CODIGO">Codigo</a></li>
+        <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
+    </ul>
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="index.html" style="font-weight: bold;">Volver a la página principal</a>
+    </div>
+</div>
+
+<div class="content">
+    <div style="text-align: center;">
+        <big><big><span style="font-weight: bold;"> AMR - MARKER BASED VISUAL LOC</span><br>
+        <span style="font-weight: bold;">Silvia Calvo Cabello</span></big></big><br>
+    </div>
+    <br>
+    
+    <ul>
+ <ul>
+    <li><a name="INTRODUCCION"></a><span style="font-weight: bold;">INTRODUCCIÓN</span></li>
+</ul>
+
+<p>
+El objetivo de esta práctica es estimar la <b>posición y orientación (pose)</b> de un robot móvil en un entorno 2D utilizando el método de <b>balizas fijas</b>, concretamente AprilTags, cuya posición y orientación en el mapa son conocidas.
+</p>
+
+<p>
+El robot dispone de una cámara que detecta dichas balizas visuales y, a partir de su observación, se calcula la pose del robot respecto al sistema de referencia global (mundo). Para ello, se utilizan técnicas de visión por computador y transformaciones geométricas entre distintos sistemas de coordenadas.
+</p>
+
+<p>
+En la visualización del ejercicio:
+<ul>
+    <li>El <span style="color: blue;"><b>robot azul</b></span> representa la posición obtenida por odometría, la cual incluye ruido acumulado.</li>
+    <li>El <span style="color: red;"><b>robot rojo</b></span> representa la posición estimada por el usuario mediante visión.</li>
+</ul>
+</p>
+
+<ul>
+    <li><a name="MOVIMIENTO"></a><span style="font-weight: bold;">MOVIMIENTO</span></li>
+</ul>
+
+<p>
+Para el funcionamiento del ejercicio, el robot sigue una estrategia de movimiento sencilla que le permite recorrer el mapa y orientarse correctamente:
+</p>
+
+<p>
+<ul>
+    <li>El robot avanza recto siempre que no haya obstáculos frente a él.</li>
+    <li>Si encuentra un obstáculo, gira a la derecha si esta dirección está libre.</li>
+    <li>Si tampoco puede girar a la derecha, gira a la izquierda.</li>
+</ul>
+</p>
+
+<p>
+Este comportamiento permite que el robot explore el entorno de forma continua y aumente la probabilidad de detectar balizas desde diferentes posiciones y orientaciones.
+</p>
+
+
+<ul>
+    <li><a name="CALCULO_POSICION"></a><span style="font-weight: bold;">CALCULO DE LA POSICION</span></li>
+</ul>
+
+<p>
+Para calcular la posición del robot se utiliza el método <b>PnP (Perspective-n-Point)</b>, un problema clásico de visión por computador que permite estimar la posición y orientación de una cámara con respecto a un objeto conocido a partir de su proyección en la imagen.
+</p>
+
+<p>
+En este ejercicio, el objeto conocido es un <b>AprilTag</b>, cuyo tamaño y geometría son conocidos. A partir de las esquinas detectadas del tag en la imagen y de los parámetros intrínsecos de la cámara, el algoritmo PnP calcula:
+<ul>
+    <li>Un vector de traslación (<i>pose_t</i>), que indica la posición del tag respecto a la cámara.</li>
+    <li>Una matriz de rotación (<i>pose_R</i>), que indica la orientación del tag respecto a la cámara.</li>
+</ul>
+</p>
+
+<p>
+La librería <b>pyapriltags</b> utiliza internamente PnP para proporcionar directamente estas matrices cuando se detecta un tag.
+</p>
+
+<p>
+A partir de esta información se construyen distintas matrices de transformación:
+</p>
+
+<p>
+<ul>
+    <li><b>Matriz cámara → tag</b>: describe la pose del tag respecto a la cámara.</li>
+    <li><b>Matriz tag → cámara</b>: se obtiene invirtiendo la matriz anterior. Además, se realiza un cambio de ejes, ya que el sistema de coordenadas de la cámara no coincide con el del robot.</li>
+    <li><b>Matriz mundo → tag</b>: se construye a partir de la posición y orientación conocidas del tag en el mapa.</li>
+    <li><b>Matriz cámara → robot</b>: representa la posición fija de la cámara respecto al robot.</li>
+</ul>
+</p>
+
+<p>
+Finalmente, todas las transformaciones se encadenan para obtener la matriz <b>mundo → robot</b>:
+  <p style="text-align: center;">
+<b>M<sub>mundo-robot</sub> = M<sub>mundo-tag</sub> · M<sub>tag-cámara</sub> · M<sub>cámara-robot</sub></b>
+</p>
+</p>
+
+
+    <ul>
+    <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
+    </ul>
+
+
+        <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
+
+         <br> Video de la construccion de mapa recorriendo la pared.<br>
+     <br><br>
+    <a href="https://urjc-my.sharepoint.com/:v:/g/personal/s_calvo_2022_alumnos_urjc_es/EVj5Psr2pmFLl8tmnTEGSY8B7qeQFeCMGN-sfwnGahJptw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=pbApKN" style="color: white;">Ver el video</a>
+        <br><br>
+   
+    
+     <br>
+     <br>
+
+</div>
+
+<a href="Serviceblogp4.html" class="fixed-box left-box">←</a>
+<a href="index.html" class="fixed-box right-box">→</a>
+</body>
+</html>
