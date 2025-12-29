@@ -174,6 +174,86 @@ Finalmente, todas las transformaciones se encadenan para obtener la matriz <b>mu
   <br>
     <li><a name="CODIGO"></a><span style="font-weight: bold;">CODIGO</span></li>
   
+<li><a name="CODIGO"></a><span style="font-weight: bold;">CÓDIGO</span></li>
+</ul>
+<h4>Explicación del programa</h4>
+
+Este programa implementa un sistema de localización de un robot móvil en un mapa 2D utilizando balizas visuales conocidas (AprilTags) y odometría.  
+El objetivo es estimar la posición y orientación (pose) del robot en el mundo combinando información de la cámara y del sensor láser.  
+<br><br>
+
+El flujo principal comienza con la captura de imágenes mediante la cámara del robot y la detección de AprilTags.  
+Si se detecta algún tag dentro de la distancia óptima, se calcula la pose del robot respecto a ese tag utilizando el algoritmo PnP.  
+Se encadenan matrices de transformación para obtener la pose final del robot en el sistema de referencia global.  
+<br><br>
+
+Si no se detectan tags o están demasiado lejos, se utiliza la odometría para actualizar la posición estimada a partir del último valor visual confiable.  
+A continuación, se decide el movimiento del robot según los datos del láser: avanzar recto, girar a la derecha o girar a la izquierda, evitando obstáculos.  
+<br><br>
+
+El ciclo se repite continuamente, mostrando en la interfaz gráfica la imagen de la cámara con los tags detectados y la pose estimada del robot.
+
+<br><br>
+<h4>Funciones del programa</h4>
+
+<h5>orientar(target_yaw)</h5>
+<p>
+Gira el robot hasta alcanzar la orientación deseada <b>target_yaw</b>.  
+<br>Calcula la diferencia angular entre la orientación actual y la deseada y ajusta la velocidad angular para girar.  
+El bucle continúa hasta que el robot se aproxima a la orientación objetivo, momento en el que se detiene.
+</p>
+
+<h5>chech_move(i)</h5>
+<p>
+Decide la acción de movimiento del robot según los datos del sensor láser:  
+<br><ul>
+<li>Avanza recto si no hay obstáculos delante.</li>
+<li>Gira a la derecha si no puede avanzar recto.</li>
+<li>Gira a la izquierda si tampoco puede girar a la derecha.</li>
+</ul>
+Actualiza el índice <b>i</b> de la dirección cardinal actual del robot y devuelve el valor actualizado.
+</p>
+
+<h5>calibration()</h5>
+<p>
+Calcula los parámetros intrínsecos de la cámara, necesarios para el algoritmo PnP.  
+<br>Se determina la matriz de calibración a partir del tamaño de la imagen y la distancia focal, y se generan los coeficientes de distorsión, que en este caso se inicializan a cero.
+</p>
+
+<h5>Detección de AprilTags y PnP</h5>
+<p>
+El programa captura la imagen de la cámara, la convierte a escala de grises y detecta todos los AprilTags visibles.  
+<br>Para cada tag, se obtiene su posición y orientación relativa a la cámara usando PnP.  
+Se selecciona el tag más cercano al robot para minimizar errores y se construyen las matrices de transformación necesarias:  
+<ul>
+<li><b>Matriz cámara → tag:</b> Pose del tag en la cámara.</li>
+<li><b>Matriz tag → cámara:</b> Inversa de la anterior, adaptando los ejes a la referencia del robot.</li>
+<li><b>Matriz mundo → tag:</b> Pose conocida del tag en el mundo.</li>
+<li><b>Matriz cámara → robot:</b> Posición de la cámara respecto al robot.</li>
+</ul>
+A partir de estas matrices se calcula la pose final del robot en el mundo.
+</p>
+
+<h5>Actualización de posición con odometría</h5>
+<p>
+Si no se detectan tags dentro de la distancia óptima, se utiliza la odometría para estimar el movimiento del robot desde la última posición visual confiable.  
+Se calcula el desplazamiento en x, y y yaw y se suma a la última posición conocida para mantener la estimación de la pose.
+</p>
+
+<h5>Ciclo principal</h5>
+<p>
+El ciclo principal del programa realiza continuamente las siguientes acciones:
+<ul>
+<li>Captura la imagen de la cámara y detecta AprilTags.</li>
+<li>Selecciona el tag más cercano y calcula la pose del robot usando PnP y matrices de transformación.</li>
+<li>Actualiza la pose estimada y la muestra en la interfaz gráfica.</li>
+<li>Si no se detectan tags, utiliza la odometría para estimar la posición.</li>
+<li>Decide el movimiento del robot mediante la función <b>chech_move()</b>.</li>
+<li>Muestra la imagen procesada con los tags detectados y la pose estimada.</li>
+</ul>
+El bucle se repite indefinidamente mientras el robot explora el entorno.
+</p>
+<br>
 
 
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
