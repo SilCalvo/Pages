@@ -65,6 +65,7 @@
     </style>
 </head>
 <body>
+    
 
 <div class="sidebar">
     <h3>Índice</h3>
@@ -73,6 +74,7 @@
         <li><a href="#MAPA">Mapa</a></li>
         <li><a href="#RECORRIDO">Recorrido</a></li>
         <li><a href="#CODIGO">Codigo</a></li>
+        <li><a href="#COMPARATIVA">Comparativa</a></li>
         <li><a href="#VIDEO_DE_MUESTRA">Video de muestra</a></li>
     </ul>
     <div style="text-align: center; margin-top: 20px;">
@@ -95,9 +97,10 @@
 <p>
 La práctica consiste en generar un mapa del entorno a partir de la información obtenida por el sensor LIDAR del robot. 
 El objetivo principal es desarrollar un algoritmo de navegación capaz de explorar de forma autónoma un área de almacén 
-mientras construye un mapa preciso del entorno utilizando los datos del láser.  
-Posteriormente, empleando ese mismo mapa, se implementa un algoritmo basado en <b>BSA</b> que permite recorrer 
-sistemáticamente todas las zonas accesibles.
+mientras construye un mapa probabilistico preciso del entorno utilizando los datos del láser.  
+
+También se realizará la comprativa de este mismo algoritmo mediante empeorando la localizacion del robot, para ver los efecto en la genereracion del mapa.
+
 </p>
 
 <ul>
@@ -113,8 +116,17 @@ Para construir el mapa a partir de los datos del láser es necesario conocer var
     <li>Es imprescindible conocer la orientación del robot para poder transformar correctamente 
         los ángulos del láser al marco global.</li>
 </ul>
-Con esta información se trazan los rayos del LIDAR sobre el mapa, marcando con <b>255</b> las zonas libres 
-y con <b>0</b> las posiciones donde se detectan obstáculos, generando así un mapa de ocupación.
+Con esta información se trazan los rayos del LIDAR sobre el mapa, se realiza un mapa probabilistico, en caso de detectar libre aumenta la probabilidad de libre un (RELLENAR) y en caso de detectar ocupado baja la probabilidad de estar libre un (RELLENAR).
+</p>
+
+    <p>
+Para garantizar la independencia entre observaciones en la construcción del mapa probabilístico,
+se ha aplicado un muestreo angular del sensor láser. En lugar de utilizar todos los rayos,
+se selecciona únicamente uno de cada 5 (salto = 5), lo que introduce una separación angular suficiente
+para reducir la correlación entre medidas consecutivas.
+
+Esto permite aproximar la hipótesis de independencia entre observaciones requerida por los métodos
+de mapeo probabilístico, manteniendo al mismo tiempo una cobertura adecuada del entorno.
 </p>
 
 <ul>
@@ -131,11 +143,10 @@ En esta práctica, el robot sigue una estrategia similar:
 <ul>
     <li>Primero localiza la pared más cercana en la dirección Este.</li>
     <li>Después recorre todo el perímetro del entorno siguiendo la pared y actualizando el mapa.</li>
-    <li>Una vez delimitado el contorno, se ejecuta un recorrido completo del área utilizando un algoritmo 
-        de <b>Bsa</b> , asegurando así que el robot visita todas las zonas libres identificadas.</li>
+    <li>Una vez delimitado el contorno, se ejecuta un algoritmo basado en BSA que busca la celda libre más cercana de modo que va recorriendo una mayor zona.</li>
 </ul>
 
-De esta forma se garantiza que el robot explora y mapea la totalidad del entorno accesible de manera eficiente y ordenada.
+De esta forma el robot obtendrá un mapa bastante completo.
 </p>
 
 
@@ -145,174 +156,27 @@ De esta forma se garantiza que el robot explora y mapea la totalidad del entorno
 <h4>Explicación del programa</h4>
 
 <p>
-Este programa implementa un sistema autónomo de exploración del entorno mediante <b>mapeo</b>, 
-<b>recorrido de paredes</b>, <b>conversión del mapa a cuadrícula</b>, <b>engrosamiento de obstáculos</b> 
-y finalmente la generación de un <b>camino zigzag</b> tipo cobertura que recorre todas las celdas libres del mapa.  
-Utiliza la simulación provista por <b>HAL</b> y la visualización mediante <b>WebGUI</b>, 
-construyendo un mapa propio a partir del láser.
+Este programa implementa un sistema autónomo de exploración del entorno mediante <b>mapeo probabilístico con sensor láser usando log-odds y ray tracing (Bresenham)</b>,
+y finalmente la generación de un <b>recorrido tipo cobertura</b> que permite visitar todas las celdas libres del entorno.  
+
+El sistema combina dos estrategias:
+<ul>
+  <li>Exploración global mediante <b>seguimiento de paredes</b></li>
+  <li>Exploración interna mediante <b>búsqueda de celdas libres (BFS)</b></li>
+</ul>
+
+Utiliza <b>HAL</b> para el control del robot y <b>WebGUI</b> para la visualización, construyendo dinámicamente un mapa del entorno a partir del láser.
 </p>
 
 <p>
 Este sistema funciona con:  
 <ul>
-  <li>Mapeo dinámico con mapping()</li>
+  <li>Mapeo dinámico con <b>mapping()</b></li>
   <li>Recorrido de paredes para delimitar el entorno</li>
-  <li>Conversión del mapa a celdas</li>
-  <li>Generación de recorrido completo mediante zigzag y BFS</li>
-  <li>Seguimiento celda a celda mediante go_to()</li>
+  <li>Conversión implícita a celdas mediante discretización</li>
+  <li>Exploración completa usando vecinos + BFS</li>
+  <li>Movimiento preciso con <b>go_to()</b></li>
 </ul>
-</p>
-
-<br>
-
-<h4>Funciones del programa</h4>
-
-<h5>pixel_a_celda() y celda_a_pixel()</h5>
-<p>
-El robot usa dos espacios de coordenadas:  
-<ul>
-  <li><b>Mapa en píxeles</b></li>
-  <li><b>Mapa en celdas</b></li>
-</ul>
-Las funciones convierten entre estos dos sistemas:  
-<ul>
-  <li><b>pixel_a_celda()</b>: pasa de píxeles a celda</li>
-  <li><b>celda_a_pixel()</b>: devuelve el centro de una celda en píxeles</li>
-</ul>
-Esto permite al robot navegar celda a celda siguiendo el recorrido generado.
-</p>
-
-<h5>orientar()</h5>
-<p>
-Ajusta la orientación del robot hacia un ángulo objetivo:
-<ul>
-  <li>Calcula el error angular</li>
-  <li>Elige el giro más corto</li>
-  <li>Gira hasta que el error sea menor a 0.1 rad</li>
-  <li>Detiene el movimiento angular</li>
-</ul>
-Es fundamental antes de avanzar en línea recta.
-</p>
-
-<h5>avanzar()</h5>
-<p>
-Avanza una distancia dada mientras no haya obstáculos.
-<ul>
-  <li>Guarda posición inicial</li>
-  <li>Lee el láser continuamente</li>
-  <li>Detiene el avance si aparece un obstáculo</li>
-  <li>Detiene el avance si llega a la distancia requerida</li>
-  <li>Actualiza el mapa y celdas visitadas</li>
-</ul>
-</p>
-
-<h5>map_visit_rellenar()</h5>
-<p>
-Marca en una matriz qué celdas ha visitado el robot:
-<ul>
-  <li>Obtiene la pose</li>
-  <li>Convierte a píxeles → celda</li>
-  <li>Marca la celda como visitada</li>
-</ul>
-Esto permite que el zigzag evite repetir celdas.
-</p>
-
-<h5>recorrer_pared()</h5>
-<p>
-Implementa un algoritmo de seguimiento de pared (wall-following):
-<ul>
-  <li>Mira si tiene pared a la derecha</li>
-  <li>Si no hay pared, gira a la derecha y avanza</li>
-  <li>Si la hay, avanza recto</li>
-  <li>Si encuentra un obstáculo frontal, gira a la izquierda</li>
-  <li>Va rellenando mapa y celdas visitadas</li>
-  <li>Termina al volver cerca del punto inicial</li>
-</ul>
-Sirve para delimitar el entorno completo.
-</p>
-
-<h5>go_to()</h5>
-<p>
-Mueve el robot hacia un punto dado en píxeles.
-<ul>
-  <li>Convierte la pose actual a píxeles</li>
-  <li>Calcula la dirección hacia el objetivo</li>
-  <li>Orienta el robot</li>
-  <li>Avanza hasta alcanzar el punto o detectar un obstáculo</li>
-</ul>
-Es la función usada para seguir el recorrido zigzag.
-</p>
-
-<h5>convert_map_to_grid()</h5>
-<p>
-Convierte el mapa continuo en una cuadrícula binaria:
-<ul>
-  <li>Divide el mapa en bloques del tamaño CELDA</li>
-  <li>Calcula el brillo promedio</li>
-  <li>Celdas claras → libres (255)</li>
-  <li>Celdas oscuras → ocupadas (0)</li>
-  <li>Actualiza WebGUI</li>
-</ul>
-Es el mapa usado para la planificación BFS.
-</p>
-
-<h5>engordar_obstaculos()</h5>
-<p>
-Expande los obstáculos del grid para aumentar la seguridad:
-<ul>
-  <li>Por cada celda ocupada, marca como ocupadas las celdas vecinas</li>
-</ul>
-Evita que la ruta pase demasiado cerca de paredes.
-</p>
-
-<h5>bfs_find_shortest_path()</h5>
-<p>
-Busca un camino más corto entre dos celdas libres usando BFS:
-<ul>
-  <li>Expande en 4 direcciones</li>
-  <li>Guarda el camino recorrido</li>
-  <li>Devuelve la lista de celdas desde origen a destino</li>
-</ul>
-Se usa cuando el zigzag necesita saltar a otra región.
-</p>
-
-<h5>bfs_find_nearest_free_cell()</h5>
-<p>
-Encuentra la celda libre más cercana no visitada:
-<ul>
-  <li>Expande BFS desde la posición actual</li>
-  <li>Detiene al encontrar la primera celda libre sin visitar</li>
-</ul>
-Usado en zonas donde no se puede avanzar más en zigzag.
-</p>
-
-<h5>zigzag_spiral_path()</h5>
-<p>
-Genera el camino completo para cubrir el mapa:
-<ul>
-  <li>Obtiene todas las celdas libres no visitadas</li>
-  <li>Comienza desde la celda inicial</li>
-  <li>Intenta avanzar en prioridad N → O → E → S</li>
-  <li>Si no puede avanzar, usa BFS para saltar a la celda libre más cercana</li>
-  <li>Continúa hasta visitar todas las celdas</li>
-</ul>
-Este es el núcleo del sistema de cobertura.
-</p>
-
-<h5>mapping()</h5>
-<p>
-Construye dinámicamente un mapa de ocupación usando el láser:
-<ul>
-  <li>Para cada rayo calcula el punto final</li>
-  <li>Dibuja en mapa los puntos libres hasta ese punto</li>
-  <li>Si hubo impacto, marca el punto final como ocupado</li>
-</ul>
-Este mapa es la base del grid final.
-</p>
-
-<h5>metros_a_pixeles()</h5>
-<p>
-Convierte distancias en metros a desplazamientos en píxeles usando WebGUI.
 </p>
 
 <br>
@@ -322,24 +186,272 @@ Convierte distancias en metros a desplazamientos en píxeles usando WebGUI.
 <p>
 El programa sigue los siguientes pasos:
 <ul>
-  <li>Carga inicial y cálculo de escala metro → píxel</li>
-  <li>Orientación inicial hacia el Este</li>
-  <li>Avance hasta detectar una pared</li>
-  <li>Orientación hacia el Norte</li>
-  <li>Recorrido completo de pared con mapeo</li>
-  <li>Engordar el mapa</li>
-  <li>Conversión del mapa en una cuadrícula de celdas</li>
-  <li>Generación del recorrido completo zigzag</li>
-  <li>Seguimiento celda a celda usando go_to()</li>
-  <li>Marcado de celdas visitadas</li>
-  <li>Detención del robot al terminar</li>
+  <li>Inicialización de mapas y parámetros</li>
+  <li>Llamada a <b>go_init_position()</b>:
+    <ul>
+      <li>Orienta el robot hacia el Este</li>
+      <li>Avanza hasta encontrar una pared</li>
+      <li>Se orienta hacia el Norte</li>
+    </ul>
+  </li>
+  
+  <li>Ejecución de <b>recorrer_pared()</b>:
+    <ul>
+      <li>El robot sigue la pared usando wall-following</li>
+      <li>Va construyendo el mapa con <b>mapping()</b></li>
+      <li>Marca las celdas visitadas</li>
+      <li>Finaliza cuando vuelve cerca del punto inicial</li>
+    </ul>
+  </li>
+  
+  <li>Ejecución de <b>recorrer_interior()</b>:
+    <ul>
+      <li>Busca celdas vecinas no visitadas (<b>next_cell()</b>)</li>
+      <li>Si no hay, usa BFS (<b>buscar_celda_libre_mas_cercana()</b>)</li>
+      <li>Convierte la celda a píxeles</li>
+      <li>Se mueve con <b>go_to()</b></li>
+      <li>Marca la celda como visitada</li>
+      <li>Repite hasta cubrir todo el mapa</li>
+    </ul>
+  </li>
+  
+  <li>Finalización cuando no quedan celdas accesibles</li>
 </ul>
 </p>
 
 <p>
-Al finalizar, el robot habrá mapeado el entorno y recorrido la totalidad del espacio navegable.
+Al finalizar, el robot habrá mapeado completamente el entorno y recorrido todas las zonas navegables de forma autónoma.
 </p>
 
+<br>
+
+<h4>Funciones del programa</h4>
+
+<h5>bresenham()</h5>
+<p>
+Implementa el algoritmo de Bresenham para trazar líneas discretas:
+<ul>
+  <li>Recibe dos puntos (inicio y fin)</li>
+  <li>Devuelve todos los píxeles intermedios</li>
+  <li>Se usa para simular el recorrido del rayo láser</li>
+</ul>
+Es fundamental en el proceso de mapping.
+</p>
+
+<h5>pixel_a_celda() y celda_a_pixel()</h5>
+<p>
+Permiten convertir entre dos sistemas:
+<ul>
+  <li>Píxeles (mapa continuo)</li>
+  <li>Celdas (mapa discreto)</li>
+</ul>
+
+<ul>
+  <li><b>pixel_a_celda()</b>: divide por el tamaño de celda</li>
+  <li><b>celda_a_pixel()</b>: devuelve el centro de la celda</li>
+</ul>
+</p>
+
+<h5>avanzar()</h5>
+<p>
+Hace avanzar el robot una distancia determinada:
+<ul>
+  <li>Guarda la posición inicial</li>
+  <li>Se mueve hacia delante</li>
+  <li>Comprueba continuamente el láser frontal</li>
+  <li>Se detiene si:
+    <ul>
+      <li>Detecta obstáculo</li>
+      <li>Alcanza la distancia objetivo</li>
+    </ul>
+  </li>
+  <li>Durante el avance:
+    <ul>
+      <li>Actualiza el mapa con <b>mapping()</b></li>
+      <li>Marca celdas visitadas</li>
+    </ul>
+  </li>
+</ul>
+</p>
+
+<h5>map_visit_rellenar()</h5>
+<p>
+Marca la celda actual como visitada:
+<ul>
+  <li>Obtiene la pose del robot</li>
+  <li>Convierte a píxeles y luego a celda</li>
+  <li>Marca la matriz <b>mapa_visit</b> con 255</li>
+  <li>Pinta la celda en el mapa</li>
+</ul>
+</p>
+
+<h5>orientar()</h5>
+<p>
+Orienta el robot hacia un ángulo objetivo:
+<ul>
+  <li>Calcula la diferencia angular</li>
+  <li>Normaliza el ángulo entre [-π, π]</li>
+  <li>Gira en la dirección más corta</li>
+  <li>Se detiene cuando el error es pequeño</li>
+</ul>
+</p>
+
+<h5>recorrer_pared()</h5>
+<p>
+Implementa seguimiento de pared:
+<ul>
+  <li>Comprueba el lado derecho con el láser</li>
+  <li>Si está libre → gira a la derecha</li>
+  <li>Si está ocupado → avanza recto</li>
+  <li>Si hay obstáculo frontal → gira a la izquierda</li>
+  <li>Actualiza mapa y celdas visitadas</li>
+  <li>Termina al volver al punto inicial</li>
+</ul>
+</p>
+
+<h5>go_init_position()</h5>
+<p>
+Coloca el robot en una posición inicial adecuada:
+<ul>
+  <li>Se orienta hacia el Este</li>
+  <li>Avanza hasta detectar una pared</li>
+  <li>Se orienta hacia el Norte</li>
+</ul>
+</p>
+
+<h5>es_obstaculo()</h5>
+<p>
+Determina si una celda es un obstáculo:
+<ul>
+  <li>Convierte la celda a región de píxeles</li>
+  <li>Calcula el valor medio</li>
+  <li>Si es oscuro → obstáculo</li>
+  <li>Si es claro → libre</li>
+</ul>
+</p>
+
+<h5>buscar_celda_libre_mas_cercana()</h5>
+<p>
+Busca la celda libre no visitada más cercana mediante BFS:
+<ul>
+  <li>Parte desde la celda actual</li>
+  <li>Explora vecinos (N, E, S, O)</li>
+  <li>Evita obstáculos</li>
+  <li>Devuelve la primera celda válida encontrada</li>
+</ul>
+</p>
+
+<h5>next_cell()</h5>
+<p>
+Devuelve una celda vecina no visitada:
+<ul>
+  <li>Prioridad: Norte → Este → Sur → Oeste</li>
+  <li>Si existe, la devuelve</li>
+  <li>Si no, devuelve None</li>
+</ul>
+</p>
+
+<h5>go_to()</h5>
+<p>
+Mueve el robot a una posición objetivo:
+<ul>
+  <li>Calcula dirección hacia el objetivo</li>
+  <li>Orienta el robot</li>
+  <li>Avanza hacia el punto</li>
+  <li>Se detiene si:
+    <ul>
+      <li>Llega al objetivo</li>
+      <li>Detecta obstáculo</li>
+    </ul>
+  </li>
+  <li>Si hay obstáculo:
+    <ul>
+      <li>Marca la celda como ocupada</li>
+      <li>Retrocede ligeramente</li>
+    </ul>
+  </li>
+</ul>
+</p>
+
+<h5>pintar_celda_rojo()</h5>
+<p>
+Pinta una celda en el mapa visual:
+<ul>
+  <li>Convierte la celda a píxeles</li>
+  <li>Colorea la región</li>
+  <li>Actualiza la GUI</li>
+</ul>
+</p>
+
+<h5>recorrer_interior()</h5>
+<p>
+Explora todo el interior del mapa:
+<ul>
+  <li>Busca siguiente celda con <b>next_cell()</b></li>
+  <li>Si no hay, usa BFS</li>
+  <li>Convierte a píxeles</li>
+  <li>Se mueve con <b>go_to()</b></li>
+  <li>Marca la celda como visitada</li>
+  <li>Repite hasta terminar</li>
+</ul>
+</p>
+
+<h5>mapping()</h5>
+<p>
+Construye el mapa de ocupación:
+<ul>
+  <li>Lee datos del láser</li>
+  <li>Convierte cada rayo a coordenadas globales</li>
+  <li>Traza el rayo con Bresenham</li>
+  <li>Actualiza:
+    <ul>
+      <li>Zonas libres (L_FREE)</li>
+      <li>Obstáculos (L_OBS)</li>
+    </ul>
+  </li>
+  <li>Aplica saturación</li>
+  <li>Convierte log-odds a imagen (0–255)</li>
+</ul>
+</p>
+
+        
+    <ul>
+    <li><a name="COMPARATIVA"></a><span style="font-weight: bold;">COMPARATIVA</span></li>
+    </ul>
+<h4> Localización exacta (getPose3d())</h4>
+        
+<div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
+
+  <img src="fino_recorrido.png" style="width: 40%;">
+  <img src="fino_mapa.png" style="width: 40%;">
+
+</div>
+        <h4> Localización con ruido baajo (HAL.getOdom())</h4>
+        
+<div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
+
+  <img src="img/pose3d.png" style="width: 40%;">
+  <img src="img/odom.png" style="width: 40%;">
+
+</div>
+        <h4> Localización con ruido medio (getOdom2())</h4>
+        
+<div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
+
+  <img src="img/pose3d.png" style="width: 40%;">
+  <img src="img/odom.png" style="width: 40%;">
+
+</div>
+        <h4> Localización con ruido alto (getOdom3())</h4>
+        
+<div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
+
+  <img src="img/pose3d.png" style="width: 40%;">
+  <img src="img/odom.png" style="width: 40%;">
+
+</div>
+
+        Como se puede observar, hay una gran diferencia
 
         <li><a name="VIDEO_DE_MUESTRA"></a><span style="font-weight: bold;">VIDEO DE MUESTRA</span></li>
 
