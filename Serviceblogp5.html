@@ -115,6 +115,7 @@ Para construir el mapa a partir de los datos del láser es necesario conocer var
     <li>El alcance máximo del sensor es de <b>3.5 metros</b>.</li>
     <li>Es imprescindible conocer la orientación del robot para poder transformar correctamente 
         los ángulos del láser al marco global.</li>
+    <br>
 </ul>
 Con esta información se trazan los rayos del LIDAR sobre el mapa, se realiza un mapa probabilistico, en caso de detectar libre aumenta la probabilidad de libre un (RELLENAR) y en caso de detectar ocupado baja la probabilidad de estar libre un (RELLENAR).
 </p>
@@ -145,7 +146,7 @@ En esta práctica, el robot sigue una estrategia similar:
     <li>Después recorre todo el perímetro del entorno siguiendo la pared y actualizando el mapa.</li>
     <li>Una vez delimitado el contorno, se ejecuta un algoritmo basado en BSA que busca la celda libre más cercana de modo que va recorriendo una mayor zona.</li>
 </ul>
-
+ <br>
 De esta forma el robot obtendrá un mapa bastante completo.
 </p>
 
@@ -164,7 +165,7 @@ El sistema combina dos estrategias:
   <li>Exploración global mediante <b>seguimiento de paredes</b></li>
   <li>Exploración interna mediante <b>búsqueda de celdas libres (BFS)</b></li>
 </ul>
-
+ <br>
 Utiliza <b>HAL</b> para el control del robot y <b>WebGUI</b> para la visualización, construyendo dinámicamente un mapa del entorno a partir del láser.
 </p>
 
@@ -422,8 +423,8 @@ Construye el mapa de ocupación:
         
 <div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
 
-  <img src="fino_recorrido.png" style="width: 40%;">
-  <img src="fino_mapa.png" style="width: 40%;">
+  <img src="fino_recorrido.PNG" style="width: 40%;">
+  <img src="fino_mapa.PNG" style="width: 40%;">
 
 </div>
         <h4> Localización con ruido baajo (HAL.getOdom())</h4>
