@@ -99,7 +99,7 @@ La práctica consiste en generar un mapa del entorno a partir de la información
 El objetivo principal es desarrollar un algoritmo de navegación capaz de explorar de forma autónoma un área de almacén 
 mientras construye un mapa probabilistico preciso del entorno utilizando los datos del láser.  
 
-También se realizará la comprativa de este mismo algoritmo mediante empeorando la localizacion del robot, para ver los efecto en la genereracion del mapa.
+También se realizará la comprativa de este mismo algoritmo empeorando la localizacion del robot, para ver los efecto en la genereracion del mapa.
 
 </p>
 
@@ -113,22 +113,41 @@ Para construir el mapa a partir de los datos del láser es necesario conocer var
     <li>El sensor proporciona <b>360 lecturas</b>, una por cada grado.</li>
     <li>El láser 0 apunta hacia delante y el láser 270 hacia la derecha.</li>
     <li>El alcance máximo del sensor es de <b>3.5 metros</b>.</li>
-    <li>Es imprescindible conocer la orientación del robot para poder transformar correctamente 
-        los ángulos del láser al marco global.</li>
+    <li>Se necesita la orientación del robot para los calculos del LIDAR a coordenadas, esto es la parte que destaca al cambiar el ruido de la odometria en este ejercicio.</li>
     <br>
 </ul>
-Con esta información se trazan los rayos del LIDAR sobre el mapa, se realiza un mapa probabilistico, en caso de detectar libre aumenta la probabilidad de libre un (RELLENAR) y en caso de detectar ocupado baja la probabilidad de estar libre un (RELLENAR).
+<p>
+El algoritmo implementado para la construcción del mapa de ocupación probabilístico se basa en un enfoque de rejilla (Gridmap) utilizando la regla de Bayes (mediante la técnica de Log-Odds) para fusionar las evidencias sensoriales. El proceso de "muestreo" y actualización se divide en las siguientes etapas clave requeridas:
 </p>
 
-    <p>
-Para garantizar la independencia entre observaciones en la construcción del mapa probabilístico,
-se ha aplicado un muestreo angular del sensor láser. En lugar de utilizar todos los rayos,
-se selecciona únicamente uno de cada 5 (salto = 5), lo que introduce una separación angular suficiente
-para reducir la correlación entre medidas consecutivas.
-
-Esto permite aproximar la hipótesis de independencia entre observaciones requerida por los métodos
-de mapeo probabilístico, manteniendo al mismo tiempo una cobertura adecuada del entorno.
-</p>
+<ol>
+    <li>
+        <b>Filtro de Observaciones Independientes:</b><br>
+        Para garantizar la validez matemática del filtro bayesiano, es crucial que las medidas sensoriales que se integren en el mapa sean estadísticamente independientes. En el código, esto se aproxima descartando lecturas redundantes cuando el robot está prácticamente quieto. La función <code>mapping()</code> evalúa la posición actual frente a la última posición registrada. Solo si el robot se ha desplazado una distancia suficiente (ej. > 0.2 metros) o ha rotado un ángulo significativo (ej. > 0.15 radianes), se acepta la nueva lectura del láser. Esto evita sobreescribir la misma celda repetidamente con la misma información estática.
+    </li>
+    <br>
+    <li>
+        <b>Modelo Sensorial y Geometría Axial:</b><br>
+        Dado que el sensor láser tiene una apertura angular muy estrecha, se asume una aproximación de geometría axial perfecta. Para cada rayo del LIDAR válido, se calcula el punto de impacto en el mundo. El haz del láser se modela como una línea recta estricta desde el robot hasta el obstáculo utilizando el <b>algoritmo de Bresenham</b>. Todas las celdas atravesadas por esta línea se consideran libres de obstáculos, mientras que la celda final se considera ocupada.
+    </li>
+    <br>
+    <li>
+        <b>Integración mediante la Regla de Bayes (Log-Odds):</b><br>
+        El algoritmo utiliza el modelo de <i>Log-Odds</i>. Esto permite aplicar la regla de Bayes mediante simples sumas y restas de evidencias:
+        <ul>
+            <li><b>Zona Libre (<code>L_FREE = -0.4</code>):</b> A cada celda atravesada por el rayo se le resta este valor, disminuyendo su probabilidad de estar ocupada.</li>
+            <li><b>Zona Ocupada (<code>L_OBS = 1.2</code>):</b> Al detectar un impacto, se suma este valor.</li>
+        </ul>
+        El peso de ocupación es intencionadamente mayor que el de espacio libre. De este modo, el robot requiere obtener varias detecciones de que una celda está vacía de forma independiente para declararla segura, priorizando la seguiridad frente a falsos positivos espaciales.
+    </li>
+    <br>
+    <li>
+        <b>Mecanismos de Saturación:</b><br>
+        El código incorpora límites de saturación para evitar valores extremos: L_MAX = 10.0 y L_MIN = -10.0. 
+       
+        Gracias a esto , el mapa es dinámico y puede reaccionar rápidamente ante nueva información o correcciones, evitando una inercia probabilística excesiva.
+    </li>
+</ol>
 
 <ul>
     <li><a name="RECORRIDO"></a><span style="font-weight: bold;">RECORRIDO</span></li>
