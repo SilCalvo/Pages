@@ -13,7 +13,8 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-position: center;
-            color: white;
+            color: #cccccc;
+            line-height: 1.25;
             height: 100vh;
             display: flex;
         }
@@ -187,21 +188,21 @@ Para hacer la comparativa, se ha configurado el sistema para que el robot se mue
 <p>
 Como se puede ver en las imágenes de abajo, solo la localización sin ruido consigue calcular el mapa de forma correcta. Las otras opciones crean un mapa que se vuelve cada vez más borroso a medida que pasa el tiempo. Esto pasa porque el robot empieza a colocar medidas de obstáculos encima de zonas que en realidad están libres, lo que termina ensuciando todo el mapa.
 </p>
-        <h4> Localización sin ruido </h4>
+        <h4> Mapeado sin ruido </h4>
         
 <div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
 
   <img src="nonoise_1.PNG" style="width: 70%;">
 
 </div>
-        <h4> Localización con ruido medio </h4>
+        <h4> Mapeado con ruido medio </h4>
         
 <div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
 
   <img src="noise_1.PNG" style="width: 70%;">
 
 </div>
-        <h4> Localización con ruido alto </h4>
+        <h4> Mapeado con ruido alto </h4>
         
 <div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
 
