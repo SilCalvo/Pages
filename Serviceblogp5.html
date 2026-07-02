@@ -183,7 +183,7 @@ Para que el robot complete el mapa haciendo un recorrido correcto, divide el ent
         
     </ul>
 <p>
-Para hacer la comparativa, se ha configurado el sistema para que el robot se mueva siempre usando la odometría sin ruido. De esta manera, el robot hace exactamente el mismo camino en todas las pruebas. Lo que cambia en cada caso es el ruido de la odometría que se usa para dibujar el mapa, lo que permite comparar bien cómo afectan los distintos niveles de ruido a las medidas tomadas.
+Para hacer la comparativa, se ha configurado el sistema para que el robot se mueva siempre usando la odometría sin ruido. De esta manera, el robot hace exactamente el mismo camino en todas las pruebas. Lo que cambia en cada caso es el ruido de la odometría que se usa para dibujar el mapa, lo que permite comparar bien cómo afectan los distintos niveles de ruido a las medidas tomadas. En la última imagen podemos observar que si mantenemos el movimeinto con odom, el mapa queda  con más ruido aún y descolocado totalmente, haciedno inviable la creacion de un mapa de esta manera.
 </p>
 
 <p>
@@ -208,6 +208,14 @@ Como se puede ver en las imágenes de abajo, solo la localización sin ruido con
 <div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
 
   <img src="noise_2.PNG" style="width: 70%;">
+
+</div>
+
+         <h4> Movimiento y mapeado con ruido </h4>
+        
+<div style="display: flex; justify-content: center; gap: 30px; margin: 20px 0;">
+
+  <img src="ruido_all.PNG" style="width: 70%;">
 
 </div>
 
